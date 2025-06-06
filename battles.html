@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battles - Meme Fight Club</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #0a0015, #1a0033, #330066);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #ff0066;
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff0066;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover {
+            color: #ff0066;
+        }
+
+        .nav-links a.active {
+            color: #ff0066;
+            background: rgba(255, 0, 102, 0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 120px 2rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff0066, #ffff00, #00ff66);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: pulse 2s ease-in-out infinite;
+            text-align: center;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            color: #ffff00;
+        }
+
+        /* Stats Dashboard */
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #00ff66;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ff66;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Battle Archive Section */
+        .battle-archive {
+            background: rgba(0, 0, 0, 0.6);
+            border: 3px solid #ff0066;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 3rem 0;
+            box-shadow: 0 20px 40px rgba(255, 0, 102, 0.3);
+        }
+
+        .archive-title {
+            font-size: 2rem;
+            color: #ff0066;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #ff0066;
+            padding-bottom: 1rem;
+        }
+
+        .battle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .battle-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #00ff66;
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .battle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 255, 102, 0.3);
+        }
+
+        .battle-card-title {
+            font-size: 1.3rem;
+            color: #00ff66;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .battle-fighters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+
+        .battle-fighter {
+            text-align: center;
+            flex: 1;
+        }
+
+        .battle-fighter-emoji {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .battle-fighter-name {
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .battle-fighter-votes {
+            color: #ffff00;
+            font-size: 0.9rem;
+        }
+
+        .battle-vs {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff0066;
+            margin: 0 1rem;
+        }
+
+        .battle-result {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(0, 255, 102, 0.1);
+            border-radius: 10px;
+            color: #00ff66;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .battle-result.completed {
+            background: rgba(255, 255, 0, 0.1);
+            color: #ffff00;
+        }
+
+        .battle-date {
+            text-align: center;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+        }
+
+        /* Coming Soon Section */
+        .coming-soon-section {
+            background: rgba(0, 0, 0, 0.6);
+            border: 3px solid #ffff00;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            margin: 3rem 0;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(255, 255, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coming-soon-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 4s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .coming-soon-title {
+            font-size: 2.5rem;
+            color: #ffff00;
+            margin-bottom: 1.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .coming-soon-description {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .features-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            border-color: #ffff00;
+            transform: scale(1.05);
+        }
+
+        .feature-emoji {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            color: #ffff00;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        /* CTA Buttons */
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+        }
+
+        .cta-btn {
+            background: linear-gradient(45deg, #ff0066, #ff3399);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-btn:hover::before {
+            left: 100%;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 0, 102, 0.5);
+        }
+
+        .secondary-btn {
+            background: transparent;
+            border: 2px solid #00ff66;
+            color: #00ff66;
+        }
+
+        .secondary-btn:hover {
+            background: #00ff66;
+            color: #000;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 2rem;
+            text-align: center;
+            border-top: 2px solid #ff0066;
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ff0066;
+        }
+
+        .disclaimer {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .main-content {
+                padding: 100px 1rem 1rem;
+            }
+
+            .battle-fighters {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .battle-vs {
+                order: 2;
+                margin: 0.5rem 0;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .battle-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #ff0066, #ffff00); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 1.5rem;">🥊</div>
+                MEME FIGHT CLUB
+            </div>
+            <div class="nav-links">
+                <a href="index.html">HOME</a>
+                <a href="battles.html" class="active">BATTLES</a>
+                <a href="leaderboard.html">LEADERBOARD</a>
+                <a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" target="_blank">MEFC TOKEN</a>
+                <a href="disclaimer.html">DISCLAIMER</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="page-title fade-in">⚔️ Battle Archive</h1>
+        <p class="page-subtitle fade-in">Epic meme showdowns and legendary crypto battles</p>
+
+        <!-- Stats Dashboard -->
+        <div class="stats-dashboard fade-in">
+            <div class="stat-card">
+                <div class="stat-number">2,847</div>
+                <div class="stat-label">Total Battles</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12.4M</div>
+                <div class="stat-label">MEFC Distributed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15,923</div>
+                <div class="stat-label">Active Fighters</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">423</div>
+                <div class="stat-label">Online Now</div>
+            </div>
+        </div>
+
+        <!-- Battle Archive -->
+        <div class="battle-archive fade-in">
+            <div class="archive-title">🏆 Recent Epic Battles</div>
+            
+            <div class="battle-grid">
+                <!-- Battle 1 - Current Live Battle -->
+                <div class="battle-card">
+                    <div class="battle-card-title">🔴 LIVE - Battle #2847</div>
+                    <div class="battle-fighters">
+                        <div class="battle-fighter">
+                            <div class="battle-fighter-emoji">🐸</div>
+                            <div class="battle-fighter-name">Pepe Returns</div>
+                            <div class="battle-fighter-votes">1,247 votes</div>
+                        </div>
+                        <div class="battle-vs">VS</div>
+                        <div class="battle-fighter">
+                            <div class="battle-fighter-emoji">🐕</div>
+                            <div class="battle-fighter-name">Doge Classic</div>
+                            <div class="battle-fighter-votes">982 votes</div>
+                        </div>
+                    </div>
+                    <div class="battle-result">🔥 BATTLE IN PROGRESS - 2:34:12 remaining</div>
+                    <div class="battle-date">Started: June 6, 2025</div>
+                </div>
+
+                <!-- Battle 2 - Recent Completed -->
+                <div class="battle-card">
+                    <div class="battle-card-title">🏆 Epic Battle #2846</div>
+                    <div class="battle-fighters">
+                        <div class="battle-fighter">
+                            <div class="battle-fighter-emoji">👑</div>
+                            <div class="battle-fighter-name">Chad Wojak</div>
+                            <div class="battle-fighter-votes">2,156 votes</div>
+                        </div>
+                        <div class="battle-vs">VS</div>
+                        <div class="battle-fighter">
+                            <div class="battle-fighter-emoji">🧠</div>
+                            <div class="battle-fighter-name">Big Brain Meme</div>
+                            <div class="battle-fighter-votes">1,943 votes</div>
+                        </div>
+                    </div>
+                    <div class="battle-result completed">🎉 WINNER: Chad Wojak - 213 vote lead!</div>
+                    <div class="battle-date">Completed: June 5, 2025</div>
+                </div>
+
+                <!-- Battle 3 -->
+                <div class="battle-card">
+                    <div class="battle-card-title">🔥 Legendary Battle #2845</div>
+                    <div class="battle-fighters">
+                        <div class="battle-fighter">
+                            <div class="battle-fighter-emoji">🥈</div>
+                            <div class="battle-fighter-name">Distracted Boyfriend</div>
+                            <div class="battle-fighter-votes">1,887 votes</div>
+                        </div>
+                        <div class="battle-vs">VS</div>
+                        <div class="battle-fighter">
+                            <div class="battle-fighter-emoji">😹</div>
+                            <div class="battle-fighter-name">Woman Yelling at Cat</div>
+                            <div class="battle-fighter-votes">2,234 votes</div>
+                        </div>
+                    </div>
+                    <div class="battle-result completed">🏆 WINNER: Woman Yelling at Cat - Epic comeback!</div>
+                    <div class="battle-date">Completed: June 4, 2025</div>
+                </div>
+
+                <!-- Battle 4 -->
+                <div class="battle-card">
+                    <div class="battle-card-title">⚡ Intense Battle #2844</div>
+                    <div class="battle-fighters">
+                        <div class="battle-fighter">
+                            <div class="battle-fighter-emoji">🎯</div>
+                            <div class="battle-fighter-name">Drake Pointing</div>
+                            <div class="battle-fighter-votes">1,654 votes</div>
+                        </div>
+                        <div class="battle-vs">VS</div>
+                        <div class="battle-fighter">
+                            <div class="battle-fighter-emoji">🤔</div>
+                            <div class="battle-fighter-name">Thinking Face</div>
+                            <div class="battle-fighter-votes">1,598 votes</div>
+                        </div>
+                    </div>
+                    <div class="battle-result completed">🔥 WINNER: Drake Pointing - Close victory!</div>
+                    <div class="battle-date">Completed: June 3, 2025</div>
+                </div>
+
+                <!-- Battle 5 -->
+                <div class="battle-card">
+                    <div class="battle-card-title">💎 Diamond Battle #2843</div>
+                    <div class="battle-fighters">
+                        <div class="battle-fighter">
+                            <div class="battle-fighter-emoji">💪</div>
+                            <div class="battle-fighter-name">Stonks Guy</div>
+                            <div class="battle-fighter-votes">2,789 votes</div>
+                        </div>
+                        <div class="battle-vs">VS</div>
+                        <div class="battle-fighter">
+                            <div class="battle-fighter-emoji">📈</div>
+                            <div class="battle-fighter-name">Number Go Up</div>
+                            <div class="battle-fighter-votes">1,456 votes</div>
+                        </div>
+                    </div>
+                    <div class="battle-result completed">🚀 WINNER: Stonks Guy - Massive victory!</div>
+                    <div class="battle-date">Completed: June 2, 2025</div>
+                </div>
+
+                <!-- Battle 6 -->
+                <div class="battle-card">
+                    <div class="battle-card-title">🌟 Classic Battle #2842</div>
+                    <div class="battle-fighters">
+                        <div class="battle-fighter">
+                            <div class="battle-fighter-emoji">🚀</div>
+                            <div class="battle-fighter-name">To The Moon</div>
+                            <div class="battle-fighter-votes">1,987 votes</div>
+                        </div>
+                        <div class="battle-vs">VS</div>
+                        <div class="battle-fighter">
+                            <div class="battle-fighter-emoji">💎</div>
+                            <div class="battle-fighter-name">Diamond Hands</div>
+                            <div class="battle-fighter-votes">2,103 votes</div>
+                        </div>
+                    </div>
+                    <div class="battle-result completed">💎 WINNER: Diamond Hands - HODL strong!</div>
+                    <div class="battle-date">Completed: June 1, 2025</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coming Soon Features -->
+        <div class="coming-soon-section fade-in">
+            <div class="coming-soon-title">🚧 Coming Soon Features!</div>
+            <div class="coming-soon-description">
+                We're building the ultimate battle experience with advanced analytics, replay systems, and community features!
+            </div>
+            
+            <div class="features-preview">
+                <div class="feature-item">
+                    <div class="feature-emoji">📊</div>
+                    <div class="feature-title">Battle Analytics</div>
+                    <div>Detailed voting patterns, comeback tracking, and performance metrics</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-emoji">🔄</div>
+                    <div class="feature-title">Battle Replays</div>
+                    <div>Watch epic battles unfold again with real-time vote progression</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-emoji">🏆</div>
+                    <div class="feature-title">Hall of Fame</div>
+                    <div>Immortalize the greatest battles and legendary comeback victories</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-emoji">🎭</div>
+                    <div class="feature-title">Meme Tournaments</div>
+                    <div>Multi-round elimination battles with massive MEFC prize pools</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-emoji">📈</div>
+                    <div class="feature-title">Fighter Rankings</div>
+                    <div>ELO-style rating system tracking meme performance over time</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-emoji">💬</div>
+                    <div class="feature-title">Battle Comments</div>
+                    <div>Community discussion and meme commentary during live battles</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="cta-buttons fade-in">
+            <a href="index.html" class="cta-btn">🥊 Join Live Battle</a>
+            <a href="leaderboard.html" class="cta-btn secondary-btn">🏆 View Leaderboard</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="disclaimer.html">Disclaimer</a>
+            <a href="terms.html">Terms</a>
+            <a href="privacy.html">Privacy</a>
+        </div>
+        <div class="disclaimer">
+            ⚠️ MEFC is for entertainment only. High risk of total loss. Not financial advice. 18+ only.
+        </div>
+    </footer>
+</body>
+</html>
