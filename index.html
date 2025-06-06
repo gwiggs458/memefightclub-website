@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaderboard - Meme Fight Club</title>
+    <title>Meme Fight Club - The Ultimate Crypto Battle Arena</title>
     <style>
         * {
             margin: 0;
@@ -18,7 +18,6 @@
             animation: gradientShift 8s ease infinite;
             color: white;
             overflow-x: hidden;
-            min-height: 100vh;
         }
 
         @keyframes gradientShift {
@@ -55,6 +54,13 @@
             color: #ff0066;
         }
 
+        .logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
         .nav-links {
             display: flex;
             gap: 2rem;
@@ -64,28 +70,42 @@
             color: white;
             text-decoration: none;
             transition: color 0.3s;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
         }
 
         .nav-links a:hover {
             color: #ff0066;
         }
 
-        .nav-links a.active {
-            color: #ff0066;
-            background: rgba(255, 0, 102, 0.1);
-        }
-
-        /* Main Content */
-        .main-content {
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
             padding: 120px 2rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
+            position: relative;
         }
 
-        .page-title {
-            font-size: 3rem;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="%23ff0066" opacity="0.3"><animate attributeName="r" values="0;3;0" dur="2s" repeatCount="indefinite"/></circle></svg>');
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-title {
+            font-size: 4rem;
             font-weight: bold;
             margin-bottom: 1rem;
             background: linear-gradient(45deg, #ff0066, #ffff00, #00ff66);
@@ -93,7 +113,6 @@
             -webkit-background-clip: text;
             color: transparent;
             animation: pulse 2s ease-in-out infinite;
-            text-align: center;
         }
 
         @keyframes pulse {
@@ -101,12 +120,144 @@
             50% { transform: scale(1.05); }
         }
 
-        .page-subtitle {
-            font-size: 1.2rem;
-            text-align: center;
+        .hero-subtitle {
+            font-size: 1.5rem;
             margin-bottom: 3rem;
             opacity: 0.9;
+        }
+
+        /* Live Battle Arena */
+        .battle-arena {
+            background: rgba(0, 0, 0, 0.6);
+            border: 3px solid #ff0066;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(255, 0, 102, 0.3);
+        }
+
+        .battle-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .battle-status {
+            font-size: 1.2rem;
+            color: #00ff66;
+            margin-bottom: 0.5rem;
+        }
+
+        .battle-timer {
+            font-size: 2rem;
             color: #ffff00;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .fighters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            gap: 2rem;
+        }
+
+        .fighter {
+            flex: 1;
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .fighter:hover {
+            border-color: #ff0066;
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(255, 0, 102, 0.4);
+        }
+
+        .fighter.winning {
+            border-color: #00ff66;
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.5);
+        }
+
+        .fighter-emoji {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .fighter-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .vote-count {
+            font-size: 1.1rem;
+            color: #00ff66;
+            font-weight: bold;
+        }
+
+        .vs-divider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffff00;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .vote-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .vote-btn {
+            background: linear-gradient(45deg, #ff0066, #ff3399);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vote-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .vote-btn:hover::before {
+            left: 100%;
+        }
+
+        .vote-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 0, 102, 0.5);
         }
 
         /* Stats Dashboard */
@@ -114,7 +265,9 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
-            margin: 3rem 0;
+            margin: 4rem 0;
+            max-width: 1000px;
+            width: 100%;
         }
 
         .stat-card {
@@ -142,86 +295,37 @@
             opacity: 0.8;
         }
 
-        /* Leaderboard Sections */
-        .leaderboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            margin: 3rem 0;
-        }
-
-        .leaderboard-section {
+        /* Leaderboard */
+        .leaderboard {
             background: rgba(0, 0, 0, 0.6);
-            border: 3px solid #ff0066;
-            border-radius: 20px;
+            border: 2px solid #00ff66;
+            border-radius: 15px;
             padding: 2rem;
-            box-shadow: 0 20px 40px rgba(255, 0, 102, 0.3);
+            margin: 4rem 0;
+            max-width: 600px;
+            width: 100%;
         }
 
-        .leaderboard-section.hall-of-fame {
-            border-color: #ffd700;
-            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3);
-        }
-
-        .leaderboard-section.mefc-holders {
-            border-color: #00ff66;
-            box-shadow: 0 20px 40px rgba(0, 255, 102, 0.3);
-        }
-
-        .section-title {
-            font-size: 1.8rem;
+        .leaderboard-title {
             text-align: center;
-            margin-bottom: 2rem;
-            border-bottom: 2px solid;
-            padding-bottom: 1rem;
-        }
-
-        .section-title.fighters {
-            color: #ff0066;
-            border-color: #ff0066;
-        }
-
-        .section-title.hall {
-            color: #ffd700;
-            border-color: #ffd700;
-        }
-
-        .section-title.mefc {
+            font-size: 1.5rem;
             color: #00ff66;
-            border-color: #00ff66;
+            margin-bottom: 2rem;
         }
 
-        /* Leaderboard Items */
         .leaderboard-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1rem;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.5rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
+            transition: background 0.3s ease;
         }
 
         .leaderboard-item:hover {
             background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-        }
-
-        .leaderboard-item.rank-1 {
-            border-left-color: #ffd700;
-            background: rgba(255, 215, 0, 0.1);
-        }
-
-        .leaderboard-item.rank-2 {
-            border-left-color: #c0c0c0;
-            background: rgba(192, 192, 192, 0.1);
-        }
-
-        .leaderboard-item.rank-3 {
-            border-left-color: #cd7f32;
-            background: rgba(205, 127, 50, 0.1);
         }
 
         .rank {
@@ -236,119 +340,65 @@
             margin-left: 1rem;
         }
 
-        .fighter-name {
-            font-weight: bold;
-            margin-bottom: 0.3rem;
-            font-size: 1.1rem;
-        }
-
-        .fighter-stats {
-            font-size: 0.8rem;
-            opacity: 0.8;
-            color: #ffff00;
-        }
-
         .votes {
             color: #00ff66;
             font-weight: bold;
-            text-align: right;
         }
 
-        .mefc-amount {
-            color: #00ff66;
-            font-weight: bold;
-            text-align: right;
-        }
-
-        /* Hall of Fame Special Styling */
-        .hall-of-fame .leaderboard-item {
-            background: rgba(255, 215, 0, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-        }
-
-        .hall-of-fame .fighter-info {
-            color: #ffd700;
-        }
-
-        .hall-of-fame .votes {
-            color: #ffd700;
-        }
-
-        /* Extended Leaderboard */
-        .extended-leaderboard {
-            background: rgba(0, 0, 0, 0.6);
-            border: 2px solid #00ff66;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 3rem 0;
-            grid-column: 1 / -1;
-        }
-
-        .extended-title {
-            font-size: 1.8rem;
-            color: #00ff66;
+        /* CTA Section */
+        .cta-section {
             text-align: center;
+            margin: 4rem 0;
+            padding: 3rem 2rem;
+            background: rgba(255, 0, 102, 0.1);
+            border-radius: 20px;
+            border: 2px solid #ff0066;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ff0066;
+        }
+
+        .cta-subtitle {
+            font-size: 1.2rem;
             margin-bottom: 2rem;
-            border-bottom: 2px solid #00ff66;
-            padding-bottom: 1rem;
+            opacity: 0.9;
         }
 
-        .extended-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-        }
-
-        /* CTA Buttons */
         .cta-buttons {
             display: flex;
             gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
-            margin: 3rem 0;
         }
 
         .cta-btn {
-            background: linear-gradient(45deg, #ff0066, #ff3399);
-            color: white;
+            background: linear-gradient(45deg, #ffff00, #ffa500);
+            color: #000;
             text-decoration: none;
             padding: 1rem 2rem;
             border-radius: 25px;
             font-weight: bold;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .cta-btn:hover::before {
-            left: 100%;
+            display: inline-block;
         }
 
         .cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 0, 102, 0.5);
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 255, 0, 0.4);
         }
 
         .secondary-btn {
             background: transparent;
-            border: 2px solid #00ff66;
-            color: #00ff66;
+            color: #ff0066;
+            border: 2px solid #ff0066;
         }
 
         .secondary-btn:hover {
-            background: #00ff66;
-            color: #000;
+            background: #ff0066;
+            color: white;
         }
 
         /* Footer */
@@ -383,28 +433,27 @@
         }
 
         /* Mobile Responsive */
-        @media (max-width: 1024px) {
-            .leaderboard-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-        }
-
         @media (max-width: 768px) {
-            .page-title {
-                font-size: 2rem;
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .fighters {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .vs-divider {
+                order: 2;
+                margin: 1rem 0;
+            }
+
+            .vote-buttons {
+                flex-direction: column;
             }
 
             .nav-links {
                 display: none;
-            }
-
-            .main-content {
-                padding: 100px 1rem 1rem;
-            }
-
-            .leaderboard-section {
-                padding: 1.5rem;
             }
 
             .cta-buttons {
@@ -435,294 +484,3 @@
             <div class="nav-links">
                 <a href="index.html">HOME</a>
                 <a href="battles.html">BATTLES</a>
-                <a href="leaderboard.html" class="active">LEADERBOARD</a>
-                <a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" target="_blank">MEFC TOKEN</a>
-                <a href="disclaimer.html">DISCLAIMER</a>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <h1 class="page-title fade-in">🏆 Leaderboard</h1>
-        <p class="page-subtitle fade-in">Top meme warriors and crypto champions</p>
-
-        <!-- Stats Dashboard -->
-        <div class="stats-dashboard fade-in">
-            <div class="stat-card">
-                <div class="stat-number">2,847</div>
-                <div class="stat-label">Total Battles</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">12.4M</div>
-                <div class="stat-label">MEFC Distributed</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">15,923</div>
-                <div class="stat-label">Active Fighters</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">423</div>
-                <div class="stat-label">Online Now</div>
-            </div>
-        </div>
-
-        <!-- Leaderboard Grid -->
-        <div class="leaderboard-grid fade-in">
-            <!-- Top Fighters This Week -->
-            <div class="leaderboard-section">
-                <div class="section-title fighters">🏆 TOP FIGHTERS THIS WEEK</div>
-                
-                <div class="leaderboard-item rank-1">
-                    <div class="rank">#1</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">👑 Chad Wojak</div>
-                        <div class="fighter-stats">12 wins • 3 day streak • 89% win rate</div>
-                    </div>
-                    <div class="votes">15,432</div>
-                </div>
-
-                <div class="leaderboard-item rank-2">
-                    <div class="rank">#2</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🥈 Distracted Boyfriend</div>
-                        <div class="fighter-stats">8 wins • 2 day streak • 76% win rate</div>
-                    </div>
-                    <div class="votes">12,891</div>
-                </div>
-
-                <div class="leaderboard-item rank-3">
-                    <div class="rank">#3</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🥉 Woman Yelling at Cat</div>
-                        <div class="fighter-stats">7 wins • 1 day streak • 82% win rate</div>
-                    </div>
-                    <div class="votes">11,204</div>
-                </div>
-
-                <div class="leaderboard-item">
-                    <div class="rank">#4</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🎯 Drake Pointing</div>
-                        <div class="fighter-stats">6 wins • No streak • 71% win rate</div>
-                    </div>
-                    <div class="votes">9,876</div>
-                </div>
-
-                <div class="leaderboard-item">
-                    <div class="rank">#5</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🧠 Expanding Brain</div>
-                        <div class="fighter-stats">5 wins • No streak • 68% win rate</div>
-                    </div>
-                    <div class="votes">8,543</div>
-                </div>
-
-                <div class="leaderboard-item">
-                    <div class="rank">#6</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🐸 Pepe Returns</div>
-                        <div class="fighter-stats">4 wins • Currently battling • 65% win rate</div>
-                    </div>
-                    <div class="votes">7,289</div>
-                </div>
-
-                <div class="leaderboard-item">
-                    <div class="rank">#7</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🐕 Doge Classic</div>
-                        <div class="fighter-stats">4 wins • Currently battling • 63% win rate</div>
-                    </div>
-                    <div class="votes">6,847</div>
-                </div>
-
-                <div class="leaderboard-item">
-                    <div class="rank">#8</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">💪 Stonks Guy</div>
-                        <div class="fighter-stats">3 wins • No streak • 60% win rate</div>
-                    </div>
-                    <div class="votes">5,923</div>
-                </div>
-            </div>
-
-            <!-- Hall of Fame -->
-            <div class="leaderboard-section hall-of-fame">
-                <div class="section-title hall">👑 HALL OF FAME</div>
-                
-                <div class="leaderboard-item rank-1">
-                    <div class="rank">🏆</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">👑 Chad Wojak</div>
-                        <div class="fighter-stats">All-time legend • 247 total wins</div>
-                    </div>
-                    <div class="votes">2.8M</div>
-                </div>
-
-                <div class="leaderboard-item rank-2">
-                    <div class="rank">🥇</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🧠 Big Brain Meme</div>
-                        <div class="fighter-stats">Intellectual champion • 189 total wins</div>
-                    </div>
-                    <div class="votes">2.1M</div>
-                </div>
-
-                <div class="leaderboard-item rank-3">
-                    <div class="rank">🥈</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">😹 Woman Yelling at Cat</div>
-                        <div class="fighter-stats">Comeback queen • 156 total wins</div>
-                    </div>
-                    <div class="votes">1.9M</div>
-                </div>
-
-                <div class="leaderboard-item">
-                    <div class="rank">🥉</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🎯 Drake Pointing</div>
-                        <div class="fighter-stats">Decision master • 134 total wins</div>
-                    </div>
-                    <div class="votes">1.7M</div>
-                </div>
-
-                <div class="leaderboard-item">
-                    <div class="rank">⭐</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🚀 To The Moon</div>
-                        <div class="fighter-stats">Crypto legend • 98 total wins</div>
-                    </div>
-                    <div class="votes">1.4M</div>
-                </div>
-
-                <div class="leaderboard-item">
-                    <div class="rank">💎</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">💎 Diamond Hands</div>
-                        <div class="fighter-stats">HODL champion • 87 total wins</div>
-                    </div>
-                    <div class="votes">1.2M</div>
-                </div>
-            </div>
-
-            <!-- Top MEFC Holders -->
-            <div class="leaderboard-section mefc-holders">
-                <div class="section-title mefc">💰 TOP MEFC HOLDERS</div>
-                
-                <div class="leaderboard-item rank-1">
-                    <div class="rank">#1</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">💎 Diamond Hands Dan</div>
-                        <div class="fighter-stats">OG holder • Battle earnings</div>
-                    </div>
-                    <div class="mefc-amount">2.1M MEFC</div>
-                </div>
-
-                <div class="leaderboard-item rank-2">
-                    <div class="rank">#2</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🚀 Crypto Crusader</div>
-                        <div class="fighter-stats">Tournament winner • Daily voter</div>
-                    </div>
-                    <div class="mefc-amount">1.8M MEFC</div>
-                </div>
-
-                <div class="leaderboard-item rank-3">
-                    <div class="rank">#3</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🏆 Meme Master</div>
-                        <div class="fighter-stats">Battle champion • Streak bonus</div>
-                    </div>
-                    <div class="mefc-amount">1.5M MEFC</div>
-                </div>
-
-                <div class="leaderboard-item">
-                    <div class="rank">#4</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">⚡ Lightning Voter</div>
-                        <div class="fighter-stats">Speed demon • Vote rewards</div>
-                    </div>
-                    <div class="mefc-amount">987K MEFC</div>
-                </div>
-
-                <div class="leaderboard-item">
-                    <div class="rank">#5</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🎭 Comedy King</div>
-                        <div class="fighter-stats">Community favorite • Referrals</div>
-                    </div>
-                    <div class="mefc-amount">743K MEFC</div>
-                </div>
-
-                <div class="leaderboard-item">
-                    <div class="rank">#6</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🔥 Meme Lord</div>
-                        <div class="fighter-stats">Viral creator • Bonus earnings</div>
-                    </div>
-                    <div class="mefc-amount">654K MEFC</div>
-                </div>
-            </div>
-
-            <!-- Rising Stars -->
-            <div class="leaderboard-section">
-                <div class="section-title fighters">⭐ RISING STARS</div>
-                
-                <div class="leaderboard-item">
-                    <div class="rank">🔥</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🌟 New Hotness</div>
-                        <div class="fighter-stats">3 wins this week • 100% win rate</div>
-                    </div>
-                    <div class="votes">4,567</div>
-                </div>
-
-                <div class="leaderboard-item">
-                    <div class="rank">⚡</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🚀 Rocket Meme</div>
-                        <div class="fighter-stats">2 wins this week • Trending up</div>
-                    </div>
-                    <div class="votes">3,234</div>
-                </div>
-
-                <div class="leaderboard-item">
-                    <div class="rank">💫</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🎪 Circus Act</div>
-                        <div class="fighter-stats">First week • Strong debut</div>
-                    </div>
-                    <div class="votes">2,891</div>
-                </div>
-
-                <div class="leaderboard-item">
-                    <div class="rank">✨</div>
-                    <div class="fighter-info">
-                        <div class="fighter-name">🎨 Art Meme</div>
-                        <div class="fighter-stats">Creative genius • Rising fast</div>
-                    </div>
-                    <div class="votes">2,456</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- CTA Buttons -->
-        <div class="cta-buttons fade-in">
-            <a href="index.html" class="cta-btn">🥊 Join Live Battle</a>
-            <a href="battles.html" class="cta-btn secondary-btn">⚔️ View Battle Archive</a>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-links">
-            <a href="disclaimer.html">Disclaimer</a>
-            <a href="terms.html">Terms</a>
-            <a href="privacy.html">Privacy</a>
-        </div>
-        <div class="disclaimer">
-            ⚠️ MEFC is for entertainment only. High risk of total loss. Not financial advice. 18+ only.
-        </div>
-    </footer>
-</body>
-</html>
