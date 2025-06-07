@@ -68,10 +68,7 @@
             border-radius: 5px;
         }
 
-        .nav-links a:hover {
-            color: #ff0066;
-        }
-
+        .nav-links a:hover,
         .nav-links a.active {
             color: #ff0066;
             background: rgba(255, 0, 102, 0.1);
@@ -85,119 +82,72 @@
         }
 
         .page-title {
+            text-align: center;
             font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
+            margin-bottom: 3rem;
             background: linear-gradient(45deg, #ff0066, #ffff00, #00ff66);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            animation: pulse 2s ease-in-out infinite;
-            text-align: center;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .page-subtitle {
-            font-size: 1.2rem;
-            text-align: center;
+        .leaderboard-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
             margin-bottom: 3rem;
-            opacity: 0.9;
-            color: #ffff00;
         }
 
-        /* Stats Dashboard */
-        .stats-dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .stat-card {
+        .tab-btn {
             background: rgba(0, 0, 0, 0.5);
-            border: 2px solid #00ff66;
-            border-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-number {
-            font-size: 2rem;
+            color: white;
+            border: 2px solid #ff0066;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             font-weight: bold;
-            color: #00ff66;
-            margin-bottom: 0.5rem;
         }
 
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
+        .tab-btn.active {
+            background: linear-gradient(45deg, #ff0066, #ff3399);
+            box-shadow: 0 5px 15px rgba(255, 0, 102, 0.4);
         }
 
-        /* Leaderboard Sections */
+        .tab-btn:hover {
+            transform: translateY(-2px);
+        }
+
         .leaderboard-grid {
             display: grid;
+            gap: 2rem;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            margin: 3rem 0;
         }
 
         .leaderboard-section {
-            background: rgba(0, 0, 0, 0.6);
-            border: 3px solid #ff0066;
-            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ff66;
+            border-radius: 15px;
             padding: 2rem;
-            box-shadow: 0 20px 40px rgba(255, 0, 102, 0.3);
-        }
-
-        .leaderboard-section.hall-of-fame {
-            border-color: #ffd700;
-            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3);
-        }
-
-        .leaderboard-section.mefc-holders {
-            border-color: #00ff66;
-            box-shadow: 0 20px 40px rgba(0, 255, 102, 0.3);
         }
 
         .section-title {
-            font-size: 1.8rem;
             text-align: center;
-            margin-bottom: 2rem;
-            border-bottom: 2px solid;
-            padding-bottom: 1rem;
-        }
-
-        .section-title.fighters {
-            color: #ff0066;
-            border-color: #ff0066;
-        }
-
-        .section-title.hall {
-            color: #ffd700;
-            border-color: #ffd700;
-        }
-
-        .section-title.mefc {
+            font-size: 1.5rem;
             color: #00ff66;
-            border-color: #00ff66;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
-        /* Leaderboard Items */
         .leaderboard-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1rem;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.5rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             transition: all 0.3s ease;
@@ -209,27 +159,21 @@
             transform: translateX(5px);
         }
 
-        .leaderboard-item.rank-1 {
-            border-left-color: #ffd700;
-            background: rgba(255, 215, 0, 0.1);
-        }
-
-        .leaderboard-item.rank-2 {
-            border-left-color: #c0c0c0;
-            background: rgba(192, 192, 192, 0.1);
-        }
-
-        .leaderboard-item.rank-3 {
-            border-left-color: #cd7f32;
-            background: rgba(205, 127, 50, 0.1);
-        }
+        .leaderboard-item:nth-child(2) { border-left-color: #ffd700; }
+        .leaderboard-item:nth-child(3) { border-left-color: #c0c0c0; }
+        .leaderboard-item:nth-child(4) { border-left-color: #cd7f32; }
 
         .rank {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #ffd700;
-            min-width: 40px;
+            min-width: 50px;
+            text-align: center;
         }
+
+        .rank.gold { color: #ffd700; }
+        .rank.silver { color: #c0c0c0; }
+        .rank.bronze { color: #cd7f32; }
+        .rank.default { color: #00ff66; }
 
         .fighter-info {
             flex: 1;
@@ -238,103 +182,418 @@
 
         .fighter-name {
             font-weight: bold;
-            margin-bottom: 0.3rem;
-            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
         }
 
         .fighter-stats {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             opacity: 0.8;
-            color: #ffff00;
         }
 
-        .votes {
-            color: #00ff66;
-            font-weight: bold;
+        .stats {
             text-align: right;
-        }
-
-        .mefc-amount {
-            color: #00ff66;
             font-weight: bold;
-            text-align: right;
         }
 
-        /* Hall of Fame Special Styling */
-        .hall-of-fame .leaderboard-item {
-            background: rgba(255, 215, 0, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.2);
+        .primary-stat {
+            color: #00ff66;
+            font-size: 1.1rem;
         }
 
-        .hall-of-fame .fighter-info {
-            color: #ffd700;
+        .secondary-stat {
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
 
-        .hall-of-fame .votes {
-            color: #ffd700;
+        /* Statistics Cards */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
         }
 
-        /* Extended Leaderboard */
-        .extended-leaderboard {
-            background: rgba(0, 0, 0, 0.6);
-            border: 2px solid #00ff66;
+        .stat-card {
+            background: rgba(255, 0, 102, 0.1);
+            border: 2px solid #ff0066;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff0066;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Recent Activity */
+        .recent-activity {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #ffff00;
             border-radius: 15px;
             padding: 2rem;
             margin: 3rem 0;
-            grid-column: 1 / -1;
         }
 
-        .extended-title {
-            font-size: 1.8rem;
-            color: #00ff66;
-            text-align: center;
-            margin-bottom: 2rem;
-            border-bottom: 2px solid #00ff66;
-            padding-bottom: 1rem;
-        }
-
-        .extended-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-        }
-
-        /* CTA Buttons */
-        .cta-buttons {
+        .activity-item {
             display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
             gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 3rem 0;
         }
 
-        .cta-btn {
-            background: linear-gradient(45deg, #ff0066, #ff3399);
-            color: white;
-            text-decoration: none;
-            padding: 1rem 2rem;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+        .activity-icon {
+            font-size: 2rem;
+            min-width: 50px;
+            text-align: center;
         }
 
-        .cta-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
+        .activity-content {
+            flex: 1;
         }
 
-        .cta-btn:hover::before {
-            left: 100%;
+        .activity-time {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            text-align: right;
         }
 
-        .cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .leaderboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .nav-links a {
+                font-size: 0.9rem;
+                padding: 0.3rem 0.5rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .leaderboard-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .tab-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #ff0066, #ffff00); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 1.5rem;">🥊</div>
+                MEME FIGHT CLUB
+            </div>
+            <div class="nav-links">
+                <a href="index.html">HOME</a>
+                <a href="battles.html">BATTLES</a>
+                <a href="leaderboard.html" class="active">LEADERBOARD</a>
+                <a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" target="_blank">MEFC TOKEN</a>
+                <a href="disclaimer.html">DISCLAIMER</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">🏆 LEADERBOARD</h1>
+
+        <!-- Tabs -->
+        <div class="leaderboard-tabs">
+            <button class="tab-btn active" onclick="showTab('week')">This Week</button>
+            <button class="tab-btn" onclick="showTab('month')">This Month</button>
+            <button class="tab-btn" onclick="showTab('alltime')">All Time</button>
+        </div>
+
+        <!-- Statistics Overview -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-icon">👑</div>
+                <div class="stat-number" id="totalFighters">15,923</div>
+                <div class="stat-label">Total Fighters</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⚔️</div>
+                <div class="stat-number" id="totalBattles">2,847</div>
+                <div class="stat-label">Battles Fought</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-number" id="tokensDistributed">12.4M</div>
+                <div class="stat-label">MEFC Distributed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-number" id="activeToday">1,234</div>
+                <div class="stat-label">Active Today</div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Grid -->
+        <div class="leaderboard-grid">
+            <!-- Top Fighters -->
+            <div class="leaderboard-section">
+                <div class="section-title">
+                    🥇 Top Fighters
+                </div>
+                <div id="topFighters">
+                    <div class="leaderboard-item">
+                        <div class="rank gold">#1</div>
+                        <div class="fighter-info">
+                            <div class="fighter-name">👑 Chad Wojak</div>
+                            <div class="fighter-stats">Win Rate: 87% • Battles: 156</div>
+                        </div>
+                        <div class="stats">
+                            <div class="primary-stat">15,432 votes</div>
+                            <div class="secondary-stat">+2,341 today</div>
+                        </div>
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="rank silver">#2</div>
+                        <div class="fighter-info">
+                            <div class="fighter-name">🥈 Distracted Boyfriend</div>
+                            <div class="fighter-stats">Win Rate: 82% • Battles: 143</div>
+                        </div>
+                        <div class="stats">
+                            <div class="primary-stat">12,891 votes</div>
+                            <div class="secondary-stat">+1,876 today</div>
+                        </div>
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="rank bronze">#3</div>
+                        <div class="fighter-info">
+                            <div class="fighter-name">🥉 Woman Yelling at Cat</div>
+                            <div class="fighter-stats">Win Rate: 79% • Battles: 134</div>
+                        </div>
+                        <div class="stats">
+                            <div class="primary-stat">11,204 votes</div>
+                            <div class="secondary-stat">+1,523 today</div>
+                        </div>
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="rank default">#4</div>
+                        <div class="fighter-info">
+                            <div class="fighter-name">🎯 Drake Pointing</div>
+                            <div class="fighter-stats">Win Rate: 76% • Battles: 127</div>
+                        </div>
+                        <div class="stats">
+                            <div class="primary-stat">9,876 votes</div>
+                            <div class="secondary-stat">+1,234 today</div>
+                        </div>
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="rank default">#5</div>
+                        <div class="fighter-info">
+                            <div class="fighter-name">🧠 Expanding Brain</div>
+                            <div class="fighter-stats">Win Rate: 74% • Battles: 119</div>
+                        </div>
+                        <div class="stats">
+                            <div class="primary-stat">8,543 votes</div>
+                            <div class="secondary-stat">+987 today</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Most Active Voters -->
+            <div class="leaderboard-section">
+                <div class="section-title">
+                    🗳️ Top Voters
+                </div>
+                <div id="topVoters">
+                    <div class="leaderboard-item">
+                        <div class="rank gold">#1</div>
+                        <div class="fighter-info">
+                            <div class="fighter-name">🐋 CryptoWhale47</div>
+                            <div class="fighter-stats">MEFC Holder • Member since Day 1</div>
+                        </div>
+                        <div class="stats">
+                            <div class="primary-stat">4,532 votes</div>
+                            <div class="secondary-stat">247 today</div>
+                        </div>
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="rank silver">#2</div>
+                        <div class="fighter-info">
+                            <div class="fighter-name">🚀 MoonBoi2024</div>
+                            <div class="fighter-stats">Power Voter • 98% accuracy</div>
+                        </div>
+                        <div class="stats">
+                            <div class="primary-stat">3,891 votes</div>
+                            <div class="secondary-stat">189 today</div>
+                        </div>
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="rank bronze">#3</div>
+                        <div class="fighter-info">
+                            <div class="fighter-name">💎 DiamondHands</div>
+                            <div class="fighter-stats">HODLer • Consistent voter</div>
+                        </div>
+                        <div class="stats">
+                            <div class="primary-stat">3,204 votes</div>
+                            <div class="secondary-stat">156 today</div>
+                        </div>
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="rank default">#4</div>
+                        <div class="fighter-info">
+                            <div class="fighter-name">🎮 GameMaster</div>
+                            <div class="fighter-stats">Daily player • 7-day streak</div>
+                        </div>
+                        <div class="stats">
+                            <div class="primary-stat">2,876 votes</div>
+                            <div class="secondary-stat">143 today</div>
+                        </div>
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="rank default">#5</div>
+                        <div class="fighter-info">
+                            <div class="fighter-name">🔥 FlameWarrior</div>
+                            <div class="fighter-stats">Rising star • New this week</div>
+                        </div>
+                        <div class="stats">
+                            <div class="primary-stat">2,543 votes</div>
+                            <div class="secondary-stat">198 today</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="recent-activity">
+            <div class="section-title">
+                ⚡ Recent Activity
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon">🏆</div>
+                <div class="activity-content">
+                    <strong>Chad Wojak</strong> won against Crying Wojak with 1,247 votes
+                </div>
+                <div class="activity-time">2 minutes ago</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon">🔥</div>
+                <div class="activity-content">
+                    <strong>FlameWarrior</strong> just earned "Hot Streak" achievement
+                </div>
+                <div class="activity-time">5 minutes ago</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon">💰</div>
+                <div class="activity-content">
+                    1,000 MEFC distributed to battle winners
+                </div>
+                <div class="activity-time">12 minutes ago</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon">⚔️</div>
+                <div class="activity-content">
+                    New battle started: <strong>Pepe vs Doge Classic</strong>
+                </div>
+                <div class="activity-time">18 minutes ago</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Tab switching functionality
+        function showTab(period) {
+            // Update active tab
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // You would typically fetch different data here based on the period
+            console.log('Showing leaderboard for:', period);
+            
+            // For now, we'll just update the title to show it's working
+            const title = document.querySelector('.page-title');
+            const periods = {
+                'week': '🏆 WEEKLY LEADERBOARD',
+                'month': '🏆 MONTHLY LEADERBOARD', 
+                'alltime': '🏆 ALL-TIME LEADERBOARD'
+            };
+            title.textContent = periods[period] || '🏆 LEADERBOARD';
+        }
+
+        // Simulate live updates
+        function updateStats() {
+            const elements = {
+                'totalFighters': { min: 15900, max: 16000 },
+                'totalBattles': { min: 2800, max: 2900 },
+                'activeToday': { min: 1200, max: 1300 }
+            };
+            
+            Object.keys(elements).forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    const range = elements[id];
+                    const current = parseInt(element.textContent.replace(/[^0-9]/g, ''));
+                    const change = Math.floor(Math.random() * 10) - 5;
+                    const newValue = Math.max(range.min, Math.min(range.max, current + change));
+                    
+                    if (id === 'totalFighters') {
+                        element.textContent = newValue.toLocaleString();
+                    } else {
+                        element.textContent = newValue;
+                    }
+                }
+            });
+        }
+
+        // Update vote counts
+        function updateVoteCounts() {
+            const voteElements = document.querySelectorAll('.primary-stat');
+            voteElements.forEach(element => {
+                if (element.textContent.includes('votes')) {
+                    const currentVotes = parseInt(element.textContent.replace(/[^0-9]/g, ''));
+                    const increment = Math.floor(Math.random() * 50) + 1;
+                    element.textContent = (currentVotes + increment).toLocaleString() + ' votes';
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start update intervals
+            setInterval(updateStats, 30000); // Every 30 seconds
+            setInterval(updateVoteCounts, 10000); // Every 10 seconds
+            
+            console.log('Leaderboard loaded successfully!');
+        });
+    </script>
+</body>
+</html>
