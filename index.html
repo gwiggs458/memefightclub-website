@@ -138,28 +138,6 @@
             z-index: 10;
         }
 
-        /* Demo Mode Disclaimer */
-        .demo-disclaimer {
-            text-align: center;
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin: 1rem 0;
-            padding: 1rem;
-            background: rgba(255, 165, 0, 0.15);
-            border-radius: 10px;
-            border: 1px solid #ffa500;
-            max-width: 600px;
-            width: 100%;
-            position: relative;
-            z-index: 10;
-            animation: glow 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from { box-shadow: 0 0 10px rgba(255, 165, 0, 0.3); }
-            to { box-shadow: 0 0 20px rgba(255, 165, 0, 0.6); }
-        }
-
         /* Live Battle Arena */
         .battle-arena {
             background: rgba(0, 0, 0, 0.8);
@@ -167,7 +145,7 @@
             border-radius: 20px;
             padding: 2rem;
             margin: 2rem 0;
-            max-width: 800px;
+            max-width: 1000px;
             width: 100%;
             box-shadow: 0 20px 40px rgba(255, 0, 102, 0.3);
             position: relative;
@@ -192,108 +170,182 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
 
-        .fighters {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* Top 6 Meme Coins Display */
+        .top-five {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
             margin: 2rem 0;
-            gap: 2rem;
         }
 
-        .fighter {
-            flex: 1;
-            text-align: center;
-            padding: 1.5rem;
+        .top-coin {
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
             border: 2px solid transparent;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .fighter:hover {
-            border-color: #ff0066;
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(255, 0, 102, 0.4);
-        }
-
-        .fighter.winning {
-            border-color: #00ff66;
-            box-shadow: 0 0 20px rgba(0, 255, 102, 0.5);
-        }
-
-        .fighter-emoji {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .fighter-name {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .vote-count {
-            font-size: 1.1rem;
-            color: #00ff66;
-            font-weight: bold;
-        }
-
-        .vs-divider {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 2rem;
-            font-weight: bold;
-            color: #ffff00;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-        }
-
-        .vote-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-
-        .vote-btn {
-            background: linear-gradient(45deg, #ff0066, #ff3399);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .vote-btn::before {
-            content: '';
+        .top-coin:hover {
+            border-color: #ff0066;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 0, 102, 0.4);
+        }
+
+        .top-coin.voted {
+            border-color: #00ff66;
+            background: rgba(0, 255, 102, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);
+        }
+
+        .coin-rank {
             position: absolute;
-            top: 0;
-            left: -100%;
+            top: 10px;
+            left: 10px;
+            background: #ff0066;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .coin-symbol {
+            font-size: 2.5rem;
+            margin: 1rem 0 0.5rem;
+            font-weight: bold;
+        }
+
+        .coin-name {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .vote-count {
+            font-size: 1.1rem;
+            color: #00ff66;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .vote-percentage {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
             width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
+            background: linear-gradient(45deg, #ff0066, #ff3399);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            width: 0%;
         }
 
-        .vote-btn:hover::before {
-            left: 100%;
+        /* Remaining Coins List */
+        .remaining-coins {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #00ff66;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            max-width: 1000px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
         }
 
-        .vote-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 0, 102, 0.5);
+        .remaining-title {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #00ff66;
+            margin-bottom: 2rem;
+        }
+
+        .coin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .coin-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .coin-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ff0066;
+            transform: translateX(5px);
+        }
+
+        .coin-item.voted {
+            background: rgba(0, 255, 102, 0.1);
+            border-color: #00ff66;
+        }
+
+        .coin-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .coin-rank-small {
+            background: #333;
+            color: #ccc;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            margin-right: 1rem;
+            min-width: 25px;
+        }
+
+        .coin-details {
+            flex: 1;
+        }
+
+        .coin-name-small {
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+        }
+
+        .coin-symbol-small {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .coin-votes {
+            text-align: right;
+            color: #00ff66;
+            font-weight: bold;
         }
 
         /* Stats Dashboard */
@@ -331,58 +383,6 @@
         .stat-label {
             font-size: 0.9rem;
             opacity: 0.8;
-        }
-
-        /* Leaderboard */
-        .leaderboard {
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #00ff66;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 4rem 0;
-            max-width: 600px;
-            width: 100%;
-            position: relative;
-            z-index: 10;
-        }
-
-        .leaderboard-title {
-            text-align: center;
-            font-size: 1.5rem;
-            color: #00ff66;
-            margin-bottom: 2rem;
-        }
-
-        .leaderboard-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            transition: background 0.3s ease;
-        }
-
-        .leaderboard-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .rank {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #ffd700;
-            min-width: 40px;
-        }
-
-        .fighter-info {
-            flex: 1;
-            margin-left: 1rem;
-        }
-
-        .votes {
-            color: #00ff66;
-            font-weight: bold;
         }
 
         /* CTA Section */
@@ -519,18 +519,12 @@
                 font-size: 2.5rem;
             }
 
-            .fighters {
-                flex-direction: column;
-                gap: 1rem;
+            .coin-grid {
+                grid-template-columns: 1fr;
             }
 
-            .vs-divider {
-                order: 2;
-                margin: 1rem 0;
-            }
-
-            .vote-buttons {
-                flex-direction: column;
+            .top-five {
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .cta-buttons {
@@ -544,7 +538,7 @@
         }
 
         /* Ensure content is always visible */
-        .hero, .hero-title, .battle-arena, .stats-dashboard, .leaderboard, .cta-section {
+        .hero, .hero-title, .battle-arena, .stats-dashboard, .remaining-coins, .cta-section {
             visibility: visible !important;
             opacity: 1 !important;
         }
@@ -571,57 +565,42 @@
     <!-- Hero Section -->
     <section class="hero">
         <h1 class="hero-title">🥊 MEME FIGHT CLUB</h1>
-        <p class="hero-subtitle">Where Memes Battle for Crypto Glory</p>
+        <p class="hero-subtitle">Vote for Your Favorite Meme Coin Champion</p>
 
         <!-- Live Battle Arena -->
         <div class="battle-arena">
             <div class="battle-header">
-                <div class="battle-status">🔴 LIVE BATTLE IN PROGRESS</div>
+                <div class="battle-status">🔴 LIVE MEME COIN VOTING</div>
                 <div class="battle-timer" id="battleTimer">2:34:12</div>
                 <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;">
-                    💰 Prize Pool: 1,000,000 MEFC | 👥 <span id="voterCount">3,421</span> voters
+                    💰 Prize Pool: 1,000,000 MEFC | 👥 <span id="totalVotes">0</span> total votes
                 </div>
             </div>
 
-            <div class="fighters">
-                <div class="fighter" id="fighter1" onclick="vote('pepe')">
-                    <div class="fighter-emoji">🐸</div>
-                    <div class="fighter-name">Pepe Returns</div>
-                    <div class="vote-count" id="pepe-votes">1,247 votes</div>
-                </div>
-
-                <div class="vs-divider">
-                    <div>⚡</div>
-                    <div>VS</div>
-                    <div>⚡</div>
-                </div>
-
-                <div class="fighter" id="fighter2" onclick="vote('doge')">
-                    <div class="fighter-emoji">🐕</div>
-                    <div class="fighter-name">Doge Classic</div>
-                    <div class="vote-count" id="doge-votes">982 votes</div>
-                </div>
+            <!-- Top 6 Meme Coins -->
+            <h3 style="text-align: center; color: #ffff00; margin-bottom: 1rem;">🏆 TOP 6 MEME COINS</h3>
+            <div class="top-five" id="topSix">
+                <!-- Top 6 coins will be populated by JavaScript -->
             </div>
 
-            <div class="vote-buttons">
-                <button class="vote-btn" onclick="vote('pepe')">🗳️ VOTE PEPE</button>
-                <button class="vote-btn" onclick="vote('doge')">🗳️ VOTE DOGE</button>
+            <!-- Remaining Coins -->
+            <div class="remaining-coins">
+                <div class="remaining-title">🎯 ALL MEME COINS (7-30)</div>
+                <div class="coin-grid" id="remainingCoins">
+                    <!-- Remaining coins will be populated by JavaScript -->
+                </div>
             </div>
         </div>
 
         <!-- Stats Dashboard -->
         <div class="stats-dashboard">
             <div class="stat-card">
-                <div class="stat-number" id="totalBattles">2,847</div>
-                <div class="stat-label">Total Battles</div>
-            </div>
-            <div class="stat-card">
                 <div class="stat-number" id="mefcDistributed">12.4M</div>
                 <div class="stat-label">MEFC Distributed</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="activeFighters">15,923</div>
-                <div class="stat-label">Active Fighters</div>
+                <div class="stat-number" id="memeCoins">30</div>
+                <div class="stat-label">Meme Coins Listed</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number" id="onlineNow">423</div>
@@ -629,50 +608,10 @@
             </div>
         </div>
 
-        <!-- Leaderboard -->
-        <div class="leaderboard">
-            <div class="leaderboard-title">🏆 TOP FIGHTERS THIS WEEK</div>
-            <div class="leaderboard-item">
-                <div class="rank">#1</div>
-                <div class="fighter-info">
-                    <div>👑 Chad Wojak</div>
-                </div>
-                <div class="votes">15,432 votes</div>
-            </div>
-            <div class="leaderboard-item">
-                <div class="rank">#2</div>
-                <div class="fighter-info">
-                    <div>🥈 Distracted Boyfriend</div>
-                </div>
-                <div class="votes">12,891 votes</div>
-            </div>
-            <div class="leaderboard-item">
-                <div class="rank">#3</div>
-                <div class="fighter-info">
-                    <div>🥉 Woman Yelling at Cat</div>
-                </div>
-                <div class="votes">11,204 votes</div>
-            </div>
-            <div class="leaderboard-item">
-                <div class="rank">#4</div>
-                <div class="fighter-info">
-                    <div>🎯 Drake Pointing</div>
-                </div>
-                <div class="votes">9,876 votes</div>
-            </div>
-            <div class="leaderboard-item">
-                <div class="rank">#5</div>
-                <div class="fighter-info">
-                    <div>🧠 Expanding Brain</div>
-                </div>
-                <div class="votes">8,543 votes</div>
-            </div>
-        </div>
-
         <!-- CTA Section -->
         <div class="cta-section">
-            <div class="cta-title">🚀 READY TO FIGHT?</div>
-            <div class="cta-subtitle">Join thousands of meme warriors in the ultimate crypto battle arena</div>
+            <div class="cta-title">🚀 READY TO VOTE?</div>
+            <div class="cta-subtitle">Join thousands of meme warriors in the ultimate crypto voting arena</div>
             <div class="cta-buttons">
                 <a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" class="cta-btn" target="_blank">💰 GET MEFC TOKENS</a>
                 <a href="#" class="cta-btn secondary-btn">📱 JOIN DISCORD</a>
@@ -683,11 +622,6 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <!-- Demo Mode Disclaimer -->
-        <div class="demo-disclaimer" style="margin: 0 auto 2rem auto; text-align: center;">
-            ⚠️ <strong>DEMO MODE:</strong> Real-time blockchain voting coming soon! Get MEFC tokens now for early access & weighted voting power.
-        </div>
-        
         <div class="footer-links">
             <a href="disclaimer.html">Disclaimer</a>
             <a href="terms.html">Terms</a>
@@ -699,6 +633,43 @@
     </footer>
 
     <script>
+        // Top 30 Meme Coins data based on market research
+        const memeCoins = [
+            { rank: 1, symbol: 'DOGE', name: 'Dogecoin', emoji: '🐕', votes: 0 },
+            { rank: 2, symbol: 'SHIB', name: 'Shiba Inu', emoji: '🐶', votes: 0 },
+            { rank: 3, symbol: 'PEPE', name: 'Pepe', emoji: '🐸', votes: 0 },
+            { rank: 4, symbol: 'WIF', name: 'Dogwifhat', emoji: '🎩', votes: 0 },
+            { rank: 5, symbol: 'BONK', name: 'Bonk', emoji: '⚾', votes: 0 },
+            { rank: 6, symbol: 'FLOKI', name: 'Floki Inu', emoji: '🗡️', votes: 0 },
+            { rank: 7, symbol: 'TRUMP', name: 'Official Trump', emoji: '🇺🇸', votes: 0 },
+            { rank: 8, symbol: 'BRETT', name: 'Brett', emoji: '👱', votes: 0 },
+            { rank: 9, symbol: 'POPCAT', name: 'Popcat', emoji: '😺', votes: 0 },
+            { rank: 10, symbol: 'MOG', name: 'Mog Coin', emoji: '😼', votes: 0 },
+            { rank: 11, symbol: 'NEIRO', name: 'Neiro', emoji: '🐕‍🦺', votes: 0 },
+            { rank: 12, symbol: 'TURBO', name: 'Turbo', emoji: '🏎️', votes: 0 },
+            { rank: 13, symbol: 'MEME', name: 'Meme', emoji: '😂', votes: 0 },
+            { rank: 14, symbol: 'CAT', name: 'Simon\'s Cat', emoji: '🐱', votes: 0 },
+            { rank: 15, symbol: 'GOAT', name: 'Goatseus Maximus', emoji: '🐐', votes: 0 },
+            { rank: 16, symbol: 'PNUT', name: 'Peanut', emoji: '🥜', votes: 0 },
+            { rank: 17, symbol: 'ACT', name: 'Act I', emoji: '🎭', votes: 0 },
+            { rank: 18, symbol: 'PONKE', name: 'Ponke', emoji: '🐒', votes: 0 },
+            { rank: 19, symbol: 'MOODENG', name: 'Moo Deng', emoji: '🦛', votes: 0 },
+            { rank: 20, symbol: 'CHILLGUY', name: 'Chill Guy', emoji: '😎', votes: 0 },
+            { rank: 21, symbol: 'BOME', name: 'Book of Meme', emoji: '📚', votes: 0 },
+            { rank: 22, symbol: 'MYRO', name: 'Myro', emoji: '🐕', votes: 0 },
+            { rank: 23, symbol: 'DOGS', name: 'Dogs', emoji: '🐕‍🦺', votes: 0 },
+            { rank: 24, symbol: 'WEN', name: 'Wen', emoji: '⏰', votes: 0 },
+            { rank: 25, symbol: 'DEGEN', name: 'Degen', emoji: '🎰', votes: 0 },
+            { rank: 26, symbol: 'PEPU', name: 'Pepe Unchained', emoji: '🐸⛓️', votes: 0 },
+            { rank: 27, symbol: 'SLERF', name: 'Slerf', emoji: '🦥', votes: 0 },
+            { rank: 28, symbol: 'MEW', name: 'Cat in a Dogs World', emoji: '🐱', votes: 0 },
+            { rank: 29, symbol: 'HONK', name: 'Honk', emoji: '🚗', votes: 0 },
+            { rank: 30, symbol: 'MEFC', name: 'Meme Fight Club', emoji: '🥊', votes: 0 }
+        ];
+
+        let userVoted = false;
+        let totalVoteCount = 0;
+
         // Battle Timer Countdown
         function updateTimer() {
             const timer = document.getElementById('battleTimer');
@@ -717,10 +688,10 @@
                     minutes = 59;
                     hours--;
                     if (hours < 0) {
-                        // Battle ended, start new one
                         hours = 2;
                         minutes = 59;
                         seconds = 59;
+                        resetVotes();
                     }
                 }
             }
@@ -729,59 +700,95 @@
         }
 
         // Vote Function
-        function vote(fighter) {
-            const element = document.getElementById(fighter + '-votes');
-            if (!element) return;
-            
-            let currentVotes = parseInt(element.textContent);
-            let increment = Math.floor(Math.random() * 5) + 1;
-            currentVotes += increment;
-            element.textContent = currentVotes + ' votes';
-            
-            // Visual feedback
-            element.style.color = '#ffff00';
-            setTimeout(() => {
-                element.style.color = '#00ff66';
-            }, 500);
-            
-            // Update voter count
-            const voterCount = document.getElementById('voterCount');
-            if (voterCount) {
-                voterCount.textContent = parseInt(voterCount.textContent) + 1;
+        function vote(symbol) {
+            if (userVoted) {
+                showMessage('You can only vote once per battle! 🗳️');
+                return;
             }
-            
-            // Check for winner
-            updateWinningFighter();
-            
-            // Show vote confirmation
-            showVoteConfirmation(fighter);
-        }
 
-        // Update winning fighter visual
-        function updateWinningFighter() {
-            const pepeVotesEl = document.getElementById('pepe-votes');
-            const dogeVotesEl = document.getElementById('doge-votes');
-            
-            if (!pepeVotesEl || !dogeVotesEl) return;
-            
-            const pepeVotes = parseInt(pepeVotesEl.textContent);
-            const dogeVotes = parseInt(dogeVotesEl.textContent);
-            
-            const fighter1 = document.getElementById('fighter1');
-            const fighter2 = document.getElementById('fighter2');
-            
-            if (fighter1) fighter1.classList.remove('winning');
-            if (fighter2) fighter2.classList.remove('winning');
-            
-            if (pepeVotes > dogeVotes && fighter1) {
-                fighter1.classList.add('winning');
-            } else if (dogeVotes > pepeVotes && fighter2) {
-                fighter2.classList.add('winning');
+            const coin = memeCoins.find(c => c.symbol === symbol);
+            if (coin) {
+                coin.votes++;
+                totalVoteCount++;
+                userVoted = true;
+                
+                updateDisplay();
+                showMessage(`Vote recorded for ${coin.emoji} ${coin.name}! 🎉`);
+                
+                // Simulate other votes
+                simulateOtherVotes();
             }
         }
 
-        // Show vote confirmation
-        function showVoteConfirmation(fighter) {
+        // Update display
+        function updateDisplay() {
+            // Sort coins by votes for ranking
+            const sortedCoins = [...memeCoins].sort((a, b) => b.votes - a.votes);
+            
+            // Update total votes
+            document.getElementById('totalVotes').textContent = totalVoteCount;
+            
+            // Update top 6
+            updateTopSix(sortedCoins.slice(0, 6));
+            
+            // Update remaining coins
+            updateRemainingCoins(sortedCoins.slice(6));
+        }
+
+        // Update top 6 display
+        function updateTopSix(topCoins) {
+            const container = document.getElementById('topSix');
+            container.innerHTML = '';
+            
+            topCoins.forEach((coin, index) => {
+                const percentage = totalVoteCount > 0 ? Math.round((coin.votes / totalVoteCount) * 100) : 0;
+                
+                const coinEl = document.createElement('div');
+                coinEl.className = `top-coin ${userVoted && coin.votes > 0 ? 'voted' : ''}`;
+                coinEl.onclick = () => vote(coin.symbol);
+                
+                coinEl.innerHTML = `
+                    <div class="coin-rank">${index + 1}</div>
+                    <div class="coin-symbol">${coin.emoji}</div>
+                    <div class="coin-name">${coin.name}</div>
+                    <div class="vote-count">${coin.votes} votes</div>
+                    <div class="vote-percentage">${percentage}%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+                
+                container.appendChild(coinEl);
+            });
+        }
+
+        // Update remaining coins display
+        function updateRemainingCoins(remainingCoins) {
+            const container = document.getElementById('remainingCoins');
+            container.innerHTML = '';
+            
+            remainingCoins.forEach((coin, index) => {
+                const coinEl = document.createElement('div');
+                coinEl.className = `coin-item ${userVoted && coin.votes > 0 ? 'voted' : ''}`;
+                coinEl.onclick = () => vote(coin.symbol);
+                
+                coinEl.innerHTML = `
+                    <div class="coin-info">
+                        <div class="coin-rank-small">${coin.rank}</div>
+                        <div class="coin-details">
+                            <div class="coin-name-small">${coin.emoji} ${coin.name}</div>
+                            <div class="coin-symbol-small">${coin.symbol}</div>
+                        </div>
+                    </div>
+                    <div class="coin-votes">${coin.votes} votes</div>
+                `;
+                
+                container.appendChild(coinEl);
+            });
+        }
+
+        // Show message popup
+        function showMessage(message) {
             const popup = document.createElement('div');
             popup.style.cssText = `
                 position: fixed;
@@ -790,23 +797,16 @@
                 transform: translate(-50%, -50%);
                 background: linear-gradient(45deg, #ff0066, #ff3399);
                 color: white;
-                padding: 2rem;
+                padding: 1.5rem 2rem;
                 border-radius: 15px;
                 text-align: center;
                 z-index: 10000;
                 font-weight: bold;
-                font-size: 1.2rem;
+                font-size: 1.1rem;
                 box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+                max-width: 90vw;
             `;
-            popup.innerHTML = `
-                🎉 Vote Recorded!<br>
-                <div style="margin: 1rem 0; font-size: 1rem;">
-                    You voted for ${fighter === 'pepe' ? '🐸 Pepe' : '🐕 Doge'}!
-                </div>
-                <div style="font-size: 0.9rem; opacity: 0.8;">
-                    Get MEFC tokens for weighted voting power!
-                </div>
-            `;
+            popup.textContent = message;
             
             document.body.appendChild(popup);
             
@@ -815,45 +815,51 @@
             }, 3000);
         }
 
-        // Random vote updates (simulate other users)
-        function simulateActivity() {
-            const fighters = ['pepe', 'doge'];
-            const randomFighter = fighters[Math.floor(Math.random() * fighters.length)];
-            const element = document.getElementById(randomFighter + '-votes');
+        // Simulate other users voting
+        function simulateOtherVotes() {
+            // Add 3-7 votes over the next 15 seconds
+            const otherVotes = Math.floor(Math.random() * 5) + 3;
             
-            if (!element) return;
-            
-            let currentVotes = parseInt(element.textContent);
-            currentVotes += Math.floor(Math.random() * 3) + 1;
-            element.textContent = currentVotes + ' votes';
-            
-            // Update voter count
-            const voterCount = document.getElementById('voterCount');
-            if (voterCount) {
-                voterCount.textContent = parseInt(voterCount.textContent) + Math.floor(Math.random() * 3) + 1;
+            for (let i = 0; i < otherVotes; i++) {
+                setTimeout(() => {
+                    const randomCoin = memeCoins[Math.floor(Math.random() * memeCoins.length)];
+                    randomCoin.votes++;
+                    totalVoteCount++;
+                    updateDisplay();
+                }, (i + 1) * 2000 + Math.random() * 3000);
             }
-            
-            updateWinningFighter();
+        }
+
+        // Simulate periodic activity
+        function simulatePeriodicActivity() {
+            if (Math.random() > 0.6) { // 40% chance
+                const randomCoin = memeCoins[Math.floor(Math.random() * memeCoins.length)];
+                randomCoin.votes++;
+                totalVoteCount++;
+                updateDisplay();
+            }
+        }
+
+        // Reset votes for new battle
+        function resetVotes() {
+            memeCoins.forEach(coin => coin.votes = 0);
+            totalVoteCount = 0;
+            userVoted = false;
+            updateDisplay();
+            showMessage('🔄 New battle started! Vote again!');
         }
 
         // Random stats updates
         function updateStats() {
-            const stats = ['totalBattles', 'activeFighters', 'onlineNow'];
+            const stats = ['memeCoins', 'onlineNow'];
             stats.forEach(stat => {
                 const element = document.getElementById(stat);
-                if (element) {
+                if (element && stat !== 'memeCoins') {
                     let current = parseInt(element.textContent.replace(/[^0-9]/g, ''));
-                    let change = Math.floor(Math.random() * 5) + 1;
-                    if (stat === 'onlineNow') {
-                        change = Math.floor(Math.random() * 10) - 5; // Can go up or down
-                        current = Math.max(current + change, 100); // Keep minimum
-                    } else {
-                        current += change;
-                    }
                     
-                    if (stat === 'activeFighters') {
-                        element.textContent = current.toLocaleString();
-                    } else {
+                    if (stat === 'onlineNow') {
+                        let change = Math.floor(Math.random() * 20) - 10; // Can go up or down
+                        current = Math.max(current + change, 100); // Keep minimum of 100
                         element.textContent = current;
                     }
                 }
@@ -862,15 +868,15 @@
 
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize display
+            updateDisplay();
+            
             // Start timers
             setInterval(updateTimer, 1000);
-            setInterval(simulateActivity, 8000);
-            setInterval(updateStats, 15000);
+            setInterval(simulatePeriodicActivity, 30000); // Every 30 seconds
+            setInterval(updateStats, 20000); // Every 20 seconds
             
-            // Initial winner check
-            updateWinningFighter();
-            
-            console.log('Meme Fight Club loaded successfully!');
+            console.log('Meme Fight Club with TOP 30 MEME COIN VOTING loaded successfully!');
         });
 
         // Smooth scrolling for mobile
