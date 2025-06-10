@@ -633,6 +633,14 @@
     </footer>
 
     <script>
+        // Storage keys for syncing with leaderboard
+        const STORAGE_KEYS = {
+            votes: 'mefc_voting_data',
+            history: 'mefc_battle_history',
+            lastUpdate: 'mefc_last_update',
+            battleTimer: 'mefc_battle_timer'
+        };
+
         // Top 30 Meme Coins data based on market research
         const memeCoins = [
             { rank: 1, symbol: 'DOGE', name: 'Dogecoin', emoji: '🐕', votes: 0 },
@@ -670,6 +678,84 @@
         let userVoted = false;
         let totalVoteCount = 0;
 
+        // Load existing voting data from localStorage
+        function loadExistingData() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEYS.votes);
+                if (stored) {
+                    const data = JSON.parse(stored);
+                    if (data.coins && data.totalVotes !== undefined) {
+                        // Merge stored votes with current coin data
+                        data.coins.forEach(storedCoin => {
+                            const currentCoin = memeCoins.find(c => c.symbol === storedCoin.symbol);
+                            if (currentCoin) {
+                                currentCoin.votes = storedCoin.votes || 0;
+                            }
+                        });
+                        totalVoteCount = data.totalVotes || 0;
+                        
+                        // Check if user already voted in current session
+                        userVoted = data.userVoted || false;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading existing voting data:', error);
+            }
+        }
+
+        // Save voting data to localStorage for leaderboard sync
+        function saveVotingData() {
+            try {
+                const data = {
+                    coins: memeCoins,
+                    totalVotes: totalVoteCount,
+                    userVoted: userVoted,
+                    timestamp: new Date().toISOString()
+                };
+                
+                localStorage.setItem(STORAGE_KEYS.votes, JSON.stringify(data));
+                localStorage.setItem(STORAGE_KEYS.lastUpdate, new Date().toISOString());
+                
+                console.log('Voting data saved for leaderboard sync');
+            } catch (error) {
+                console.error('Error saving voting data:', error);
+            }
+        }
+
+        // Save battle timer for leaderboard sync
+        function saveBattleTimer(timeString) {
+            try {
+                localStorage.setItem(STORAGE_KEYS.battleTimer, timeString);
+            } catch (error) {
+                console.error('Error saving battle timer:', error);
+            }
+        }
+
+        // Save battle history when round resets
+        function saveBattleHistory() {
+            try {
+                if (totalVoteCount === 0) return;
+                
+                const history = JSON.parse(localStorage.getItem(STORAGE_KEYS.history) || '[]');
+                const winner = [...memeCoins].sort((a, b) => b.votes - a.votes)[0];
+                
+                const battleRecord = {
+                    timestamp: new Date().toISOString(),
+                    winner: winner,
+                    totalVotes: totalVoteCount,
+                    topThree: [...memeCoins].sort((a, b) => b.votes - a.votes).slice(0, 3)
+                };
+                
+                history.unshift(battleRecord);
+                if (history.length > 10) history.pop(); // Keep last 10 rounds
+                
+                localStorage.setItem(STORAGE_KEYS.history, JSON.stringify(history));
+                console.log('Battle history saved:', battleRecord);
+            } catch (error) {
+                console.error('Error saving battle history:', error);
+            }
+        }
+
         // Battle Timer Countdown
         function updateTimer() {
             const timer = document.getElementById('battleTimer');
@@ -696,13 +782,17 @@
                 }
             }
             
-            timer.textContent = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            const timeString = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            timer.textContent = timeString;
+            
+            // Save timer for leaderboard sync
+            saveBattleTimer(timeString);
         }
 
-        // Vote Function
+        // Vote Function - Now with localStorage sync
         function vote(symbol) {
             if (userVoted) {
-                showMessage('You can only vote once per battle! 🗳️');
+                showMessage('You can only vote once per round! 🗳️');
                 return;
             }
 
@@ -711,6 +801,9 @@
                 coin.votes++;
                 totalVoteCount++;
                 userVoted = true;
+                
+                // Save data immediately for leaderboard sync
+                saveVotingData();
                 
                 updateDisplay();
                 showMessage(`Vote recorded for ${coin.emoji} ${coin.name}! 🎉`);
@@ -733,6 +826,9 @@
             
             // Update remaining coins
             updateRemainingCoins(sortedCoins.slice(6));
+            
+            // Save updated data for leaderboard
+            saveVotingData();
         }
 
         // Update top 6 display
@@ -825,7 +921,7 @@
                     const randomCoin = memeCoins[Math.floor(Math.random() * memeCoins.length)];
                     randomCoin.votes++;
                     totalVoteCount++;
-                    updateDisplay();
+                    updateDisplay(); // This will also save data
                 }, (i + 1) * 2000 + Math.random() * 3000);
             }
         }
@@ -836,17 +932,22 @@
                 const randomCoin = memeCoins[Math.floor(Math.random() * memeCoins.length)];
                 randomCoin.votes++;
                 totalVoteCount++;
-                updateDisplay();
+                updateDisplay(); // This will also save data
             }
         }
 
-        // Reset votes for new battle
+        // Reset votes for new round
         function resetVotes() {
+            // Save current round to history before reset
+            saveBattleHistory();
+            
+            // Reset all votes
             memeCoins.forEach(coin => coin.votes = 0);
             totalVoteCount = 0;
             userVoted = false;
+            
             updateDisplay();
-            showMessage('🔄 New battle started! Vote again!');
+            showMessage('🔄 New voting round started! Vote again!');
         }
 
         // Random stats updates
@@ -868,7 +969,10 @@
 
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize display
+            // Load existing voting data first
+            loadExistingData();
+            
+            // Initialize display with loaded data
             updateDisplay();
             
             // Start timers
@@ -876,7 +980,8 @@
             setInterval(simulatePeriodicActivity, 30000); // Every 30 seconds
             setInterval(updateStats, 20000); // Every 20 seconds
             
-            console.log('Meme Fight Club with TOP 30 MEME COIN VOTING loaded successfully!');
+            console.log('Meme Fight Club with LIVE SYNC loaded successfully!');
+            console.log('Loaded total votes:', totalVoteCount);
         });
 
         // Smooth scrolling for mobile
