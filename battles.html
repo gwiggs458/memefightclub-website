@@ -572,10 +572,10 @@
                     📰 Latest Meme Coin News
                     <button class="refresh-btn" onclick="refreshNews()">🔄 Refresh</button>
                 </h2>
-                <div class="loading-indicator" id="loadingNews" style="text-align: center; padding: 2rem; color: #ffff00;">
+                <div class="loading-indicator" id="loadingNews" style="text-align: center; padding: 2rem; color: #ffff00; display: block;">
                     🔄 Loading latest news...
                 </div>
-                <div id="newsContainer">
+                <div id="newsContainer" style="display: none;">
                     <!-- News items will be populated -->
                 </div>
             </section>
@@ -936,20 +936,6 @@
                 }
             });
         }, observerOptions);
-
-        // Initialize animations when DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Setting up animations...');
-            // Add animation classes to elements
-            const animatedElements = document.querySelectorAll('.news-item, .panel-section');
-            animatedElements.forEach((el, index) => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
-                el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
-                observer.observe(el);
-            });
-            console.log('Animations setup complete');
-        });
     </script>
 </body>
 </html>
