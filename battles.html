@@ -582,16 +582,19 @@
 
             <!-- Community Panel -->
             <aside class="community-panel">
-                <!-- MEFC Holder Benefits -->
+                <!-- Meme Fight Club -->
                 <section class="panel-section holder-benefits">
-                    <h3 class="section-title">💰 MEFC Holder Benefits</h3>
-                    <div class="benefit-item">🗳️ Enhanced voting power (1 MEFC = 10 votes)</div>
-                    <div class="benefit-item">🎨 Unlimited meme uploads</div>
-                    <div class="benefit-item">🏆 Exclusive meme contests</div>
-                    <div class="benefit-item">📰 Early news alerts</div>
-                    <div class="benefit-item">🎁 Monthly airdrops</div>
-                    <div class="benefit-item">💬 VIP Discord channels</div>
-                    <div class="benefit-item">📊 Advanced analytics</div>
+                    <h3 class="section-title" style="justify-content: center;">🥊 MEME FIGHT CLUB</h3>
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <div style="width: 120px; height: 120px; margin: 0 auto 1rem; background: linear-gradient(45deg, #ff0066, #ffff00, #00ff66); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; border: 3px solid #fff; box-shadow: 0 10px 30px rgba(255, 0, 102, 0.3);">
+                            🥊
+                        </div>
+                        <div style="font-size: 1.2rem; font-weight: bold; color: #ffff00; margin-bottom: 0.5rem;">Meme Fight Club</div>
+                        <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 1rem;">The ultimate meme fighting champion!</div>
+                        <a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" target="_blank" class="submit-btn" style="text-decoration: none; display: inline-block; font-size: 0.9rem; padding: 0.8rem 1.5rem;">
+                            🚀 GET MEFC TOKENS
+                        </a>
+                    </div>
                 </section>
 
                 <!-- Community Stats -->
@@ -920,6 +923,10 @@
             const newsContainer = document.getElementById('newsContainer');
             const loadingNews = document.getElementById('loadingNews');
             
+            // Show loading initially
+            loadingNews.style.display = 'block';
+            newsContainer.innerHTML = '';
+            
             // Simulate loading delay
             setTimeout(() => {
                 loadingNews.style.display = 'none';
@@ -933,7 +940,7 @@
                         <div class="news-source">Source: ${news.source}</div>
                     </div>
                 `).join('');
-            }, 2000);
+            }, 1500);
         }
 
         function refreshNews() {
