@@ -57,8 +57,8 @@
 
         .nav-links {
             display: flex;
-            gap: 0.5rem;
-            flex-wrap: nowrap;
+            gap: 0.8rem;
+            flex-wrap: wrap;
         }
 
         .nav-links a {
@@ -67,7 +67,7 @@
             transition: color 0.3s;
             padding: 0.4rem 0.7rem;
             border-radius: 5px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             white-space: nowrap;
         }
 
@@ -498,6 +498,43 @@
         }
 
         /* Mobile Responsive */
+        @media (max-width: 1200px) {
+            .nav-links {
+                gap: 0.6rem;
+            }
+            
+            .nav-links a {
+                font-size: 0.85rem;
+                padding: 0.3rem 0.6rem;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .nav-links {
+                gap: 0.5rem;
+                justify-content: center;
+            }
+            
+            .nav-links a {
+                font-size: 0.8rem;
+                padding: 0.25rem 0.5rem;
+            }
+            
+            .header {
+                padding: 0.8rem 1rem;
+            }
+            
+            .main-content {
+                margin-top: 180px;
+            }
+        }
+
         @media (max-width: 768px) {
             .hub-grid {
                 grid-template-columns: 1fr;
@@ -514,11 +551,6 @@
             .social-links {
                 flex-direction: column;
                 align-items: stretch;
-            }
-
-            .nav-links a {
-                font-size: 0.75rem;
-                padding: 0.3rem 0.5rem;
             }
 
             .logo {
@@ -551,11 +583,11 @@
                 MEME FIGHT CLUB
             </div>
             <div class="nav-links">
-                <a href="#home">HOME</a>
-                <a href="#community" class="active">COMMUNITY</a>
-                <a href="#leaderboard">LEADERBOARD</a>
-                <a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" target="_blank">MEFC TOKEN</a>
-                <a href="#disclaimer">DISCLAIMER</a>
+                <a href="https://memefightclub.com/">HOME</a>
+                <a href="https://memefightclub.com/battles.html" class="active">BATTLES</a>
+                <a href="https://memefightclub.com/leaderboard.html">LEADERBOARD</a>
+                <a href="https://memefightclub.com/mefc-token.html">MEFC TOKEN</a>
+                <a href="https://memefightclub.com/disclaimer.html">DISCLAIMER</a>
             </div>
         </nav>
     </header>
@@ -622,7 +654,7 @@
                         </div>
                         <div style="font-size: 1.2rem; font-weight: bold; color: #ffff00; margin-bottom: 0.5rem;">Meme Fight Club</div>
                         <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 1rem;">The ultimate meme fighting champion!</div>
-                        <a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" target="_blank" class="submit-btn" style="text-decoration: none; display: inline-block; font-size: 0.9rem; padding: 0.8rem 1.5rem;">
+                        <a href="https://memefightclub.com/mefc-token.html" class="submit-btn" style="text-decoration: none; display: inline-block; font-size: 0.9rem; padding: 0.8rem 1.5rem;">
                             🚀 GET MEFC TOKENS
                         </a>
                     </div>
