@@ -498,7 +498,7 @@
                 <a href="https://memefightclub.com/">HOME</a>
                 <a href="https://memefightclub.com/battles.html">BATTLES</a>
                 <a href="https://memefightclub.com/leaderboard.html" class="active">LEADERBOARD</a>
-                <a href="https://memefightclub.com/mefc-token.html">MEFC TOKEN</a>
+                <a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" target="_blank">MEFC TOKEN</a>
                 <a href="https://memefightclub.com/disclaimer.html">DISCLAIMER</a>
             </div>
         </nav>
@@ -773,7 +773,34 @@
                 const history = JSON.parse(localStorage.getItem(STORAGE_KEYS.history) || '[]');
                 
                 if (history.length === 0) {
-                    container.innerHTML = '<div style="text-align: center; opacity: 0.7;">Error loading battle history</div>';
+                    container.innerHTML = '<div style="text-align: center; opacity: 0.7; padding: 2rem;">No vote history yet. Complete some voting rounds to see results here!</div>';
+                    return;
+                }
+                
+                container.innerHTML = history.slice(0, 5).map(battle => {
+                    const date = new Date(battle.timestamp);
+                    const timeStr = date.toLocaleString();
+                    
+                    return `
+                        <div class="history-item">
+                            <div class="history-header">
+                                <div class="history-time">🏆 Voting Round Completed</div>
+                                <div class="history-status">${timeStr}</div>
+                            </div>
+                            <div>
+                                <strong>Winner:</strong> ${battle.winner.emoji} ${battle.winner.name} 
+                                with ${battle.winner.votes} votes (${Math.round((battle.winner.votes / battle.totalVotes) * 100)}%)
+                            </div>
+                            <div style="margin-top: 0.5rem; opacity: 0.8;">
+                                Total votes in round: ${battle.totalVotes.toLocaleString()}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Error loading battle history:', error);
+                container.innerHTML = '<div style="text-align: center; opacity: 0.7; padding: 2rem;">Error loading battle history</div>';
             }
         }
 
@@ -853,31 +880,4 @@
         document.addEventListener('DOMContentLoaded', initializePage);
     </script>
 </body>
-</html>; opacity: 0.7; padding: 2rem;">No vote history yet. Complete some voting rounds to see results here!</div>';
-                    return;
-                }
-                
-                container.innerHTML = history.slice(0, 5).map(battle => {
-                    const date = new Date(battle.timestamp);
-                    const timeStr = date.toLocaleString();
-                    
-                    return `
-                        <div class="history-item">
-                            <div class="history-header">
-                                <div class="history-time">🏆 Voting Round Completed</div>
-                                <div class="history-status">${timeStr}</div>
-                            </div>
-                            <div>
-                                <strong>Winner:</strong> ${battle.winner.emoji} ${battle.winner.name} 
-                                with ${battle.winner.votes} votes (${Math.round((battle.winner.votes / battle.totalVotes) * 100)}%)
-                            </div>
-                            <div style="margin-top: 0.5rem; opacity: 0.8;">
-                                Total votes in round: ${battle.totalVotes.toLocaleString()}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-                
-            } catch (error) {
-                console.error('Error loading battle history:', error);
-                container.innerHTML = '<div style="text-align: center
+</html>
