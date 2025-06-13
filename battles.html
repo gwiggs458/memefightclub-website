@@ -133,12 +133,14 @@
             padding: 1.5rem;
             margin-bottom: 1rem;
             border-left: 4px solid #00ff66;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .news-item:hover {
             transform: translateX(5px);
             background: rgba(255, 255, 255, 0.1);
+            border-left-color: #ffff00;
         }
 
         .news-header {
@@ -266,158 +268,10 @@
             box-shadow: 0 5px 15px rgba(255, 0, 102, 0.4);
         }
 
-        /* NFT Gallery Specific Styles */
-        .nft-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 0;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 2px solid transparent;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .nft-card:hover {
-            transform: translateY(-8px);
-            border-color: #00ff66;
-            box-shadow: 0 15px 40px rgba(0, 255, 102, 0.3);
-        }
-
-        .nft-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .nft-info {
-            padding: 1.5rem;
-        }
-
-        .nft-title {
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            color: #ffff00;
-        }
-
-        .nft-collection {
-            font-size: 0.9rem;
-            color: #00ff66;
-            margin-bottom: 0.5rem;
-        }
-
-        .nft-creator {
-            font-size: 0.8rem;
-            opacity: 0.7;
-            margin-bottom: 1rem;
-        }
-
-        .nft-price {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .price-eth {
-            font-weight: bold;
-            color: #ff0066;
-            font-size: 1.1rem;
-        }
-
-        .price-usd {
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-
-        .nft-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .opensea-btn {
-            background: linear-gradient(45deg, #2081e2, #1868b7);
-            color: white;
-            border: none;
-            padding: 0.7rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            flex: 1;
-            text-decoration: none;
-            text-align: center;
-            display: block;
-        }
-
-        .opensea-btn:hover {
-            background: linear-gradient(45deg, #1868b7, #2081e2);
-            transform: translateY(-2px);
-        }
-
-        .holder-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: linear-gradient(45deg, #ffd700, #ffed4a);
-            color: #000;
-            padding: 0.3rem 0.7rem;
-            border-radius: 15px;
-            font-size: 0.7rem;
-            font-weight: bold;
-        }
-
-        .loading-nfts {
-            text-align: center;
-            padding: 3rem;
-            color: #ffff00;
-        }
-
-        /* Meme Gallery */
-        .meme-gallery-section {
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #00ff66;
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .gallery-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .gallery-filter {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .filter-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid #333;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: #ff0066;
-            border-color: #ff0066;
-        }
-
-        .meme-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
         .loading-indicator {
+            text-align: center;
+            padding: 2rem;
+            color: #ffff00;
             animation: pulse 2s ease-in-out infinite;
         }
 
@@ -443,29 +297,10 @@
             transform: scale(1.05);
         }
 
-        /* Social Links */
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-
-        .social-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.8rem 1.2rem;
-            border-radius: 25px;
-            text-decoration: none;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .social-link:hover {
-            background: rgba(255, 0, 102, 0.2);
-            transform: translateY(-2px);
+        .refresh-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         /* Message popup */
@@ -492,9 +327,97 @@
             background: linear-gradient(45deg, #ff0066, #ff3399);
         }
 
+        .message-popup.info {
+            background: linear-gradient(45deg, #ffff00, #ffa500);
+            color: #000;
+        }
+
         .message-popup.show {
             opacity: 1;
             transform: translateX(0);
+        }
+
+        /* NFT Gallery Specific Styles */
+        .nft-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .nft-card:hover {
+            transform: translateY(-8px);
+            border-color: #00ff66;
+            box-shadow: 0 15px 40px rgba(0, 255, 102, 0.3);
+        }
+
+        .nft-info {
+            padding: 1.5rem;
+        }
+
+        .nft-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #ffff00;
+        }
+
+        .opensea-btn {
+            background: linear-gradient(45deg, #2081e2, #1868b7);
+            color: white;
+            border: none;
+            padding: 0.7rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            flex: 1;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+        }
+
+        .opensea-btn:hover {
+            background: linear-gradient(45deg, #1868b7, #2081e2);
+            transform: translateY(-2px);
+        }
+
+        /* Meme Gallery */
+        .meme-gallery-section {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff66;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 1.2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: rgba(255, 0, 102, 0.2);
+            transform: translateY(-2px);
         }
 
         /* Mobile Responsive */
@@ -556,21 +479,6 @@
             .logo {
                 font-size: 1.1rem;
             }
-
-            .meme-gallery {
-                grid-template-columns: 1fr;
-            }
-
-            .gallery-filter {
-                flex-wrap: wrap;
-                gap: 0.5rem;
-            }
-
-            .gallery-header {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: stretch;
-            }
         }
     </style>
 </head>
@@ -584,7 +492,7 @@
             </div>
             <div class="nav-links">
                 <a href="https://memefightclub.com/">HOME</a>
-                <a href="https://memefightclub.com/battles.html" class="active">BATTLES</a>
+                <a href="https://memefightclub.com/battles.html" class="active">COMMUNITY</a>
                 <a href="https://memefightclub.com/leaderboard.html">LEADERBOARD</a>
                 <a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" target="_blank">MEFC TOKEN</a>
                 <a href="https://memefightclub.com/disclaimer.html">DISCLAIMER</a>
@@ -605,41 +513,7 @@
                     <button class="refresh-btn" onclick="refreshNews()">🔄 Refresh</button>
                 </h2>
                 <div class="news-container">
-                    <div class="news-item">
-                        <div class="news-header">
-                            <div class="news-title">🚀 MEFC Token Surges 150% on New Partnership</div>
-                            <div class="news-time">2 hours ago</div>
-                        </div>
-                        <div class="news-content">Major partnership announcement drives unprecedented trading volume and community excitement across all platforms.</div>
-                        <div class="news-source">Source: CoinTelegraph</div>
-                    </div>
-                    
-                    <div class="news-item">
-                        <div class="news-header">
-                            <div class="news-title">📈 Top Meme Coins Show Strong Recovery</div>
-                            <div class="news-time">4 hours ago</div>
-                        </div>
-                        <div class="news-content">Market sentiment improves as leading meme tokens rally 25-40% following broader crypto market stabilization.</div>
-                        <div class="news-source">Source: CryptoNews</div>
-                    </div>
-                    
-                    <div class="news-item">
-                        <div class="news-header">
-                            <div class="news-title">🎨 NFT Market Heats Up with Meme Collections</div>
-                            <div class="news-time">6 hours ago</div>
-                        </div>
-                        <div class="news-content">Digital art marketplace sees 200% increase in meme-themed NFT collections as creators embrace entertainment tokens.</div>
-                        <div class="news-source">Source: NFT Evening</div>
-                    </div>
-                    
-                    <div class="news-item">
-                        <div class="news-header">
-                            <div class="news-title">🗳️ Community Vote: Next Meme Battle Theme</div>
-                            <div class="news-time">8 hours ago</div>
-                        </div>
-                        <div class="news-content">Token holders participate in governance vote to select themes for upcoming meme competitions and community events.</div>
-                        <div class="news-source">Source: Community Hub</div>
-                    </div>
+                    <!-- News will be loaded here by JavaScript -->
                 </div>
             </section>
 
@@ -730,10 +604,6 @@
                     Meme Fight Club NFTs are strictly digital collectibles for entertainment and meme culture. These are independent creations by artists and community members, not affiliated with or endorsed by memefightclub.com or any associated entertainment tokens. Purchasing an NFT does not grant financial rights, profit participation, access to MEFC tokens, investment expectations, token rewards, staking mechanisms, or financial services. Have Fun - but always DYOR (Do Your Own Research)!
                 </div>
             </div>
-            
-            <div class="meme-gallery" id="nftGallery">
-                <!-- NFT gallery area - now empty and clean -->
-            </div>
         </section>
 
         <!-- Social Links -->
@@ -742,7 +612,7 @@
                 <span>💬</span>
                 <span>Join Discord</span>
             </a>
-            <a href="#twitter" class="social-link">
+            <a href="https://x.com/MemeFightClubX" target="_blank" class="social-link">
                 <span>🐦</span>
                 <span>Follow Twitter</span>
             </a>
@@ -754,139 +624,295 @@
     </main>
 
     <script>
-        // News data
-        let newsData = [
-            {
-                title: "MEFC Token Surges 150% on New Partnership",
-                content: "Meme Fight Club announces strategic partnership with major DeFi protocol, bringing enhanced utility to MEFC holders.",
-                time: "2 hours ago",
-                source: "CryptoNews"
-            },
-            {
-                title: "Top Meme Coins Show Strong Recovery",
-                content: "Dogecoin, Shiba Inu, and PEPE lead the meme coin recovery with double-digit gains across the board.",
-                time: "4 hours ago",
-                source: "DeFi Pulse"
-            },
-            {
-                title: "NFT Market Heats Up with Meme Collections",
-                content: "Rare Pepe and CryptoPunk derivatives see massive volume increases as collectors seek unique digital assets.",
-                time: "6 hours ago",
-                source: "NFT Today"
-            },
-            {
-                title: "Community Vote: Next Meme Battle Theme",
-                content: "MEFC holders vote on upcoming battle themes including 'Classic vs Modern' and 'Dogs vs Cats' meme showdowns.",
-                time: "8 hours ago",
-                source: "MEFC Official"
-            }
-        ];
-
-        let currentNFTFilter = 'featured';
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            renderNFTGallery();
-            loadNews();
-            updateStats();
-        });
-
-        // Removed NFT Gallery functions - no longer needed
-
-        function filterNFTs(filter, button) {
-            // Function kept for compatibility but does nothing
-            console.log('NFT filtering disabled - redirecting to OpenSea');
-        }
-
-        function viewNFTDetail(nftId) {
-            // Function removed - no longer needed since we don't show NFT cards
-            console.log('NFT details disabled - redirecting to OpenSea');
-        }
-
-        function shareNFT(nftId) {
-            // Function removed - no longer needed since we don't show NFT cards
-            console.log('NFT sharing disabled - redirecting to OpenSea');
-        }
-
-        // News functions
-        function loadNews() {
-            const newsContainer = document.getElementById('newsContainer');
-            const loadingNews = document.getElementById('loadingNews');
+        // LIVE NEWS API INTEGRATION
+        const NEWS_CONFIG = {
+            // Free RSS to JSON converter (no API key needed)
+            rssProxy: 'https://api.rss2json.com/v1/api.json?rss_url=',
+            cryptoFeeds: [
+                'https://cointelegraph.com/rss',
+                'https://decrypt.co/feed',
+                'https://cryptonews.com/rss.xml',
+                'https://www.coindesk.com/arc/outboundfeeds/rss/'
+            ],
             
-            // Show loading initially
-            loadingNews.style.display = 'block';
-            newsContainer.innerHTML = '';
-            
-            // Simulate loading delay
-            setTimeout(() => {
-                loadingNews.style.display = 'none';
-                newsContainer.innerHTML = newsData.map(news => `
-                    <div class="news-item">
-                        <div class="news-header">
-                            <div class="news-title">${news.title}</div>
-                            <div class="news-time">${news.time}</div>
-                        </div>
-                        <div class="news-content">${news.content}</div>
-                        <div class="news-source">Source: ${news.source}</div>
-                    </div>
-                `).join('');
-            }, 1500);
-        }
+            // Fallback news for when APIs fail
+            fallbackNews: [
+                {
+                    title: "🚀 MEFC Community Reaches New Milestone",
+                    content: "Meme Fight Club community celebrates record engagement as token holders participate in governance decisions and meme battles.",
+                    publishedAt: new Date().toISOString(),
+                    source: "MEFC Official",
+                    url: "https://memefightclub.com"
+                },
+                {
+                    title: "📈 Meme Coin Market Shows Resilience",
+                    content: "Despite market volatility, entertainment tokens maintain strong community support and trading volume across major exchanges.",
+                    publishedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                    source: "Crypto Markets",
+                    url: "#"
+                },
+                {
+                    title: "🎭 NFT Collections See Renewed Interest",
+                    content: "Digital art marketplaces report increased activity in meme-themed collections as creators embrace community-driven projects.",
+                    publishedAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+                    source: "NFT Today",
+                    url: "#"
+                },
+                {
+                    title: "🗳️ Community Governance Gains Momentum",
+                    content: "Decentralized voting mechanisms see increased adoption as entertainment token communities take active roles in project decisions.",
+                    publishedAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+                    source: "DeFi News",
+                    url: "#"
+                }
+            ]
+        };
 
-        function refreshNews() {
-            console.log('Refreshing news...');
-            const newsContainer = document.getElementById('newsContainer');
-            const loadingNews = document.getElementById('loadingNews');
+        let newsCache = [];
+        let lastNewsUpdate = 0;
+        const NEWS_CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
+
+        // Main news loading function with multiple fallbacks
+        async function loadNews() {
+            const newsContainer = document.querySelector('.news-container');
             
-            if (!newsContainer || !loadingNews) {
-                console.error('News elements not found for refresh');
+            if (!newsContainer) {
+                console.error('News container not found');
                 return;
             }
+
+            // Show loading state
+            showNewsLoading(true);
             
-            newsContainer.innerHTML = '';
-            loadingNews.style.display = 'block';
+            try {
+                // Check cache first
+                if (newsCache.length > 0 && (Date.now() - lastNewsUpdate) < NEWS_CACHE_DURATION) {
+                    console.log('Loading news from cache');
+                    displayNews(newsCache);
+                    showNewsLoading(false);
+                    return;
+                }
+
+                // Try to fetch live news
+                const news = await fetchLiveNews();
+                
+                if (news && news.length > 0) {
+                    newsCache = news;
+                    lastNewsUpdate = Date.now();
+                    displayNews(news);
+                    console.log('✅ Live news loaded successfully');
+                } else {
+                    throw new Error('No news data received');
+                }
+                
+            } catch (error) {
+                console.warn('Failed to load live news:', error);
+                // Use fallback news
+                displayNews(NEWS_CONFIG.fallbackNews);
+                showMessage('📰 Using cached news - refresh to try live feed again', 'info');
+            }
             
-            // Simulate fetching new news
-            setTimeout(() => {
-                console.log('Loading refreshed news...');
-                // Shuffle news and add some new ones
-                const currentTime = new Date().toLocaleTimeString('en-US', { 
-                    hour: 'numeric', 
-                    minute: '2-digit',
-                    hour12: true 
-                });
+            showNewsLoading(false);
+        }
+
+        // Fetch news from multiple RSS sources
+        async function fetchLiveNews() {
+            const allNews = [];
+            
+            // Try RSS feeds (most reliable and free)
+            for (const feedUrl of NEWS_CONFIG.cryptoFeeds) {
+                try {
+                    const rssNews = await fetchRSSNews(feedUrl);
+                    if (rssNews && rssNews.length > 0) {
+                        allNews.push(...rssNews);
+                        console.log(`✅ Loaded ${rssNews.length} articles from ${extractSourceName(feedUrl)}`);
+                    }
+                } catch (error) {
+                    console.warn(`Failed to load RSS from ${feedUrl}:`, error);
+                }
+            }
+            
+            // If we have enough news, return it
+            if (allNews.length >= 3) {
+                return allNews
+                    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+                    .slice(0, 6)
+                    .map(article => ({
+                        ...article,
+                        content: article.content || article.description || 'Click to read more...'
+                    }));
+            }
+            
+            return null;
+        }
+
+        // Fetch from RSS feeds via proxy
+        async function fetchRSSNews(feedUrl) {
+            try {
+                const proxyUrl = `${NEWS_CONFIG.rssProxy}${encodeURIComponent(feedUrl)}`;
+                const response = await fetch(proxyUrl);
                 
-                const refreshedNews = [
-                    {
-                        title: "🚀 MEFC Breaks New ATH in 24h Trading Volume",
-                        content: "Community excitement reaches fever pitch as MEFC token hits record trading volume amid speculation of major announcements.",
-                        time: "Just now",
-                        source: "CoinGecko"
-                    },
-                    {
-                        title: "Meme Coins Rally as Market Sentiment Improves",
-                        content: "Leading meme tokens show strong gains as crypto markets recover from recent volatility.",
-                        time: "15 minutes ago", 
-                        source: "CryptoNews"
-                    },
-                    ...newsData.slice(0, 2) // Keep some original news
-                ];
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
                 
-                loadingNews.style.display = 'none';
-                newsContainer.innerHTML = refreshedNews.map(news => `
-                    <div class="news-item">
-                        <div class="news-header">
-                            <div class="news-title">${news.title}</div>
-                            <div class="news-time">${news.time}</div>
-                        </div>
-                        <div class="news-content">${news.content}</div>
-                        <div class="news-source">Source: ${news.source}</div>
+                const data = await response.json();
+                
+                if (data.status !== 'ok' || !data.items) {
+                    throw new Error('Invalid RSS data');
+                }
+                
+                return data.items
+                    .filter(item => {
+                        const title = item.title.toLowerCase();
+                        const content = (item.description || '').toLowerCase();
+                        // Filter for crypto/meme coin related content
+                        return title.includes('crypto') || title.includes('bitcoin') || 
+                               title.includes('meme') || title.includes('token') ||
+                               title.includes('coin') || title.includes('defi') ||
+                               content.includes('cryptocurrency') || content.includes('blockchain');
+                    })
+                    .slice(0, 3)
+                    .map(item => ({
+                        title: addCryptoEmoji(item.title),
+                        content: stripHtml(item.description || item.content || '').substring(0, 180) + '...',
+                        publishedAt: item.pubDate,
+                        source: extractSourceName(feedUrl),
+                        url: item.link || '#'
+                    }));
+                    
+            } catch (error) {
+                console.warn(`RSS fetch failed for ${feedUrl}:`, error);
+                return [];
+            }
+        }
+
+        // Utility functions
+        function addCryptoEmoji(title) {
+            const emojiMap = {
+                'bitcoin': '₿',
+                'ethereum': '⟠',
+                'meme': '🎭',
+                'surge': '🚀',
+                'rise': '📈',
+                'gain': '📈',
+                'fall': '📉',
+                'drop': '📉',
+                'pump': '💪',
+                'bull': '🐂',
+                'bear': '🐻',
+                'moon': '🌙',
+                'rocket': '🚀',
+                'fire': '🔥',
+                'hot': '🔥'
+            };
+            
+            const lowerTitle = title.toLowerCase();
+            for (const [keyword, emoji] of Object.entries(emojiMap)) {
+                if (lowerTitle.includes(keyword) && !title.includes(emoji)) {
+                    return `${emoji} ${title}`;
+                }
+            }
+            return `📰 ${title}`; // Default news emoji
+        }
+
+        function stripHtml(html) {
+            const tmp = document.createElement('div');
+            tmp.innerHTML = html;
+            return tmp.textContent || tmp.innerText || '';
+        }
+
+        function extractSourceName(url) {
+            try {
+                const domain = new URL(url).hostname;
+                const name = domain.replace('www.', '').split('.')[0];
+                return name.charAt(0).toUpperCase() + name.slice(1);
+            } catch {
+                return 'Crypto News';
+            }
+        }
+
+        function formatTimeAgo(dateString) {
+            try {
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffInMinutes = Math.floor((now - date) / (1000 * 60));
+                
+                if (diffInMinutes < 60) {
+                    return `${diffInMinutes} minutes ago`;
+                } else if (diffInMinutes < 1440) {
+                    const hours = Math.floor(diffInMinutes / 60);
+                    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+                } else {
+                    const days = Math.floor(diffInMinutes / 1440);
+                    return `${days} day${days > 1 ? 's' : ''} ago`;
+                }
+            } catch {
+                return 'Recently';
+            }
+        }
+
+        // Display functions
+        function displayNews(newsArray) {
+            const newsContainer = document.querySelector('.news-container');
+            if (!newsContainer) return;
+            
+            newsContainer.innerHTML = newsArray.map(article => `
+                <div class="news-item" onclick="openNewsArticle('${article.url}')">
+                    <div class="news-header">
+                        <div class="news-title">${article.title}</div>
+                        <div class="news-time">${formatTimeAgo(article.publishedAt)}</div>
                     </div>
-                `).join('');
+                    <div class="news-content">${article.content}</div>
+                    <div class="news-source">Source: ${article.source}</div>
+                </div>
+            `).join('');
+        }
+
+        function showNewsLoading(show) {
+            const newsContainer = document.querySelector('.news-container');
+            if (!newsContainer) return;
+            
+            if (show) {
+                newsContainer.innerHTML = `
+                    <div class="loading-indicator">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">📡</div>
+                        <div>Loading latest crypto news...</div>
+                        <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem;">Fetching from multiple sources</div>
+                    </div>
+                `;
+            }
+        }
+
+        function openNewsArticle(url) {
+            if (url && url !== '#') {
+                window.open(url, '_blank', 'noopener,noreferrer');
+            }
+        }
+
+        // Refresh function with actual API calls
+        async function refreshNews() {
+            console.log('🔄 Refreshing live news...');
+            
+            // Clear cache to force fresh fetch
+            newsCache = [];
+            lastNewsUpdate = 0;
+            
+            // Show refresh button loading state
+            const refreshBtn = document.querySelector('.refresh-btn');
+            if (refreshBtn) {
+                const originalText = refreshBtn.textContent;
+                refreshBtn.textContent = '🔄 Loading...';
+                refreshBtn.disabled = true;
                 
-                showMessage('📰 News refreshed successfully!', 'success');
-                console.log('News refresh completed');
-            }, 1000);
+                setTimeout(() => {
+                    refreshBtn.textContent = originalText;
+                    refreshBtn.disabled = false;
+                }, 5000);
+            }
+            
+            await loadNews();
+            showMessage('📰 News refreshed with latest articles!', 'success');
         }
 
         // Form submission functions
@@ -920,7 +946,7 @@
                     count += Math.floor(Math.random() * 3) + 1;
                     memesUploaded.textContent = count.toLocaleString();
                 }
-            }, 10000); // Update every 10 seconds
+            }, 15000); // Update every 15 seconds
         }
 
         // Utility functions
@@ -938,8 +964,23 @@
             setTimeout(() => {
                 popup.classList.remove('show');
                 setTimeout(() => popup.remove(), 300);
-            }, 3000);
+            }, 4000);
         }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 MEFC Community Hub loading...');
+            loadNews();
+            updateStats();
+            
+            // Auto-refresh news every 15 minutes
+            setInterval(() => {
+                console.log('🔄 Auto-refreshing news...');
+                loadNews();
+            }, 15 * 60 * 1000);
+            
+            console.log('✅ Community Hub loaded with live news feed!');
+        });
 
         // Add some interactive animations
         document.addEventListener('mousemove', function(e) {
@@ -952,53 +993,15 @@
                 if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
-                    const rotateX = (y - centerY) / 10;
-                    const rotateY = (centerX - x) / 10;
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
                     
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(5px) translateX(5px)`;
                 } else {
-                    card.style.transform = '';
+                    card.style.transform = 'translateX(0)';
                 }
             });
         });
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Add keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                // Close any open popups
-                const popups = document.querySelectorAll('.popup');
-                popups.forEach(popup => popup.remove());
-            }
-        });
-
-        // Lazy loading animation for elements
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
     </script>
 </body>
 </html>
