@@ -27,39 +27,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Debug Panel */
-        .debug-panel {
-            position: fixed;
-            top: 100%;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid #ff0066;
-            border-radius: 10px;
-            padding: 1rem;
-            max-width: 300px;
-            z-index: 2000;
-            font-size: 0.8rem;
-            transition: top 0.3s ease;
-        }
-
-        .debug-panel.show {
-            top: 20px;
-        }
-
-        .debug-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #ff0066;
-            color: white;
-            border: none;
-            padding: 0.5rem;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 2001;
-            font-size: 0.8rem;
-        }
-
         /* Header */
         .header {
             position: fixed;
@@ -191,6 +158,26 @@
         .info-label {
             font-size: 0.9rem;
             opacity: 0.8;
+        }
+
+        /* Connection Status */
+        .connection-status {
+            background: rgba(255, 165, 0, 0.1);
+            border: 2px solid #ffa500;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .connection-status.connected {
+            background: rgba(0, 255, 102, 0.1);
+            border-color: #00ff66;
+        }
+
+        .connection-status.error {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: #ff0066;
         }
 
         /* Podium */
@@ -412,23 +399,6 @@
             border-left: 4px solid #00ff66;
         }
 
-        .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .history-time {
-            color: #ffff00;
-            font-weight: bold;
-        }
-
-        .history-status {
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-
         .refresh-btn {
             background: linear-gradient(45deg, #00ff66, #33ff99);
             color: #000;
@@ -448,43 +418,6 @@
         }
 
         /* Mobile Responsive */
-        @media (max-width: 1200px) {
-            .nav-links {
-                gap: 0.6rem;
-            }
-            
-            .nav-links a {
-                font-size: 0.85rem;
-                padding: 0.3rem 0.6rem;
-            }
-        }
-
-        @media (max-width: 900px) {
-            .nav {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-            
-            .nav-links {
-                gap: 0.5rem;
-                justify-content: center;
-            }
-            
-            .nav-links a {
-                font-size: 0.8rem;
-                padding: 0.25rem 0.5rem;
-            }
-            
-            .header {
-                padding: 0.8rem 1rem;
-            }
-            
-            .main-content {
-                margin-top: 180px;
-            }
-        }
-
         @media (max-width: 768px) {
             .page-title {
                 font-size: 2rem;
@@ -516,26 +449,10 @@
             .battle-info {
                 grid-template-columns: 1fr 1fr;
             }
-            
-            .debug-panel {
-                right: 10px;
-                max-width: 250px;
-            }
-            
-            .debug-toggle {
-                right: 10px;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Debug Panel -->
-    <button class="debug-toggle" onclick="toggleDebug()">Debug</button>
-    <div class="debug-panel" id="debugPanel">
-        <h4>Debug Info</h4>
-        <div id="debugContent">Loading...</div>
-    </div>
-
     <!-- Header -->
     <header class="header">
         <nav class="nav">
@@ -558,6 +475,12 @@
         <h1 class="page-title">🏆 LIVE LEADERBOARD</h1>
         <p class="page-subtitle">Real-time results from the meme coin voting battle</p>
 
+        <!-- Connection Status -->
+        <section class="connection-status" id="connectionStatus">
+            <h3>📡 Connecting to homepage data...</h3>
+            <p>This leaderboard syncs with voting data from the homepage. For full functionality, upload this to your domain alongside the homepage.</p>
+        </section>
+
         <!-- Live Status -->
         <section class="live-status">
             <div class="status-indicator">
@@ -570,7 +493,7 @@
                     <div class="info-label">Total Votes Cast</div>
                 </div>
                 <div class="info-card">
-                    <div class="info-number" id="battleTimeRemaining">Loading...</div>
+                    <div class="info-number" id="battleTimeRemaining">0:59:45</div>
                     <div class="info-label">Time Remaining</div>
                 </div>
                 <div class="info-card">
@@ -615,23 +538,10 @@
             </div>
         </section>
 
-        <button class="refresh-btn" onclick="forceRefresh()">🔄 Refresh Data</button>
+        <button class="refresh-btn" onclick="simulateVoteData()">🔧 Simulate Vote Data (Demo)</button>
     </main>
 
     <script>
-        // Global state
-        let debugMode = false;
-        let lastDataHash = '';
-        let refreshCount = 0;
-        
-        // Storage keys for syncing with home page
-        const STORAGE_KEYS = {
-            votes: 'mefc_voting_data',
-            history: 'mefc_battle_history',
-            lastUpdate: 'mefc_last_update',
-            battleTimer: 'mefc_battle_timer'
-        };
-
         // Default meme coins data (same as home page)
         const defaultMemeCoins = [
             { rank: 1, symbol: 'DOGE', name: 'Dogecoin', emoji: '🐕', votes: 0 },
@@ -666,124 +576,78 @@
             { rank: 30, symbol: 'MEFC', name: 'Meme Fight Club', emoji: '🥊', votes: 0 }
         ];
 
-        let currentData = [];
+        let currentData = [...defaultMemeCoins];
         let totalVotes = 0;
+        let isConnected = false;
 
-        // Debug functions
-        function toggleDebug() {
-            debugMode = !debugMode;
-            const panel = document.getElementById('debugPanel');
-            panel.classList.toggle('show', debugMode);
-            if (debugMode) updateDebugInfo();
-        }
-
-        function updateDebugInfo() {
-            if (!debugMode) return;
+        // Safe localStorage wrapper that handles sandboxing
+        const SafeStorage = {
+            getItem: function(key) {
+                try {
+                    return localStorage.getItem(key);
+                } catch (error) {
+                    console.warn('localStorage blocked:', error.message);
+                    return null;
+                }
+            },
             
-            const debugContent = document.getElementById('debugContent');
-            const stored = localStorage.getItem(STORAGE_KEYS.votes);
-            const history = localStorage.getItem(STORAGE_KEYS.history);
-            const lastUpdate = localStorage.getItem(STORAGE_KEYS.lastUpdate);
-            const timer = localStorage.getItem(STORAGE_KEYS.battleTimer);
+            setItem: function(key, value) {
+                try {
+                    localStorage.setItem(key, value);
+                    return true;
+                } catch (error) {
+                    console.warn('localStorage blocked:', error.message);
+                    return false;
+                }
+            }
+        };
+
+        // Check connection status and update UI
+        function checkConnection() {
+            const statusEl = document.getElementById('connectionStatus');
             
-            debugContent.innerHTML = `
-                <div><strong>Refresh Count:</strong> ${refreshCount}</div>
-                <div><strong>Current Total Votes:</strong> ${totalVotes}</div>
-                <div><strong>Data Items:</strong> ${currentData.length}</div>
-                <div><strong>Last Hash:</strong> ${lastDataHash.slice(0, 8)}...</div>
-                <div><strong>LocalStorage Keys:</strong></div>
-                <div style="margin-left: 10px;">
-                    • votes: ${stored ? 'exists' : 'missing'}<br>
-                    • history: ${history ? 'exists' : 'missing'}<br>
-                    • lastUpdate: ${lastUpdate ? 'exists' : 'missing'}<br>
-                    • timer: ${timer ? 'exists' : 'missing'}
-                </div>
-                <div><strong>Storage Content:</strong></div>
-                <div style="margin-left: 10px; font-size: 0.7rem; max-height: 100px; overflow-y: auto;">
-                    ${stored ? stored.slice(0, 200) + '...' : 'No data'}
-                </div>
-            `;
-        }
-
-        // Generate a simple hash of the data to detect changes
-        function generateDataHash(data) {
-            return JSON.stringify(data).split('').reduce((a, b) => {
-                a = ((a << 5) - a) + b.charCodeAt(0);
-                return a & a;
-            }, 0).toString();
-        }
-
-        // Load data from localStorage with better error handling
-        function loadVotingData() {
             try {
-                const stored = localStorage.getItem(STORAGE_KEYS.votes);
-                console.log('Loading voting data...', stored ? 'Found data' : 'No data');
+                // Test localStorage access
+                const testData = SafeStorage.getItem('mefc_voting_data');
                 
-                if (stored) {
-                    const data = JSON.parse(stored);
-                    
-                    // Validate data structure
-                    if (data && typeof data === 'object') {
-                        if (data.coins && Array.isArray(data.coins)) {
-                            currentData = data.coins;
-                            totalVotes = data.totalVotes || 0;
-                            console.log('Loaded voting data:', { coins: currentData.length, totalVotes });
-                        } else if (Array.isArray(data)) {
-                            // Handle case where data is directly an array
-                            currentData = data;
-                            totalVotes = data.reduce((sum, coin) => sum + (coin.votes || 0), 0);
-                            console.log('Loaded array data:', { coins: currentData.length, totalVotes });
-                        } else {
-                            throw new Error('Invalid data structure');
-                        }
-                    } else {
-                        throw new Error('Invalid data format');
-                    }
+                if (testData) {
+                    isConnected = true;
+                    statusEl.className = 'connection-status connected';
+                    statusEl.innerHTML = '<h3>✅ Connected to homepage data!</h3><p>Live sync is active. Vote data will update automatically.</p>';
                 } else {
-                    console.log('No stored data found, using defaults');
-                    currentData = [...defaultMemeCoins];
-                    totalVotes = 0;
+                    statusEl.className = 'connection-status';
+                    statusEl.innerHTML = '<h3>⚠️ No vote data found</h3><p>Visit the <a href="https://memefightclub.com/" style="color: #ff0066;">homepage</a> to start voting, or use the demo button below.</p>';
                 }
-                
-                // Generate hash to detect changes
-                const newHash = generateDataHash(currentData);
-                if (newHash !== lastDataHash) {
-                    console.log('Data changed, updating displays');
-                    lastDataHash = newHash;
-                    return true; // Data changed
-                }
-                
-                return false; // No change
-                
             } catch (error) {
-                console.error('Error loading voting data:', error);
-                currentData = [...defaultMemeCoins];
-                totalVotes = 0;
-                return true; // Force update on error
+                statusEl.className = 'connection-status error';
+                statusEl.innerHTML = '<h3>🚫 localStorage Blocked</h3><p>This is a demo environment. For full functionality, deploy both pages to your domain.</p>';
             }
         }
 
-        // Create sample data for testing (remove in production)
-        function createSampleData() {
-            const sampleData = [...defaultMemeCoins];
+        // Load voting data with error handling
+        function loadVotingData() {
+            const stored = SafeStorage.getItem('mefc_voting_data');
             
-            // Add some random votes for testing
-            sampleData.forEach(coin => {
-                coin.votes = Math.floor(Math.random() * 100);
-            });
+            if (stored) {
+                try {
+                    const data = JSON.parse(stored);
+                    
+                    if (data && data.coins && Array.isArray(data.coins)) {
+                        currentData = data.coins;
+                        totalVotes = data.totalVotes || 0;
+                        isConnected = true;
+                        console.log('Loaded live voting data:', { coins: currentData.length, totalVotes });
+                        return true;
+                    }
+                } catch (error) {
+                    console.error('Error parsing voting data:', error);
+                }
+            }
             
-            const sampleTotalVotes = sampleData.reduce((sum, coin) => sum + coin.votes, 0);
-            
-            const dataToStore = {
-                coins: sampleData,
-                totalVotes: sampleTotalVotes,
-                timestamp: new Date().toISOString()
-            };
-            
-            localStorage.setItem(STORAGE_KEYS.votes, JSON.stringify(dataToStore));
-            localStorage.setItem(STORAGE_KEYS.lastUpdate, new Date().toISOString());
-            
-            console.log('Created sample data for testing:', dataToStore);
+            // No data available
+            currentData = [...defaultMemeCoins];
+            totalVotes = 0;
+            return false;
         }
 
         // Display the podium (top 3)
@@ -792,15 +656,11 @@
             const sorted = [...currentData].sort((a, b) => (b.votes || 0) - (a.votes || 0));
             const top3 = sorted.slice(0, 3);
             
-            console.log('Updating podium with data:', { totalVotes, top3: top3.map(c => ({ name: c.name, votes: c.votes })) });
-            
             if (totalVotes === 0) {
                 podium.innerHTML = `
                     <div style="text-align: center; padding: 2rem; opacity: 0.7; width: 100%;">
-                        <p>No votes yet - visit the <a href="https://memefightclub.com/" style="color: #ff0066;">Home page</a> to start voting!</p>
-                        <button onclick="createSampleData(); forceRefresh();" style="background: #ff0066; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; margin-top: 1rem; cursor: pointer;">
-                            Create Sample Data (Testing)
-                        </button>
+                        <p style="margin-bottom: 1rem;">No votes yet</p>
+                        <p style="font-size: 0.9rem;">Visit the <a href="https://memefightclub.com/" style="color: #ff0066;">homepage</a> to start voting!</p>
                     </div>
                 `;
                 return;
@@ -832,10 +692,8 @@
             const container = document.getElementById('leaderboardRows');
             const sorted = [...currentData].sort((a, b) => (b.votes || 0) - (a.votes || 0));
             
-            console.log('Updating leaderboard with', sorted.length, 'items');
-            
             if (totalVotes === 0) {
-                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; opacity: 0.7;">No voting data available. Start voting on the <a href="https://memefightclub.com/" style="color: #ff0066;">Home page</a>!</div>';
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; opacity: 0.7;">No voting data available</div>';
                 return;
             }
             
@@ -883,76 +741,67 @@
             } else {
                 document.getElementById('leadingCoin').textContent = 'No votes yet';
             }
-        }
 
-        // Update last update time
-        function updateLastUpdateDisplay(date) {
-            const now = new Date();
-            const diff = Math.floor((now - date) / 1000);
-            
-            let timeText;
-            if (diff < 60) timeText = 'Just now';
-            else if (diff < 3600) timeText = `${Math.floor(diff / 60)}m ago`;
-            else timeText = `${Math.floor(diff / 3600)}h ago`;
-            
-            document.getElementById('lastUpdate').textContent = timeText;
+            // Update timer (sync with homepage if available)
+            const timerData = SafeStorage.getItem('mefc_battle_timer');
+            if (timerData) {
+                document.getElementById('battleTimeRemaining').textContent = timerData;
+            }
+
+            // Update last update time
+            const lastUpdate = SafeStorage.getItem('mefc_last_update');
+            if (lastUpdate) {
+                const date = new Date(lastUpdate);
+                const now = new Date();
+                const diff = Math.floor((now - date) / 1000);
+                
+                let timeText;
+                if (diff < 60) timeText = 'Just now';
+                else if (diff < 3600) timeText = `${Math.floor(diff / 60)}m ago`;
+                else timeText = `${Math.floor(diff / 3600)}h ago`;
+                
+                document.getElementById('lastUpdate').textContent = timeText;
+            }
         }
 
         // Display battle history
         function updateBattleHistory() {
             const container = document.getElementById('battleHistory');
-            try {
-                const history = JSON.parse(localStorage.getItem(STORAGE_KEYS.history) || '[]');
-                
-                console.log('Loading battle history:', history.length, 'items');
-                
-                if (history.length === 0) {
-                    container.innerHTML = '<div style="text-align: center; opacity: 0.7; padding: 2rem;">No vote history yet. Complete some voting rounds to see results here!</div>';
-                    return;
-                }
-                
-                container.innerHTML = history.slice(0, 5).map(battle => {
-                    const date = new Date(battle.timestamp);
-                    const timeStr = date.toLocaleString();
+            const historyData = SafeStorage.getItem('mefc_battle_history');
+            
+            if (historyData) {
+                try {
+                    const history = JSON.parse(historyData);
                     
-                    return `
-                        <div class="history-item">
-                            <div class="history-header">
-                                <div class="history-time">🏆 Voting Round Completed</div>
-                                <div class="history-status">${timeStr}</div>
-                            </div>
-                            <div>
-                                <strong>Winner:</strong> ${battle.winner.emoji} ${battle.winner.name} 
-                                with ${battle.winner.votes} votes (${Math.round((battle.winner.votes / battle.totalVotes) * 100)}%)
-                            </div>
-                            <div style="margin-top: 0.5rem; opacity: 0.8;">
-                                Total votes in round: ${battle.totalVotes.toLocaleString()}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-                
-            } catch (error) {
-                console.error('Error loading battle history:', error);
-                container.innerHTML = '<div style="text-align: center; opacity: 0.7; padding: 2rem;">Error loading battle history</div>';
-            }
-        }
-
-        // Sync battle timer from home page
-        function syncBattleTimer() {
-            try {
-                const timerData = localStorage.getItem(STORAGE_KEYS.battleTimer);
-                const element = document.getElementById('battleTimeRemaining');
-                
-                if (timerData && timerData !== 'null' && timerData !== 'undefined') {
-                    element.textContent = timerData;
-                } else {
-                    element.textContent = 'No active battle';
+                    if (history.length > 0) {
+                        container.innerHTML = history.slice(0, 5).map(battle => {
+                            const date = new Date(battle.timestamp);
+                            const timeStr = date.toLocaleString();
+                            
+                            return `
+                                <div class="history-item">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                        <div style="color: #ffff00; font-weight: bold;">🏆 Voting Round Completed</div>
+                                        <div style="font-size: 0.9rem; opacity: 0.7;">${timeStr}</div>
+                                    </div>
+                                    <div>
+                                        <strong>Winner:</strong> ${battle.winner.emoji} ${battle.winner.name} 
+                                        with ${battle.winner.votes} votes (${Math.round((battle.winner.votes / battle.totalVotes) * 100)}%)
+                                    </div>
+                                    <div style="margin-top: 0.5rem; opacity: 0.8;">
+                                        Total votes in round: ${battle.totalVotes.toLocaleString()}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error loading battle history:', error);
                 }
-            } catch (error) {
-                console.error('Error syncing battle timer:', error);
-                document.getElementById('battleTimeRemaining').textContent = 'Error';
             }
+            
+            container.innerHTML = '<div style="text-align: center; opacity: 0.7; padding: 2rem;">No vote history yet</div>';
         }
 
         // Update all displays
@@ -961,117 +810,107 @@
             updateLeaderboard();
             updateLiveStatus();
             updateBattleHistory();
-            syncBattleTimer();
-            
-            // Update last update time
-            const lastUpdate = localStorage.getItem(STORAGE_KEYS.lastUpdate);
-            if (lastUpdate) {
-                updateLastUpdateDisplay(new Date(lastUpdate));
-            }
-            
-            if (debugMode) updateDebugInfo();
+            checkConnection();
         }
 
-        // Force refresh data
-        function forceRefresh() {
-            console.log('Force refresh triggered');
-            refreshCount++;
+        // Simulate vote data for demo purposes
+        function simulateVoteData() {
+            const sampleData = [...defaultMemeCoins];
             
-            const dataChanged = loadVotingData();
+            // Add random votes
+            sampleData.forEach(coin => {
+                coin.votes = Math.floor(Math.random() * 150);
+            });
+            
+            currentData = sampleData;
+            totalVotes = sampleData.reduce((sum, coin) => sum + coin.votes, 0);
+            
             updateAllDisplays();
             
-            // Show refresh confirmation
+            // Try to save to localStorage for demonstration
+            const dataToStore = {
+                coins: sampleData,
+                totalVotes: totalVotes,
+                timestamp: new Date().toISOString()
+            };
+            
+            if (SafeStorage.setItem('mefc_voting_data', JSON.stringify(dataToStore))) {
+                SafeStorage.setItem('mefc_last_update', new Date().toISOString());
+                SafeStorage.setItem('mefc_battle_timer', '0:45:32');
+                
+                // Create sample history
+                const sampleHistory = [{
+                    timestamp: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
+                    winner: { emoji: '🐕', name: 'Dogecoin', votes: 87 },
+                    totalVotes: 234,
+                    topThree: [
+                        { emoji: '🐕', name: 'Dogecoin', votes: 87 },
+                        { emoji: '🐸', name: 'Pepe', votes: 65 },
+                        { emoji: '🐶', name: 'Shiba Inu', votes: 42 }
+                    ]
+                }];
+                
+                SafeStorage.setItem('mefc_battle_history', JSON.stringify(sampleHistory));
+            }
+            
+            // Update button
             const btn = document.querySelector('.refresh-btn');
             const originalText = btn.textContent;
-            btn.textContent = dataChanged ? '✅ Data Refreshed!' : '✅ Already Current!';
-            btn.style.background = 'linear-gradient(45deg, #00ff66, #33ff99)';
+            btn.textContent = '✅ Demo Data Created!';
+            btn.style.background = 'linear-gradient(45deg, #ffd700, #ffed4a)';
             
             setTimeout(() => {
                 btn.textContent = originalText;
                 btn.style.background = 'linear-gradient(45deg, #00ff66, #33ff99)';
-            }, 2000);
-            
-            console.log('Refresh completed. Data changed:', dataChanged);
+            }, 3000);
         }
 
-        // Auto-refresh function with change detection
+        // Auto-refresh function
         function autoRefresh() {
-            const dataChanged = loadVotingData();
-            if (dataChanged) {
-                console.log('Auto-refresh: Data changed, updating displays');
+            const hasNewData = loadVotingData();
+            if (hasNewData || isConnected) {
                 updateAllDisplays();
-            } else if (debugMode) {
-                console.log('Auto-refresh: No data changes detected');
-                updateDebugInfo();
             }
         }
 
         // Initialize page
         function initializePage() {
-            console.log('Initializing Live Leaderboard page...');
+            console.log('Initializing Live Leaderboard...');
             
             // Initial load
             loadVotingData();
             updateAllDisplays();
             
-            // Set up auto-refresh with change detection (every 3 seconds)
-            setInterval(autoRefresh, 3000);
+            // Set up auto-refresh every 5 seconds
+            setInterval(autoRefresh, 5000);
             
-            // Update "last updated" display every 30 seconds
-            setInterval(() => {
-                const lastUpdate = localStorage.getItem(STORAGE_KEYS.lastUpdate);
-                if (lastUpdate) {
-                    updateLastUpdateDisplay(new Date(lastUpdate));
-                }
-            }, 30000);
-            
-            // Check for localStorage support
+            // Listen for storage changes (if supported)
             try {
-                localStorage.setItem('test', 'test');
-                localStorage.removeItem('test');
-                console.log('LocalStorage is supported and working');
+                window.addEventListener('storage', function(e) {
+                    if (e.key && e.key.includes('mefc_')) {
+                        console.log('Storage change detected:', e.key);
+                        setTimeout(autoRefresh, 100);
+                    }
+                });
             } catch (error) {
-                console.error('LocalStorage not supported:', error);
-                alert('Warning: LocalStorage is not supported. Live updates may not work properly.');
+                console.log('Storage event listener not supported');
             }
             
-            console.log('Live Leaderboard initialized successfully!');
+            // Listen for visibility changes
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    console.log('Tab became visible, refreshing...');
+                    setTimeout(autoRefresh, 500);
+                }
+            });
+            
+            console.log('Live Leaderboard initialized!');
         }
 
-        // Listen for storage changes from other tabs
-        window.addEventListener('storage', function(e) {
-            if (Object.values(STORAGE_KEYS).includes(e.key)) {
-                console.log('Storage change detected from another tab:', e.key);
-                setTimeout(() => {
-                    forceRefresh();
-                }, 100); // Small delay to ensure data is fully written
-            }
-        });
-
-        // Listen for visibility changes to refresh when tab becomes active
-        document.addEventListener('visibilitychange', function() {
-            if (!document.hidden) {
-                console.log('Tab became visible, refreshing data');
-                setTimeout(forceRefresh, 500);
-            }
-        });
-
-        // Enhanced error handling
-        window.addEventListener('error', function(e) {
-            console.error('JavaScript error:', e.error);
-            if (debugMode) {
-                updateDebugInfo();
-            }
-        });
-
-        // Start the page when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initializePage);
-        
-        // Also try to start immediately if DOM is already loaded
+        // Start when DOM is ready
         if (document.readyState === 'loading') {
-            // Still loading, wait for DOMContentLoaded
+            document.addEventListener('DOMContentLoaded', initializePage);
         } else {
-            // DOM already loaded
             initializePage();
         }
     </script>
