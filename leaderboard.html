@@ -27,6 +27,39 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* Debug Panel */
+        .debug-panel {
+            position: fixed;
+            top: 100%;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #ff0066;
+            border-radius: 10px;
+            padding: 1rem;
+            max-width: 300px;
+            z-index: 2000;
+            font-size: 0.8rem;
+            transition: top 0.3s ease;
+        }
+
+        .debug-panel.show {
+            top: 20px;
+        }
+
+        .debug-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff0066;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 2001;
+            font-size: 0.8rem;
+        }
+
         /* Header */
         .header {
             position: fixed;
@@ -483,10 +516,26 @@
             .battle-info {
                 grid-template-columns: 1fr 1fr;
             }
+            
+            .debug-panel {
+                right: 10px;
+                max-width: 250px;
+            }
+            
+            .debug-toggle {
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Debug Panel -->
+    <button class="debug-toggle" onclick="toggleDebug()">Debug</button>
+    <div class="debug-panel" id="debugPanel">
+        <h4>Debug Info</h4>
+        <div id="debugContent">Loading...</div>
+    </div>
+
     <!-- Header -->
     <header class="header">
         <nav class="nav">
@@ -570,6 +619,11 @@
     </main>
 
     <script>
+        // Global state
+        let debugMode = false;
+        let lastDataHash = '';
+        let refreshCount = 0;
+        
         // Storage keys for syncing with home page
         const STORAGE_KEYS = {
             votes: 'mefc_voting_data',
@@ -615,66 +669,140 @@
         let currentData = [];
         let totalVotes = 0;
 
-        // Load data from localStorage (synced with home page)
+        // Debug functions
+        function toggleDebug() {
+            debugMode = !debugMode;
+            const panel = document.getElementById('debugPanel');
+            panel.classList.toggle('show', debugMode);
+            if (debugMode) updateDebugInfo();
+        }
+
+        function updateDebugInfo() {
+            if (!debugMode) return;
+            
+            const debugContent = document.getElementById('debugContent');
+            const stored = localStorage.getItem(STORAGE_KEYS.votes);
+            const history = localStorage.getItem(STORAGE_KEYS.history);
+            const lastUpdate = localStorage.getItem(STORAGE_KEYS.lastUpdate);
+            const timer = localStorage.getItem(STORAGE_KEYS.battleTimer);
+            
+            debugContent.innerHTML = `
+                <div><strong>Refresh Count:</strong> ${refreshCount}</div>
+                <div><strong>Current Total Votes:</strong> ${totalVotes}</div>
+                <div><strong>Data Items:</strong> ${currentData.length}</div>
+                <div><strong>Last Hash:</strong> ${lastDataHash.slice(0, 8)}...</div>
+                <div><strong>LocalStorage Keys:</strong></div>
+                <div style="margin-left: 10px;">
+                    • votes: ${stored ? 'exists' : 'missing'}<br>
+                    • history: ${history ? 'exists' : 'missing'}<br>
+                    • lastUpdate: ${lastUpdate ? 'exists' : 'missing'}<br>
+                    • timer: ${timer ? 'exists' : 'missing'}
+                </div>
+                <div><strong>Storage Content:</strong></div>
+                <div style="margin-left: 10px; font-size: 0.7rem; max-height: 100px; overflow-y: auto;">
+                    ${stored ? stored.slice(0, 200) + '...' : 'No data'}
+                </div>
+            `;
+        }
+
+        // Generate a simple hash of the data to detect changes
+        function generateDataHash(data) {
+            return JSON.stringify(data).split('').reduce((a, b) => {
+                a = ((a << 5) - a) + b.charCodeAt(0);
+                return a & a;
+            }, 0).toString();
+        }
+
+        // Load data from localStorage with better error handling
         function loadVotingData() {
             try {
                 const stored = localStorage.getItem(STORAGE_KEYS.votes);
+                console.log('Loading voting data...', stored ? 'Found data' : 'No data');
+                
                 if (stored) {
                     const data = JSON.parse(stored);
-                    currentData = data.coins || [...defaultMemeCoins];
-                    totalVotes = data.totalVotes || 0;
+                    
+                    // Validate data structure
+                    if (data && typeof data === 'object') {
+                        if (data.coins && Array.isArray(data.coins)) {
+                            currentData = data.coins;
+                            totalVotes = data.totalVotes || 0;
+                            console.log('Loaded voting data:', { coins: currentData.length, totalVotes });
+                        } else if (Array.isArray(data)) {
+                            // Handle case where data is directly an array
+                            currentData = data;
+                            totalVotes = data.reduce((sum, coin) => sum + (coin.votes || 0), 0);
+                            console.log('Loaded array data:', { coins: currentData.length, totalVotes });
+                        } else {
+                            throw new Error('Invalid data structure');
+                        }
+                    } else {
+                        throw new Error('Invalid data format');
+                    }
                 } else {
-                    // No data yet, use defaults
+                    console.log('No stored data found, using defaults');
                     currentData = [...defaultMemeCoins];
                     totalVotes = 0;
                 }
                 
-                // Update last update time
-                const lastUpdate = localStorage.getItem(STORAGE_KEYS.lastUpdate);
-                if (lastUpdate) {
-                    updateLastUpdateDisplay(new Date(lastUpdate));
+                // Generate hash to detect changes
+                const newHash = generateDataHash(currentData);
+                if (newHash !== lastDataHash) {
+                    console.log('Data changed, updating displays');
+                    lastDataHash = newHash;
+                    return true; // Data changed
                 }
+                
+                return false; // No change
                 
             } catch (error) {
                 console.error('Error loading voting data:', error);
                 currentData = [...defaultMemeCoins];
                 totalVotes = 0;
+                return true; // Force update on error
             }
         }
 
-        // Save current state as history when battle resets
-        function saveBattleHistory() {
-            try {
-                const history = JSON.parse(localStorage.getItem(STORAGE_KEYS.history) || '[]');
-                
-                if (totalVotes > 0) {
-                    const winner = [...currentData].sort((a, b) => b.votes - a.votes)[0];
-                    
-                    const battleRecord = {
-                        timestamp: new Date().toISOString(),
-                        winner: winner,
-                        totalVotes: totalVotes,
-                        topThree: [...currentData].sort((a, b) => b.votes - a.votes).slice(0, 3)
-                    };
-                    
-                    history.unshift(battleRecord);
-                    if (history.length > 10) history.pop(); // Keep last 10 battles
-                    
-                    localStorage.setItem(STORAGE_KEYS.history, JSON.stringify(history));
-                }
-            } catch (error) {
-                console.error('Error saving battle history:', error);
-            }
+        // Create sample data for testing (remove in production)
+        function createSampleData() {
+            const sampleData = [...defaultMemeCoins];
+            
+            // Add some random votes for testing
+            sampleData.forEach(coin => {
+                coin.votes = Math.floor(Math.random() * 100);
+            });
+            
+            const sampleTotalVotes = sampleData.reduce((sum, coin) => sum + coin.votes, 0);
+            
+            const dataToStore = {
+                coins: sampleData,
+                totalVotes: sampleTotalVotes,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem(STORAGE_KEYS.votes, JSON.stringify(dataToStore));
+            localStorage.setItem(STORAGE_KEYS.lastUpdate, new Date().toISOString());
+            
+            console.log('Created sample data for testing:', dataToStore);
         }
 
         // Display the podium (top 3)
         function updatePodium() {
             const podium = document.getElementById('podium');
-            const sorted = [...currentData].sort((a, b) => b.votes - a.votes);
+            const sorted = [...currentData].sort((a, b) => (b.votes || 0) - (a.votes || 0));
             const top3 = sorted.slice(0, 3);
             
-            if (top3.length === 0 || totalVotes === 0) {
-                podium.innerHTML = '<div style="text-align: center; padding: 2rem; opacity: 0.7;">No votes yet - visit the <a href="https://memefightclub.com/" style="color: #ff0066;">Home page</a> to start voting!</div>';
+            console.log('Updating podium with data:', { totalVotes, top3: top3.map(c => ({ name: c.name, votes: c.votes })) });
+            
+            if (totalVotes === 0) {
+                podium.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; opacity: 0.7; width: 100%;">
+                        <p>No votes yet - visit the <a href="https://memefightclub.com/" style="color: #ff0066;">Home page</a> to start voting!</p>
+                        <button onclick="createSampleData(); forceRefresh();" style="background: #ff0066; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; margin-top: 1rem; cursor: pointer;">
+                            Create Sample Data (Testing)
+                        </button>
+                    </div>
+                `;
                 return;
             }
             
@@ -682,7 +810,8 @@
             const numbers = ['🥈', '🥇', '🥉'];
             
             podium.innerHTML = top3.map((coin, index) => {
-                const percentage = totalVotes > 0 ? Math.round((coin.votes / totalVotes) * 100) : 0;
+                const votes = coin.votes || 0;
+                const percentage = totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0;
                 const placeClass = places[index] || 'third-place';
                 const placeNumber = numbers[index] || '🏅';
                 
@@ -691,7 +820,7 @@
                         <div class="place-number">${placeNumber}</div>
                         <div class="place-emoji">${coin.emoji}</div>
                         <div class="place-name">${coin.name}</div>
-                        <div class="place-votes">${coin.votes} votes</div>
+                        <div class="place-votes">${votes} votes</div>
                         <div class="place-percentage">${percentage}%</div>
                     </div>
                 `;
@@ -701,7 +830,9 @@
         // Display full leaderboard table
         function updateLeaderboard() {
             const container = document.getElementById('leaderboardRows');
-            const sorted = [...currentData].sort((a, b) => b.votes - a.votes);
+            const sorted = [...currentData].sort((a, b) => (b.votes || 0) - (a.votes || 0));
+            
+            console.log('Updating leaderboard with', sorted.length, 'items');
             
             if (totalVotes === 0) {
                 container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; opacity: 0.7;">No voting data available. Start voting on the <a href="https://memefightclub.com/" style="color: #ff0066;">Home page</a>!</div>';
@@ -709,7 +840,8 @@
             }
             
             container.innerHTML = sorted.map((coin, index) => {
-                const percentage = totalVotes > 0 ? Math.round((coin.votes / totalVotes) * 100) : 0;
+                const votes = coin.votes || 0;
+                const percentage = totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0;
                 const rank = index + 1;
                 let rankClass = 'rank-other';
                 
@@ -727,7 +859,7 @@
                                 <div class="coin-symbol">${coin.symbol}</div>
                             </div>
                         </div>
-                        <div class="votes-cell">${coin.votes}</div>
+                        <div class="votes-cell">${votes}</div>
                         <div class="percentage-cell">${percentage}%</div>
                         <div class="progress-cell">
                             <div class="progress-bar-full">
@@ -743,10 +875,10 @@
         function updateLiveStatus() {
             document.getElementById('totalVotesDisplay').textContent = totalVotes.toLocaleString();
             
-            const sorted = [...currentData].sort((a, b) => b.votes - a.votes);
+            const sorted = [...currentData].sort((a, b) => (b.votes || 0) - (a.votes || 0));
             const leader = sorted[0];
             
-            if (leader && leader.votes > 0) {
+            if (leader && (leader.votes || 0) > 0) {
                 document.getElementById('leadingCoin').textContent = `${leader.emoji} ${leader.name}`;
             } else {
                 document.getElementById('leadingCoin').textContent = 'No votes yet';
@@ -772,6 +904,8 @@
             try {
                 const history = JSON.parse(localStorage.getItem(STORAGE_KEYS.history) || '[]');
                 
+                console.log('Loading battle history:', history.length, 'items');
+                
                 if (history.length === 0) {
                     container.innerHTML = '<div style="text-align: center; opacity: 0.7; padding: 2rem;">No vote history yet. Complete some voting rounds to see results here!</div>';
                     return;
@@ -795,6 +929,7 @@
                                 Total votes in round: ${battle.totalVotes.toLocaleString()}
                             </div>
                         </div>
+                    `;
                 }).join('');
                 
             } catch (error) {
@@ -807,54 +942,80 @@
         function syncBattleTimer() {
             try {
                 const timerData = localStorage.getItem(STORAGE_KEYS.battleTimer);
-                if (timerData) {
-                    document.getElementById('battleTimeRemaining').textContent = timerData;
+                const element = document.getElementById('battleTimeRemaining');
+                
+                if (timerData && timerData !== 'null' && timerData !== 'undefined') {
+                    element.textContent = timerData;
                 } else {
-                    document.getElementById('battleTimeRemaining').textContent = 'Unknown';
+                    element.textContent = 'No active battle';
                 }
             } catch (error) {
+                console.error('Error syncing battle timer:', error);
                 document.getElementById('battleTimeRemaining').textContent = 'Error';
             }
         }
 
-        // Force refresh data
-        function forceRefresh() {
-            loadVotingData();
+        // Update all displays
+        function updateAllDisplays() {
             updatePodium();
             updateLeaderboard();
             updateLiveStatus();
             updateBattleHistory();
             syncBattleTimer();
             
+            // Update last update time
+            const lastUpdate = localStorage.getItem(STORAGE_KEYS.lastUpdate);
+            if (lastUpdate) {
+                updateLastUpdateDisplay(new Date(lastUpdate));
+            }
+            
+            if (debugMode) updateDebugInfo();
+        }
+
+        // Force refresh data
+        function forceRefresh() {
+            console.log('Force refresh triggered');
+            refreshCount++;
+            
+            const dataChanged = loadVotingData();
+            updateAllDisplays();
+            
             // Show refresh confirmation
             const btn = document.querySelector('.refresh-btn');
             const originalText = btn.textContent;
-            btn.textContent = '✅ Refreshed!';
+            btn.textContent = dataChanged ? '✅ Data Refreshed!' : '✅ Already Current!';
             btn.style.background = 'linear-gradient(45deg, #00ff66, #33ff99)';
             
             setTimeout(() => {
                 btn.textContent = originalText;
                 btn.style.background = 'linear-gradient(45deg, #00ff66, #33ff99)';
             }, 2000);
+            
+            console.log('Refresh completed. Data changed:', dataChanged);
+        }
+
+        // Auto-refresh function with change detection
+        function autoRefresh() {
+            const dataChanged = loadVotingData();
+            if (dataChanged) {
+                console.log('Auto-refresh: Data changed, updating displays');
+                updateAllDisplays();
+            } else if (debugMode) {
+                console.log('Auto-refresh: No data changes detected');
+                updateDebugInfo();
+            }
         }
 
         // Initialize page
         function initializePage() {
-            loadVotingData();
-            updatePodium();
-            updateLeaderboard();
-            updateLiveStatus();
-            updateBattleHistory();
-            syncBattleTimer();
+            console.log('Initializing Live Leaderboard page...');
             
-            // Auto-refresh every 5 seconds to sync with home page
-            setInterval(() => {
-                loadVotingData();
-                updatePodium();
-                updateLeaderboard();
-                updateLiveStatus();
-                syncBattleTimer();
-            }, 5000);
+            // Initial load
+            loadVotingData();
+            updateAllDisplays();
+            
+            // Set up auto-refresh with change detection (every 3 seconds)
+            setInterval(autoRefresh, 3000);
             
             // Update "last updated" display every 30 seconds
             setInterval(() => {
@@ -864,19 +1025,55 @@
                 }
             }, 30000);
             
-            console.log('Live Leaderboard loaded successfully!');
+            // Check for localStorage support
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                console.log('LocalStorage is supported and working');
+            } catch (error) {
+                console.error('LocalStorage not supported:', error);
+                alert('Warning: LocalStorage is not supported. Live updates may not work properly.');
+            }
+            
+            console.log('Live Leaderboard initialized successfully!');
         }
 
-        // Listen for storage changes (when home page updates data)
+        // Listen for storage changes from other tabs
         window.addEventListener('storage', function(e) {
-            if (e.key === STORAGE_KEYS.votes) {
-                console.log('Voting data updated from another tab!');
-                forceRefresh();
+            if (Object.values(STORAGE_KEYS).includes(e.key)) {
+                console.log('Storage change detected from another tab:', e.key);
+                setTimeout(() => {
+                    forceRefresh();
+                }, 100); // Small delay to ensure data is fully written
+            }
+        });
+
+        // Listen for visibility changes to refresh when tab becomes active
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                console.log('Tab became visible, refreshing data');
+                setTimeout(forceRefresh, 500);
+            }
+        });
+
+        // Enhanced error handling
+        window.addEventListener('error', function(e) {
+            console.error('JavaScript error:', e.error);
+            if (debugMode) {
+                updateDebugInfo();
             }
         });
 
         // Start the page when DOM is loaded
         document.addEventListener('DOMContentLoaded', initializePage);
+        
+        // Also try to start immediately if DOM is already loaded
+        if (document.readyState === 'loading') {
+            // Still loading, wait for DOMContentLoaded
+        } else {
+            // DOM already loaded
+            initializePage();
+        }
     </script>
 </body>
 </html>
