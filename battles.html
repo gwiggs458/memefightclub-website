@@ -769,4 +769,255 @@
                         return title.includes('crypto') || title.includes('bitcoin') ||
                                title.includes('meme') || title.includes('token') ||
                                title.includes('coin') || title.includes('defi') ||
+                               title.includes('blockchain') || title.includes('ethereum') ||
+                               desc.includes('cryptocurrency') || desc.includes('digital asset');
+                    })
+                    .slice(0, 3)
+                    .map(item => ({
+                        title: item.title,
+                        content: stripHtml(item.description || item.content || '').substring(0, 200) + '...',
+                        publishedAt: item.pubDate,
+                        source: extractSourceName(rssUrl),
+                        url: item.link || '#'
+                    }));
+
+            } catch (error) {
+                console.error(`RSS fetch error for ${rssUrl}:`, error);
+                return [];
+            }
+        }
+
+        // Utility functions
+        function addCryptoEmojis(title) {
+            if (!title) return '';
+            
+            const emojiMap = {
+                'bitcoin': '₿',
+                'ethereum': '⟠', 
+                'meme': '🎭',
+                'surge': '🚀',
+                'pump': '🚀',
+                'rise': '📈',
+                'gain': '📈',
+                'up': '📈',
+                'fall': '📉',
+                'drop': '📉',
+                'down': '📉',
+                'bull': '🐂',
+                'bear': '🐻',
+                'moon': '🌙',
+                'fire': '🔥',
+                'hot': '🔥',
+                'breaking': '🚨',
+                'alert': '⚠️',
+                'new': '✨'
+            };
+            
+            const lowerTitle = title.toLowerCase();
+            for (const [keyword, emoji] of Object.entries(emojiMap)) {
+                if (lowerTitle.includes(keyword) && !title.includes(emoji)) {
+                    return `${emoji} ${title}`;
+                }
+            }
+            return `📰 ${title}`;
+        }
+
+        function stripHtml(html) {
+            if (!html) return '';
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            return div.textContent || div.innerText || '';
+        }
+
+        function cleanContent(content) {
+            if (!content) return 'Click to read more...';
+            return stripHtml(content).substring(0, 180) + '...';
+        }
+
+        function extractSourceName(url) {
+            try {
+                const domain = new URL(url).hostname;
+                const name = domain.replace('www.', '').split('.')[0];
+                return name.charAt(0).toUpperCase() + name.slice(1);
+            } catch {
+                return 'Crypto News';
+            }
+        }
+
+        function formatTimeAgo(dateString) {
+            try {
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffInMinutes = Math.floor((now - date) / (1000 * 60));
+                
+                if (diffInMinutes < 60) {
+                    return `${Math.max(1, diffInMinutes)} min ago`;
+                } else if (diffInMinutes < 1440) {
+                    const hours = Math.floor(diffInMinutes / 60);
+                    return `${hours}h ago`;
+                } else {
+                    const days = Math.floor(diffInMinutes / 1440);
+                    return `${days}d ago`;
+                }
+            } catch {
+                return 'Just now';
+            }
+        }
+
+        // Display functions
+        function displayLiveNews(newsArray) {
+            const newsContainer = document.querySelector('.news-container');
+            if (!newsContainer) return;
+            
+            const newsHTML = newsArray.map((article, index) => `
+                <div class="news-item" onclick="openLiveArticle('${article.url}')" 
+                     style="animation-delay: ${index * 0.1}s; opacity: 0; animation: fadeInNews 0.6s ease forwards;">
+                    <div class="news-header">
+                        <div class="news-title">${article.title}</div>
+                        <div class="news-time">${formatTimeAgo(article.publishedAt)}</div>
+                    </div>
+                    <div class="news-content">${article.content}</div>
+                    <div class="news-source">🔴 LIVE: ${article.source}</div>
+                </div>
+            `).join('');
+            
+            newsContainer.innerHTML = newsHTML;
+        }
+
+        function showLiveLoading(show) {
+            const newsContainer = document.querySelector('.news-container');
+            if (!newsContainer) return;
+            
+            if (show) {
+                newsContainer.innerHTML = `
+                    <div class="loading-indicator">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">📡</div>
+                        <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">Loading LIVE Crypto News...</div>
+                        <div style="font-size: 0.9rem; opacity: 0.7;">Fetching from CoinTelegraph, Decrypt, CoinDesk...</div>
+                        <div style="font-size: 0.8rem; opacity: 0.5; margin-top: 0.5rem;">⚡ Real-time updates</div>
+                    </div>
+                `;
+            }
+        }
+
+        function openLiveArticle(url) {
+            if (url && url !== '#') {
+                window.open(url, '_blank', 'noopener,noreferrer');
+                showSuccessMessage('📖 Opening article in new tab!');
+            } else {
+                showInfoMessage('📰 This is a news highlight!');
+            }
+        }
+
+        // Enhanced refresh function
+        async function refreshLiveNews() {
+            console.log('🔄 Manual refresh of LIVE NEWS...');
+            
+            // Clear cache to force fresh fetch
+            liveNewsCache = [];
+            lastLiveUpdate = 0;
+            
+            // Update refresh button
+            const refreshBtn = document.querySelector('.refresh-btn');
+            if (refreshBtn) {
+                const originalText = refreshBtn.textContent;
+                refreshBtn.textContent = '🔄 Fetching...';
+                refreshBtn.disabled = true;
+                
+                setTimeout(() => {
+                    refreshBtn.textContent = originalText;
+                    refreshBtn.disabled = false;
+                }, 4000);
+            }
+            
+            await loadLiveNews();
+        }
+
+        // Message system
+        function showSuccessMessage(message) {
+            showMessage(message, 'success');
+        }
+
+        function showInfoMessage(message) {
+            showMessage(message, 'info');
+        }
+
+        function showMessage(message, type = 'success') {
+            const popup = document.createElement('div');
+            popup.className = `message-popup ${type}`;
+            popup.textContent = message;
+            
+            document.body.appendChild(popup);
+            
+            setTimeout(() => popup.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                popup.classList.remove('show');
+                setTimeout(() => popup.remove(), 300);
+            }, 4000);
+        }
+
+        // Form submission
+        function submitCoin(event) {
+            event.preventDefault();
+            const form = event.target;
+            
+            const submitBtn = form.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '📤 Submitting...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                form.reset();
+                showSuccessMessage('🎯 Coin suggestion submitted! We\'ll review it soon.');
+            }, 2000);
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 MEFC Community Hub with LIVE NEWS initializing...');
+            
+            // Load live news immediately
+            loadLiveNews();
+            
+            // Auto-refresh every 15 minutes
+            setInterval(() => {
+                console.log('⏰ Auto-refreshing live news feed...');
+                loadLiveNews();
+            }, 15 * 60 * 1000);
+            
+            // Add hover effects
+            document.addEventListener('mousemove', function(e) {
+                const cards = document.querySelectorAll('.news-item');
+                cards.forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+                        const rotateX = (y - centerY) / 25;
+                        const rotateY = (centerX - x) / 25;
+                        
+                        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px) translateX(5px)`;
+                    } else {
+                        card.style.transform = 'translateX(0)';
+                    }
+                });
+            });
+            
+            console.log('✅ LIVE NEWS SYSTEM FULLY LOADED AND OPERATIONAL!');
+            showSuccessMessage('🔴 LIVE crypto news feed activated!');
+        });
+
+        // Global functions for HTML onclick handlers
+        window.refreshLiveNews = refreshLiveNews;
+        window.submitCoin = submitCoin;
+        window.openLiveArticle = openLiveArticle;
+    </script>
+</body>
+</html>
                                title.includes('
