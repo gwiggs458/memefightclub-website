@@ -815,4 +815,143 @@
                     const days = Math.floor(diffInMinutes / 1440);
                     return `${days} day${days > 1 ? 's' : ''} ago`;
                 }
+            } catch {
+                return 'Recently';
             }
+        }
+
+        // Display functions
+        function displayNews(newsArray) {
+            const newsContainer = document.querySelector('.news-container');
+            if (!newsContainer) return;
+            
+            newsContainer.innerHTML = newsArray.map(article => `
+                <div class="news-item" onclick="openNewsArticle('${article.url}')">
+                    <div class="news-header">
+                        <div class="news-title">${article.title}</div>
+                        <div class="news-time">${formatTimeAgo(article.publishedAt)}</div>
+                    </div>
+                    <div class="news-content">${article.content}</div>
+                    <div class="news-source">Source: ${article.source}</div>
+                </div>
+            `).join('');
+        }
+
+        function showNewsLoading(show) {
+            const newsContainer = document.querySelector('.news-container');
+            if (!newsContainer) return;
+            
+            if (show) {
+                newsContainer.innerHTML = `
+                    <div class="loading-indicator">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">📡</div>
+                        <div>Loading latest crypto news...</div>
+                        <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem;">Fetching from multiple sources</div>
+                    </div>
+                `;
+            }
+        }
+
+        function openNewsArticle(url) {
+            if (url && url !== '#') {
+                window.open(url, '_blank', 'noopener,noreferrer');
+            }
+        }
+
+        // Refresh function with actual API calls
+        async function refreshNews() {
+            console.log('🔄 Refreshing live news...');
+            
+            // Clear cache to force fresh fetch
+            newsCache = [];
+            lastNewsUpdate = 0;
+            
+            // Show refresh button loading state
+            const refreshBtn = document.querySelector('.refresh-btn');
+            if (refreshBtn) {
+                const originalText = refreshBtn.textContent;
+                refreshBtn.textContent = '🔄 Loading...';
+                refreshBtn.disabled = true;
+                
+                setTimeout(() => {
+                    refreshBtn.textContent = originalText;
+                    refreshBtn.disabled = false;
+                }, 5000);
+            }
+            
+            await loadNews();
+            showMessage('📰 News refreshed with latest articles!', 'success');
+        }
+
+        // Form submission functions
+        function submitCoin(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            // Simulate form submission
+            const submitBtn = form.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '📤 Submitting...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                form.reset();
+                showMessage('🎯 Coin suggestion submitted successfully!', 'success');
+            }, 2000);
+        }
+
+        // Utility functions
+        function showMessage(message, type = 'success') {
+            const popup = document.createElement('div');
+            popup.className = `message-popup ${type}`;
+            popup.textContent = message;
+            
+            document.body.appendChild(popup);
+            
+            // Trigger animation
+            setTimeout(() => popup.classList.add('show'), 100);
+            
+            // Remove after delay
+            setTimeout(() => {
+                popup.classList.remove('show');
+                setTimeout(() => popup.remove(), 300);
+            }, 4000);
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 MEFC Community Hub loading...');
+            loadNews();
+            
+            // Auto-refresh news every 15 minutes
+            setInterval(() => {
+                console.log('🔄 Auto-refreshing news...');
+                loadNews();
+            }, 15 * 60 * 1000);
+            
+            console.log('✅ Community Hub loaded with live news feed!');
+        });
+
+        // Add some interactive animations
+        document.addEventListener('mousemove', function(e) {
+            const cards = document.querySelectorAll('.news-item');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(5px) translateX(5px)`;
+                } else {
+                    card.style.transform = 'translateX(0)';
+                }
+            });
+        });
