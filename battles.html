@@ -371,6 +371,12 @@
             transform: translateY(-2px);
         }
 
+        /* Animation for news items */
+        @keyframes fadeInNews {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Mobile Responsive */
         @media (max-width: 1200px) {
             .nav-links {
@@ -454,17 +460,17 @@
     <!-- Main Content -->
     <main class="main-content">
         <h1 class="page-title">🚀 MEFC COMMUNITY HUB</h1>
-        <p class="page-subtitle">Your playground for memecoin news and MEFC community updates</p>
+        <p class="page-subtitle">Your playground for LIVE memecoin news and MEFC community updates</p>
 
         <div class="hub-grid">
             <!-- News Feed -->
             <section class="news-feed">
                 <h2 class="section-title">
-                    📰 Latest Meme Coin News
-                    <button class="refresh-btn" onclick="refreshNews()">🔄 Refresh</button>
+                    🔴 LIVE Crypto News Feed
+                    <button class="refresh-btn" onclick="refreshLiveNews()">🔄 Refresh Live</button>
                 </h2>
                 <div class="news-container">
-                    <!-- News will be loaded here by JavaScript -->
+                    <!-- LIVE NEWS LOADED HERE -->
                 </div>
             </section>
 
@@ -576,7 +582,7 @@
 
         <!-- Social Links -->
         <section class="social-links">
-            <a href="#discord" class="social-link">
+            <a href="https://discord.gg/uVavCgB6vq" target="_blank" class="social-link">
                 <span>💬</span>
                 <span>Join Discord</span>
             </a>
@@ -592,366 +598,175 @@
     </main>
 
     <script>
-        // LIVE NEWS API INTEGRATION
-        const NEWS_CONFIG = {
-            // Free RSS to JSON converter (no API key needed)
-            rssProxy: 'https://api.rss2json.com/v1/api.json?rss_url=',
-            cryptoFeeds: [
+        // 🔴 LIVE NEWS FEED SYSTEM - FULLY FUNCTIONAL
+        console.log('🚀 Initializing LIVE NEWS SYSTEM...');
+        
+        const LIVE_NEWS_CONFIG = {
+            // Major crypto RSS feeds
+            rssFeeds: [
                 'https://cointelegraph.com/rss',
-                'https://decrypt.co/feed',
+                'https://decrypt.co/feed', 
+                'https://www.coindesk.com/arc/outboundfeeds/rss/',
                 'https://cryptonews.com/rss.xml',
-                'https://www.coindesk.com/arc/outboundfeeds/rss/'
+                'https://feeds.bloomberg.com/crypto/news.rss'
             ],
             
-            // Fallback news for when APIs fail
+            // RSS-to-JSON proxy service
+            proxyService: 'https://api.rss2json.com/v1/api.json?rss_url=',
+            
+            // Cache settings
+            cacheTimeout: 15 * 60 * 1000, // 15 minutes
+            
+            // Fallback news for when live feeds fail
             fallbackNews: [
                 {
-                    title: "🚀 MEFC Community Reaches New Milestone",
-                    content: "Meme Fight Club community celebrates record engagement as token holders participate in governance decisions and meme battles.",
+                    title: "🚀 MEFC Community Reaches New All-Time High",
+                    content: "Meme Fight Club sets new engagement records as community members participate in record numbers of voting battles and token governance decisions.",
                     publishedAt: new Date().toISOString(),
                     source: "MEFC Official",
                     url: "https://memefightclub.com"
                 },
                 {
-                    title: "📈 Meme Coin Market Shows Resilience",
-                    content: "Despite market volatility, entertainment tokens maintain strong community support and trading volume across major exchanges.",
-                    publishedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-                    source: "Crypto Markets",
+                    title: "📈 Entertainment Tokens Show Market Resilience",
+                    content: "Community-driven meme tokens demonstrate strong holding patterns and active user engagement despite broader market volatility.",
+                    publishedAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+                    source: "Crypto Analytics",
                     url: "#"
                 },
                 {
-                    title: "🎭 NFT Collections See Renewed Interest",
-                    content: "Digital art marketplaces report increased activity in meme-themed collections as creators embrace community-driven projects.",
-                    publishedAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-                    source: "NFT Today",
-                    url: "#"
-                },
-                {
-                    title: "🗳️ Community Governance Gains Momentum",
-                    content: "Decentralized voting mechanisms see increased adoption as entertainment token communities take active roles in project decisions.",
+                    title: "🎭 Meme Culture Drives Crypto Innovation",
+                    content: "Research shows entertainment-focused blockchain projects lead in user retention and community engagement metrics across the industry.",
                     publishedAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-                    source: "DeFi News",
+                    source: "Blockchain Research",
                     url: "#"
                 }
             ]
         };
 
-        let newsCache = [];
-        let lastNewsUpdate = 0;
-        const NEWS_CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
+        let liveNewsCache = [];
+        let lastLiveUpdate = 0;
+        let isLoadingNews = false;
 
-        // Main news loading function with multiple fallbacks
-        async function loadNews() {
-            const newsContainer = document.querySelector('.news-container');
+        // Main function to load live news
+        async function loadLiveNews() {
+            if (isLoadingNews) return;
+            isLoadingNews = true;
             
+            const newsContainer = document.querySelector('.news-container');
             if (!newsContainer) {
-                console.error('News container not found');
+                isLoadingNews = false;
                 return;
             }
 
-            // Show loading state
-            showNewsLoading(true);
-            
+            console.log('📡 Loading live crypto news...');
+            showLiveLoading(true);
+
             try {
                 // Check cache first
-                if (newsCache.length > 0 && (Date.now() - lastNewsUpdate) < NEWS_CACHE_DURATION) {
-                    console.log('Loading news from cache');
-                    displayNews(newsCache);
-                    showNewsLoading(false);
+                const now = Date.now();
+                if (liveNewsCache.length > 0 && (now - lastLiveUpdate) < LIVE_NEWS_CONFIG.cacheTimeout) {
+                    console.log('📋 Using cached live news');
+                    displayLiveNews(liveNewsCache);
+                    showLiveLoading(false);
+                    isLoadingNews = false;
                     return;
                 }
 
-                // Try to fetch live news
-                const news = await fetchLiveNews();
+                // Fetch fresh live news
+                const liveNews = await fetchFreshNews();
                 
-                if (news && news.length > 0) {
-                    newsCache = news;
-                    lastNewsUpdate = Date.now();
-                    displayNews(news);
-                    console.log('✅ Live news loaded successfully');
+                if (liveNews && liveNews.length > 0) {
+                    liveNewsCache = liveNews;
+                    lastLiveUpdate = now;
+                    displayLiveNews(liveNews);
+                    console.log('✅ LIVE NEWS LOADED SUCCESSFULLY!');
+                    showSuccessMessage('🔴 LIVE news updated from crypto sources!');
                 } else {
-                    throw new Error('No news data received');
+                    throw new Error('No live news available');
                 }
-                
+
             } catch (error) {
-                console.warn('Failed to load live news:', error);
-                // Use fallback news
-                displayNews(NEWS_CONFIG.fallbackNews);
-                showMessage('📰 Using cached news - refresh to try live feed again', 'info');
+                console.warn('⚠️ Live news failed, using fallback:', error);
+                displayLiveNews(LIVE_NEWS_CONFIG.fallbackNews);
+                showInfoMessage('📰 Using cached news - refresh to try live feed');
             }
-            
-            showNewsLoading(false);
+
+            showLiveLoading(false);
+            isLoadingNews = false;
         }
 
-        // Fetch news from multiple RSS sources
-        async function fetchLiveNews() {
-            const allNews = [];
+        // Fetch fresh news from RSS feeds
+        async function fetchFreshNews() {
+            const allLiveNews = [];
             
-            // Try RSS feeds (most reliable and free)
-            for (const feedUrl of NEWS_CONFIG.cryptoFeeds) {
+            // Try each RSS feed
+            for (const rssUrl of LIVE_NEWS_CONFIG.rssFeeds) {
                 try {
-                    const rssNews = await fetchRSSNews(feedUrl);
-                    if (rssNews && rssNews.length > 0) {
-                        allNews.push(...rssNews);
-                        console.log(`✅ Loaded ${rssNews.length} articles from ${extractSourceName(feedUrl)}`);
+                    console.log(`🔍 Fetching from ${extractSourceName(rssUrl)}...`);
+                    const articles = await fetchFromRSS(rssUrl);
+                    
+                    if (articles && articles.length > 0) {
+                        allLiveNews.push(...articles);
+                        console.log(`✅ Got ${articles.length} articles from ${extractSourceName(rssUrl)}`);
                     }
                 } catch (error) {
-                    console.warn(`Failed to load RSS from ${feedUrl}:`, error);
+                    console.warn(`❌ Failed to fetch from ${rssUrl}:`, error);
+                    continue; // Try next source
                 }
             }
-            
-            // If we have enough news, return it
-            if (allNews.length >= 3) {
-                return allNews
+
+            // Process and return best articles
+            if (allLiveNews.length >= 2) {
+                return allLiveNews
+                    .filter(article => article.title && article.content)
                     .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
-                    .slice(0, 6)
+                    .slice(0, 5)
                     .map(article => ({
                         ...article,
-                        content: article.content || article.description || 'Click to read more...'
+                        title: addCryptoEmojis(article.title),
+                        content: cleanContent(article.content)
                     }));
             }
-            
+
             return null;
         }
 
-        // Fetch from RSS feeds via proxy
-        async function fetchRSSNews(feedUrl) {
+        // Fetch from individual RSS feed
+        async function fetchFromRSS(rssUrl) {
+            const proxyUrl = `${LIVE_NEWS_CONFIG.proxyService}${encodeURIComponent(rssUrl)}`;
+            
             try {
-                const proxyUrl = `${NEWS_CONFIG.rssProxy}${encodeURIComponent(feedUrl)}`;
-                const response = await fetch(proxyUrl);
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
                 
+                const response = await fetch(proxyUrl, {
+                    signal: controller.signal,
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                clearTimeout(timeoutId);
+
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
-                
+
                 const data = await response.json();
                 
-                if (data.status !== 'ok' || !data.items) {
-                    throw new Error('Invalid RSS data');
+                if (data.status !== 'ok' || !data.items || !Array.isArray(data.items)) {
+                    throw new Error('Invalid RSS response format');
                 }
-                
+
+                // Filter for crypto/meme related content
                 return data.items
                     .filter(item => {
+                        if (!item.title) return false;
                         const title = item.title.toLowerCase();
-                        const content = (item.description || '').toLowerCase();
-                        // Filter for crypto/meme coin related content
-                        return title.includes('crypto') || title.includes('bitcoin') || 
+                        const desc = (item.description || '').toLowerCase();
+                        
+                        return title.includes('crypto') || title.includes('bitcoin') ||
                                title.includes('meme') || title.includes('token') ||
                                title.includes('coin') || title.includes('defi') ||
-                               content.includes('cryptocurrency') || content.includes('blockchain');
-                    })
-                    .slice(0, 3)
-                    .map(item => ({
-                        title: addCryptoEmoji(item.title),
-                        content: stripHtml(item.description || item.content || '').substring(0, 180) + '...',
-                        publishedAt: item.pubDate,
-                        source: extractSourceName(feedUrl),
-                        url: item.link || '#'
-                    }));
-                    
-            } catch (error) {
-                console.warn(`RSS fetch failed for ${feedUrl}:`, error);
-                return [];
-            }
-        }
-
-        // Utility functions
-        function addCryptoEmoji(title) {
-            const emojiMap = {
-                'bitcoin': '₿',
-                'ethereum': '⟠',
-                'meme': '🎭',
-                'surge': '🚀',
-                'rise': '📈',
-                'gain': '📈',
-                'fall': '📉',
-                'drop': '📉',
-                'pump': '💪',
-                'bull': '🐂',
-                'bear': '🐻',
-                'moon': '🌙',
-                'rocket': '🚀',
-                'fire': '🔥',
-                'hot': '🔥'
-            };
-            
-            const lowerTitle = title.toLowerCase();
-            for (const [keyword, emoji] of Object.entries(emojiMap)) {
-                if (lowerTitle.includes(keyword) && !title.includes(emoji)) {
-                    return `${emoji} ${title}`;
-                }
-            }
-            return `📰 ${title}`; // Default news emoji
-        }
-
-        function stripHtml(html) {
-            const tmp = document.createElement('div');
-            tmp.innerHTML = html;
-            return tmp.textContent || tmp.innerText || '';
-        }
-
-        function extractSourceName(url) {
-            try {
-                const domain = new URL(url).hostname;
-                const name = domain.replace('www.', '').split('.')[0];
-                return name.charAt(0).toUpperCase() + name.slice(1);
-            } catch {
-                return 'Crypto News';
-            }
-        }
-
-        function formatTimeAgo(dateString) {
-            try {
-                const date = new Date(dateString);
-                const now = new Date();
-                const diffInMinutes = Math.floor((now - date) / (1000 * 60));
-                
-                if (diffInMinutes < 60) {
-                    return `${diffInMinutes} minutes ago`;
-                } else if (diffInMinutes < 1440) {
-                    const hours = Math.floor(diffInMinutes / 60);
-                    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-                } else {
-                    const days = Math.floor(diffInMinutes / 1440);
-                    return `${days} day${days > 1 ? 's' : ''} ago`;
-                }
-            } catch {
-                return 'Recently';
-            }
-        }
-
-        // Display functions
-        function displayNews(newsArray) {
-            const newsContainer = document.querySelector('.news-container');
-            if (!newsContainer) return;
-            
-            newsContainer.innerHTML = newsArray.map(article => `
-                <div class="news-item" onclick="openNewsArticle('${article.url}')">
-                    <div class="news-header">
-                        <div class="news-title">${article.title}</div>
-                        <div class="news-time">${formatTimeAgo(article.publishedAt)}</div>
-                    </div>
-                    <div class="news-content">${article.content}</div>
-                    <div class="news-source">Source: ${article.source}</div>
-                </div>
-            `).join('');
-        }
-
-        function showNewsLoading(show) {
-            const newsContainer = document.querySelector('.news-container');
-            if (!newsContainer) return;
-            
-            if (show) {
-                newsContainer.innerHTML = `
-                    <div class="loading-indicator">
-                        <div style="font-size: 2rem; margin-bottom: 1rem;">📡</div>
-                        <div>Loading latest crypto news...</div>
-                        <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem;">Fetching from multiple sources</div>
-                    </div>
-                `;
-            }
-        }
-
-        function openNewsArticle(url) {
-            if (url && url !== '#') {
-                window.open(url, '_blank', 'noopener,noreferrer');
-            }
-        }
-
-        // Refresh function with actual API calls
-        async function refreshNews() {
-            console.log('🔄 Refreshing live news...');
-            
-            // Clear cache to force fresh fetch
-            newsCache = [];
-            lastNewsUpdate = 0;
-            
-            // Show refresh button loading state
-            const refreshBtn = document.querySelector('.refresh-btn');
-            if (refreshBtn) {
-                const originalText = refreshBtn.textContent;
-                refreshBtn.textContent = '🔄 Loading...';
-                refreshBtn.disabled = true;
-                
-                setTimeout(() => {
-                    refreshBtn.textContent = originalText;
-                    refreshBtn.disabled = false;
-                }, 5000);
-            }
-            
-            await loadNews();
-            showMessage('📰 News refreshed with latest articles!', 'success');
-        }
-
-        // Form submission functions
-        function submitCoin(event) {
-            event.preventDefault();
-            const form = event.target;
-            const formData = new FormData(form);
-            
-            // Simulate form submission
-            const submitBtn = form.querySelector('.submit-btn');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = '📤 Submitting...';
-            submitBtn.disabled = true;
-            
-            setTimeout(() => {
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-                form.reset();
-                showMessage('🎯 Coin suggestion submitted successfully!', 'success');
-            }, 2000);
-        }
-
-        // Utility functions
-        function showMessage(message, type = 'success') {
-            const popup = document.createElement('div');
-            popup.className = `message-popup ${type}`;
-            popup.textContent = message;
-            
-            document.body.appendChild(popup);
-            
-            // Trigger animation
-            setTimeout(() => popup.classList.add('show'), 100);
-            
-            // Remove after delay
-            setTimeout(() => {
-                popup.classList.remove('show');
-                setTimeout(() => popup.remove(), 300);
-            }, 4000);
-        }
-
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 MEFC Community Hub loading...');
-            loadNews();
-            
-            // Auto-refresh news every 15 minutes
-            setInterval(() => {
-                console.log('🔄 Auto-refreshing news...');
-                loadNews();
-            }, 15 * 60 * 1000);
-            
-            console.log('✅ Community Hub loaded with live news feed!');
-        });
-
-        // Add some interactive animations
-        document.addEventListener('mousemove', function(e) {
-            const cards = document.querySelectorAll('.news-item');
-            cards.forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const rotateX = (y - centerY) / 20;
-                    const rotateY = (centerX - x) / 20;
-                    
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(5px) translateX(5px)`;
-                } else {
-                    card.style.transform = 'translateX(0)';
-                }
-            });
-        });
+                               title.includes('
