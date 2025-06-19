@@ -337,55 +337,6 @@
             transform: translateX(0);
         }
 
-        /* NFT Gallery Specific Styles */
-        .nft-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 0;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 2px solid transparent;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .nft-card:hover {
-            transform: translateY(-8px);
-            border-color: #00ff66;
-            box-shadow: 0 15px 40px rgba(0, 255, 102, 0.3);
-        }
-
-        .nft-info {
-            padding: 1.5rem;
-        }
-
-        .nft-title {
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            color: #ffff00;
-        }
-
-        .opensea-btn {
-            background: linear-gradient(45deg, #2081e2, #1868b7);
-            color: white;
-            border: none;
-            padding: 0.7rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            flex: 1;
-            text-decoration: none;
-            text-align: center;
-            display: block;
-        }
-
-        .opensea-btn:hover {
-            background: linear-gradient(45deg, #1868b7, #2081e2);
-            transform: translateY(-2px);
-        }
-
         /* Meme Gallery */
         .meme-gallery-section {
             background: rgba(0, 0, 0, 0.8);
@@ -534,32 +485,44 @@
                     </div>
                 </section>
 
-                <!-- Community Stats -->
+                <!-- Community Goals -->
                 <section class="panel-section">
-                    <h3 class="section-title">📊 Community Stats</h3>
+                    <h3 class="section-title">🎯 Community Goals</h3>
                     <div class="stats-grid">
                         <div class="stat-item">
-                            <div class="stat-number">12,547</div>
-                            <div class="stat-label">Discord Members</div>
+                            <div class="stat-number">10K</div>
+                            <div class="stat-label">Discord Goal</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6; margin-top: 0.3rem;">🎯 Target</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number">8,923</div>
-                            <div class="stat-label">Twitter Followers</div>
+                            <div class="stat-number">25K</div>
+                            <div class="stat-label">Twitter Goal</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6; margin-top: 0.3rem;">🎯 Target</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number">10,142</div>
-                            <div class="stat-label">MEFC Holders</div>
+                            <div class="stat-number">50K</div>
+                            <div class="stat-label">MEFC Holders Goal</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6; margin-top: 0.3rem;">🎯 Target</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number" id="memesUploaded">247</div>
-                            <div class="stat-label">Memes Uploaded</div>
+                            <div class="stat-number">1K</div>
+                            <div class="stat-label">Daily Voters Goal</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6; margin-top: 0.3rem;">🎯 Target</div>
                         </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 1rem; padding: 0.8rem; background: rgba(0, 255, 102, 0.1); border-radius: 8px; border: 1px solid #00ff66;">
+                        <div style="font-size: 0.9rem; color: #00ff66; font-weight: bold;">🚀 Help Us Reach These Milestones!</div>
+                        <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 0.3rem;">Share MEFC with friends and join the battle!</div>
                     </div>
                 </section>
 
                 <!-- Suggest New Coin -->
                 <section class="panel-section">
                     <h3 class="section-title">🎯 Suggest New Coin</h3>
+                    <div style="background: rgba(255, 255, 0, 0.1); border: 1px solid #ffff00; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; text-align: center;">
+                        <div style="color: #ffff00; font-weight: bold; margin-bottom: 0.5rem;">🚧 Feature Coming Soon!</div>
+                        <div style="font-size: 0.9rem; opacity: 0.8;">We're working on this feature. For now, suggest coins in our Discord community!</div>
+                    </div>
                     <form class="submission-form" onsubmit="submitCoin(event)">
                         <div class="form-group">
                             <label>Coin Name:</label>
@@ -579,29 +542,34 @@
             </aside>
         </div>
 
-        <!-- Meme Fight Club NFT Gallery -->
+        <!-- Meme Fight Club Fun Zone -->
         <section class="meme-gallery-section">
             <div class="gallery-header" style="justify-content: center;">
-                <h2 class="section-title">🎨 Meme Fight Club NFT Gallery</h2>
+                <h2 class="section-title">🥊 The MEFC Fun Zone</h2>
             </div>
             
-            <div class="nft-showcase" style="background: linear-gradient(45deg, rgba(255, 0, 102, 0.1), rgba(0, 255, 102, 0.1)); border: 2px solid #ffff00; border-radius: 15px; padding: 1.5rem; margin-bottom: 2rem; text-align: center;">
-                <h3 style="color: #ffff00; margin-bottom: 1rem;">🚀 Explore NFT Collections</h3>
-                <p style="margin-bottom: 1.5rem; opacity: 0.9;">Discover unique digital art and collectibles on OpenSea marketplace</p>
-                <div style="display: flex; justify-content: center;">
-                    <a href="https://opensea.io/collection/meme-fight-club" target="_blank" class="submit-btn" style="text-decoration: none; display: inline-block;">
-                        🎨 Explore NFTs
+            <div class="fun-showcase" style="background: linear-gradient(45deg, rgba(255, 0, 102, 0.1), rgba(0, 255, 102, 0.1)); border: 2px solid #ffff00; border-radius: 15px; padding: 2rem; margin-bottom: 2rem; text-align: center;">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">🎭</div>
+                <h3 style="color: #ffff00; margin-bottom: 1rem; font-size: 1.8rem;">"First Rule of Meme Fight Club: Have Fun!"</h3>
+                <h4 style="color: #00ff66; margin-bottom: 1.5rem; font-size: 1.2rem;">Second Rule: Vote for Your Champion!</h4>
+                <p style="margin-bottom: 1.5rem; opacity: 0.9; font-size: 1.1rem;">Pure Entertainment in the Crypto Arena</p>
+                <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <a href="https://memefightclub.com/" class="submit-btn" style="text-decoration: none; display: inline-block;">
+                        🗳️ Start Voting
+                    </a>
+                    <a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" target="_blank" class="submit-btn" style="text-decoration: none; display: inline-block; background: linear-gradient(45deg, #00ff66, #33ff99); color: #000;">
+                        🚀 Get MEFC Tokens
                     </a>
                 </div>
             </div>
 
-            <!-- NFT Disclaimer -->
+            <!-- Entertainment Disclaimer -->
             <div style="background: rgba(255, 255, 0, 0.1); border: 1px solid #ffff00; border-radius: 10px; padding: 1rem; margin-bottom: 2rem; font-size: 0.9rem; line-height: 1.4;">
                 <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; color: #ffff00; font-weight: bold;">
-                    ⚠️ NFT Disclaimer
+                    🎭 Entertainment Notice
                 </div>
                 <div style="opacity: 0.9;">
-                    Meme Fight Club NFTs are strictly digital collectibles for entertainment and meme culture. These are independent creations by artists and community members, not affiliated with or endorsed by memefightclub.com or any associated entertainment tokens. Purchasing an NFT does not grant financial rights, profit participation, access to MEFC tokens, investment expectations, token rewards, staking mechanisms, or financial services. Have Fun - but always DYOR (Do Your Own Research)!
+                    Meme Fight Club is designed purely for entertainment and community fun! Vote for your favorite meme coins, enjoy the battles, and connect with fellow meme enthusiasts. Remember: this is all about having a good time in the crypto space - no financial advice, just pure entertainment! 
                 </div>
             </div>
         </section>
@@ -847,161 +815,4 @@
                     const days = Math.floor(diffInMinutes / 1440);
                     return `${days} day${days > 1 ? 's' : ''} ago`;
                 }
-            } catch {
-                return 'Recently';
             }
-        }
-
-        // Display functions
-        function displayNews(newsArray) {
-            const newsContainer = document.querySelector('.news-container');
-            if (!newsContainer) return;
-            
-            newsContainer.innerHTML = newsArray.map(article => `
-                <div class="news-item" onclick="openNewsArticle('${article.url}')">
-                    <div class="news-header">
-                        <div class="news-title">${article.title}</div>
-                        <div class="news-time">${formatTimeAgo(article.publishedAt)}</div>
-                    </div>
-                    <div class="news-content">${article.content}</div>
-                    <div class="news-source">Source: ${article.source}</div>
-                </div>
-            `).join('');
-        }
-
-        function showNewsLoading(show) {
-            const newsContainer = document.querySelector('.news-container');
-            if (!newsContainer) return;
-            
-            if (show) {
-                newsContainer.innerHTML = `
-                    <div class="loading-indicator">
-                        <div style="font-size: 2rem; margin-bottom: 1rem;">📡</div>
-                        <div>Loading latest crypto news...</div>
-                        <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem;">Fetching from multiple sources</div>
-                    </div>
-                `;
-            }
-        }
-
-        function openNewsArticle(url) {
-            if (url && url !== '#') {
-                window.open(url, '_blank', 'noopener,noreferrer');
-            }
-        }
-
-        // Refresh function with actual API calls
-        async function refreshNews() {
-            console.log('🔄 Refreshing live news...');
-            
-            // Clear cache to force fresh fetch
-            newsCache = [];
-            lastNewsUpdate = 0;
-            
-            // Show refresh button loading state
-            const refreshBtn = document.querySelector('.refresh-btn');
-            if (refreshBtn) {
-                const originalText = refreshBtn.textContent;
-                refreshBtn.textContent = '🔄 Loading...';
-                refreshBtn.disabled = true;
-                
-                setTimeout(() => {
-                    refreshBtn.textContent = originalText;
-                    refreshBtn.disabled = false;
-                }, 5000);
-            }
-            
-            await loadNews();
-            showMessage('📰 News refreshed with latest articles!', 'success');
-        }
-
-        // Form submission functions
-        function submitCoin(event) {
-            event.preventDefault();
-            const form = event.target;
-            const formData = new FormData(form);
-            
-            // Simulate form submission
-            const submitBtn = form.querySelector('.submit-btn');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = '📤 Submitting...';
-            submitBtn.disabled = true;
-            
-            setTimeout(() => {
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-                form.reset();
-                showMessage('🎯 Coin suggestion submitted successfully!', 'success');
-            }, 2000);
-        }
-
-        // Stats update function
-        function updateStats() {
-            const memesUploaded = document.getElementById('memesUploaded');
-            let count = 247;
-            
-            // Simulate real-time updates
-            setInterval(() => {
-                if (Math.random() > 0.7) { // 30% chance to update
-                    count += Math.floor(Math.random() * 3) + 1;
-                    memesUploaded.textContent = count.toLocaleString();
-                }
-            }, 15000); // Update every 15 seconds
-        }
-
-        // Utility functions
-        function showMessage(message, type = 'success') {
-            const popup = document.createElement('div');
-            popup.className = `message-popup ${type}`;
-            popup.textContent = message;
-            
-            document.body.appendChild(popup);
-            
-            // Trigger animation
-            setTimeout(() => popup.classList.add('show'), 100);
-            
-            // Remove after delay
-            setTimeout(() => {
-                popup.classList.remove('show');
-                setTimeout(() => popup.remove(), 300);
-            }, 4000);
-        }
-
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 MEFC Community Hub loading...');
-            loadNews();
-            updateStats();
-            
-            // Auto-refresh news every 15 minutes
-            setInterval(() => {
-                console.log('🔄 Auto-refreshing news...');
-                loadNews();
-            }, 15 * 60 * 1000);
-            
-            console.log('✅ Community Hub loaded with live news feed!');
-        });
-
-        // Add some interactive animations
-        document.addEventListener('mousemove', function(e) {
-            const cards = document.querySelectorAll('.news-item');
-            cards.forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const rotateX = (y - centerY) / 20;
-                    const rotateY = (centerX - x) / 20;
-                    
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(5px) translateX(5px)`;
-                } else {
-                    card.style.transform = 'translateX(0)';
-                }
-            });
-        });
-    </script>
-</body>
-</html>
