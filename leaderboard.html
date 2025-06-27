@@ -493,7 +493,7 @@
     <header class="header">
         <nav class="nav">
             <div class="logo">
-                <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #ff0066, #ffff00); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 1.5rem;">🥊</div>
+                <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #ff0066, #ffff00); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px; font-weight: 900; color: #000; font-family: Arial Black, Arial, sans-serif;">MFC</div>
                 MEME FIGHT CLUB
             </div>
             <div class="nav-links">
@@ -656,7 +656,7 @@
             }
         };
 
-        // Load voting data with error handling
+        // FIXED: Load voting data with better error handling and homepage compatibility
         function loadVotingData() {
             const stored = SafeStorage.getItem('mefc_voting_data');
             
@@ -667,17 +667,18 @@
                     if (data && data.coins && Array.isArray(data.coins)) {
                         currentData = data.coins;
                         totalVotes = data.totalVotes || 0;
-                        console.log('Loaded live voting data:', { coins: currentData.length, totalVotes });
+                        console.log('✅ Loaded live voting data:', { coins: currentData.length, totalVotes, timestamp: data.timestamp });
                         return true;
                     }
                 } catch (error) {
-                    console.error('Error parsing voting data:', error);
+                    console.error('❌ Error parsing voting data:', error);
                 }
             }
             
-            // No data available
+            // No data available - use defaults
             currentData = [...defaultMemeCoins];
             totalVotes = 0;
+            console.log('📝 Using default voting data - no votes yet');
             return false;
         }
 
@@ -690,7 +691,7 @@
             if (totalVotes === 0) {
                 podium.innerHTML = `
                     <div style="text-align: center; padding: 2rem; opacity: 0.7; width: 100%;">
-                        <p style="margin-bottom: 1rem;">No votes yet</p>
+                        <p style="margin-bottom: 1rem;">No votes yet - Battle starting soon! 🚀</p>
                         <p style="font-size: 0.9rem;">Visit the <a href="https://memefightclub.com/" style="color: #ff0066;">homepage</a> to start voting!</p>
                     </div>
                 `;
@@ -724,7 +725,7 @@
             const sorted = [...currentData].sort((a, b) => (b.votes || 0) - (a.votes || 0));
             
             if (totalVotes === 0) {
-                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; opacity: 0.7;">No voting data available</div>';
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; opacity: 0.7;">Waiting for votes... Visit the homepage to vote! 🗳️</div>';
                 return;
             }
             
@@ -768,6 +769,12 @@
             document.getElementById('totalVotesDisplay').textContent = totalVotes;
             document.getElementById('leadingCoin').textContent = leader && leader.votes > 0 ? leader.symbol : '-';
             document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+            
+            // Update battle timer from homepage if available
+            const storedTimer = SafeStorage.getItem('mefc_battle_timer');
+            if (storedTimer && document.getElementById('battleTimeRemaining')) {
+                document.getElementById('battleTimeRemaining').textContent = storedTimer;
+            }
         }
 
         // Update battle history
@@ -775,7 +782,7 @@
             const historyEl = document.getElementById('battleHistory');
             
             if (totalVotes === 0) {
-                historyEl.innerHTML = '<div style="text-align: center; opacity: 0.7; padding: 2rem;">No voting history available</div>';
+                historyEl.innerHTML = '<div style="text-align: center; opacity: 0.7; padding: 2rem;">Battle in progress... Vote now to make history! 🏆</div>';
                 return;
             }
             
@@ -802,34 +809,57 @@
 
         // Refresh data function
         function refreshData() {
-            loadVotingData();
+            const success = loadVotingData();
             updateAll();
             
             // Show refresh feedback
             const btn = event.target;
             const originalText = btn.textContent;
-            btn.textContent = '🔄 Refreshed!';
-            btn.style.background = 'linear-gradient(45deg, #00ff66, #33ff99)';
+            
+            if (success && totalVotes > 0) {
+                btn.textContent = '✅ Data Refreshed!';
+                btn.style.background = 'linear-gradient(45deg, #00ff66, #33ff99)';
+            } else {
+                btn.textContent = '📝 No votes yet';
+                btn.style.background = 'linear-gradient(45deg, #ffff00, #ff9900)';
+            }
             
             setTimeout(() => {
                 btn.textContent = originalText;
                 btn.style.background = 'linear-gradient(45deg, #00ff66, #33ff99)';
-            }, 1000);
+            }, 2000);
         }
 
         // Initialize the page
         function initialize() {
-            loadVotingData();
+            console.log('🚀 Leaderboard initializing...');
+            
+            const success = loadVotingData();
             updateAll();
             
-            // Set up auto-refresh every 5 seconds
+            if (success) {
+                console.log('🎯 Homepage sync active - displaying live votes');
+            } else {
+                console.log('📝 No votes yet - waiting for homepage activity');
+            }
+            
+            // Set up auto-refresh every 3 seconds for better responsiveness
             setInterval(() => {
                 loadVotingData();
                 updateAll();
-            }, 5000);
+            }, 3000);
             
-            console.log('Leaderboard initialized');
+            console.log('✅ Leaderboard initialized with auto-refresh');
         }
+
+        // Listen for storage changes from homepage
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'mefc_voting_data') {
+                console.log('🔄 Vote data updated from homepage!');
+                loadVotingData();
+                updateAll();
+            }
+        });
 
         // Start when page loads
         document.addEventListener('DOMContentLoaded', initialize);
