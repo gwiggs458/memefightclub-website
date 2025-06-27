@@ -589,7 +589,7 @@
         <div class="battle-arena">
             <div class="battle-header">
                 <div class="battle-status">🔴 LIVE MEME COIN VOTING</div>
-                <div class="battle-timer" id="battleTimer">0:59:45</div>
+                <div class="battle-timer" id="battleTimer">0:29:45</div>
                 <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;">
                     👥 <span id="totalVotes">0</span> total votes
                 </div>
@@ -702,7 +702,8 @@
             { rank: 30, symbol: 'MEFC', name: 'Meme Fight Club', emoji: '🥊', votes: 0 }
         ];
 
-        let userVoted = false;
+        let userVotesUsed = 0;
+        const maxVotesPerRound = 2;
         let totalVoteCount = 0;
 
         // Load existing voting data from localStorage
@@ -722,7 +723,7 @@
                         totalVoteCount = data.totalVotes || 0;
                         
                         // Check if user already voted in current session
-                        userVoted = data.userVoted || false;
+                        userVotesUsed = data.userVotesUsed || 0;
                     }
                 }
             } catch (error) {
@@ -736,7 +737,7 @@
                 const data = {
                     coins: memeCoins,
                     totalVotes: totalVoteCount,
-                    userVoted: userVoted,
+                    userVotesUsed: userVotesUsed,
                     timestamp: new Date().toISOString()
                 };
                 
@@ -802,8 +803,8 @@
                     hours--;
                     if (hours < 0) {
                         hours = 0;
-                        minutes = 59;
-                        seconds = 59;
+                        minutes = 29;
+                        seconds = 45;
                         resetVotes();
                     }
                 }
@@ -816,10 +817,10 @@
             saveBattleTimer(timeString);
         }
 
-        // Vote Function - Now with localStorage sync
+        // Vote Function - Now with 2 votes per round
         function vote(symbol) {
-            if (userVoted) {
-                showMessage('You can only vote once per round! 🗳️');
+            if (userVotesUsed >= maxVotesPerRound) {
+                showMessage('You have used both votes for this round! 🗳️');
                 return;
             }
 
@@ -827,13 +828,13 @@
             if (coin) {
                 coin.votes++;
                 totalVoteCount++;
-                userVoted = true;
+                userVotesUsed++;
                 
                 // Save data immediately for leaderboard sync
                 saveVotingData();
                 
                 updateDisplay();
-                showMessage(`Vote recorded for ${coin.emoji} ${coin.name}! 🎉`);
+                showMessage(`Vote ${userVotesUsed} of ${maxVotesPerRound} recorded for ${coin.emoji} ${coin.name}! 🎉`);
                 
                 // Simulate other votes
                 simulateOtherVotes();
@@ -867,7 +868,7 @@
                 const percentage = totalVoteCount > 0 ? Math.round((coin.votes / totalVoteCount) * 100) : 0;
                 
                 const coinEl = document.createElement('div');
-                coinEl.className = `top-coin ${userVoted && coin.votes > 0 ? 'voted' : ''}`;
+                coinEl.className = `top-coin ${userVotesUsed > 0 && coin.votes > 0 ? 'voted' : ''}`;
                 coinEl.onclick = () => vote(coin.symbol);
                 
                 coinEl.innerHTML = `
@@ -892,7 +893,7 @@
             
             remainingCoins.forEach((coin, index) => {
                 const coinEl = document.createElement('div');
-                coinEl.className = `coin-item ${userVoted && coin.votes > 0 ? 'voted' : ''}`;
+                coinEl.className = `coin-item ${userVotesUsed > 0 && coin.votes > 0 ? 'voted' : ''}`;
                 coinEl.onclick = () => vote(coin.symbol);
                 
                 coinEl.innerHTML = `
@@ -971,7 +972,7 @@
             // Reset all votes
             memeCoins.forEach(coin => coin.votes = 0);
             totalVoteCount = 0;
-            userVoted = false;
+            userVotesUsed = 0;
             
             updateDisplay();
             showMessage('🔄 New voting round started! Vote again!');
@@ -1007,8 +1008,9 @@
             setInterval(simulatePeriodicActivity, 30000); // Every 30 seconds
             setInterval(updateStats, 20000); // Every 20 seconds
             
-            console.log('Meme Fight Club with LIVE SYNC loaded successfully!');
+            console.log('Meme Fight Club with 2 VOTES PER ROUND loaded successfully!');
             console.log('Loaded total votes:', totalVoteCount);
+            console.log('User votes used:', userVotesUsed);
         });
 
         // Smooth scrolling for mobile
