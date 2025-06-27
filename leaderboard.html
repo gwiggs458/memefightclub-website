@@ -160,26 +160,6 @@
             opacity: 0.8;
         }
 
-        /* Connection Status */
-        .connection-status {
-            background: rgba(255, 165, 0, 0.1);
-            border: 2px solid #ffa500;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 3rem;
-            text-align: center;
-        }
-
-        .connection-status.connected {
-            background: rgba(0, 255, 102, 0.1);
-            border-color: #00ff66;
-        }
-
-        .connection-status.error {
-            background: rgba(255, 0, 102, 0.1);
-            border-color: #ff0066;
-        }
-
         /* Podium */
         .podium-section {
             background: rgba(0, 0, 0, 0.8);
@@ -530,12 +510,7 @@
     <!-- Main Content -->
     <main class="main-content">
         <h1 class="page-title">🏆 LIVE LEADERBOARD</h1>
-        <p class="page-subtitle">Real-time results from the meme coin voting battle</p>
-
-        <!-- Connection Status -->
-        <section id="connectionStatus" class="connection-status">
-            <h3>🔄 Checking for live data...</h3>
-        </section>
+        <p class="page-subtitle">Real-time results from meme coin voting battles</p>
 
         <!-- Live Status -->
         <section class="live-status">
@@ -658,7 +633,6 @@
 
         let currentData = [...defaultMemeCoins];
         let totalVotes = 0;
-        let isConnected = false;
 
         // Safe localStorage wrapper that handles sandboxing
         const SafeStorage = {
@@ -682,28 +656,6 @@
             }
         };
 
-        // Check connection status and update UI
-        function checkConnection() {
-            const statusEl = document.getElementById('connectionStatus');
-            
-            try {
-                // Test localStorage access
-                const testData = SafeStorage.getItem('mefc_voting_data');
-                
-                if (testData) {
-                    isConnected = true;
-                    statusEl.className = 'connection-status connected';
-                    statusEl.innerHTML = '<h3>✅ Connected to homepage data!</h3><p>Live sync is active. Vote data will update automatically.</p>';
-                } else {
-                    statusEl.className = 'connection-status';
-                    statusEl.innerHTML = '<h3>⚠️ No vote data found</h3><p>Visit the <a href="https://memefightclub.com/" style="color: #ff0066;">homepage</a> to start voting, or use the demo button below.</p>';
-                }
-            } catch (error) {
-                statusEl.className = 'connection-status error';
-                statusEl.innerHTML = '<h3>🚫 localStorage Blocked</h3><p>This is a demo environment. For full functionality, deploy both pages to your domain.</p>';
-            }
-        }
-
         // Load voting data with error handling
         function loadVotingData() {
             const stored = SafeStorage.getItem('mefc_voting_data');
@@ -715,7 +667,6 @@
                     if (data && data.coins && Array.isArray(data.coins)) {
                         currentData = data.coins;
                         totalVotes = data.totalVotes || 0;
-                        isConnected = true;
                         console.log('Loaded live voting data:', { coins: currentData.length, totalVotes });
                         return true;
                     }
@@ -868,7 +819,6 @@
 
         // Initialize the page
         function initialize() {
-            checkConnection();
             loadVotingData();
             updateAll();
             
