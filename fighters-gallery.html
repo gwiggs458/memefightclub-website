@@ -98,6 +98,10 @@
             color: transparent;
             animation: pulse 2s ease-in-out infinite;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
         }
 
         @keyframes pulse {
@@ -359,6 +363,8 @@
         @media (max-width: 768px) {
             .page-title {
                 font-size: 2.5rem;
+                flex-direction: column;
+                gap: 0.5rem;
             }
 
             .main-content {
@@ -391,7 +397,7 @@
     <header class="header">
         <nav class="nav">
             <div class="logo">
-                <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #ff0066, #ffff00); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 1.5rem;">🥊</div>
+                <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #ff0066, #ffff00); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px; font-weight: 900; color: #000; font-family: Arial Black, Arial, sans-serif;">MEFC</div>
                 MEME FIGHT CLUB
             </div>
             <div class="nav-links">
@@ -407,7 +413,10 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <h1 class="page-title fade-in">🥊 Fighters Gallery</h1>
+        <h1 class="page-title fade-in">
+            <div style="width: 60px; height: 60px; background: linear-gradient(45deg, #ff0066, #ffff00); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; color: #000; font-family: Arial Black, Arial, sans-serif;">MEFC</div>
+            Fighters Gallery
+        </h1>
         <p class="page-subtitle fade-in">Meet the Epic Meme Coin Champions of the Arena</p>
 
         <!-- Gallery Stats -->
@@ -1242,7 +1251,37 @@
         </div>
     </footer>
     <script>
-        // Storage keys for syncing with main voting page
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDynamicStats();
+            updateStatsDisplay();
+            startDynamicUpdates();
+            
+            console.log('Dynamic fighter stats system loaded!');
+            console.log('Stats sync with voting data every 10 seconds');
+            console.log('Random fluctuations every 30 seconds');
+        });
+
+        // Add visual effects
+        function addStatEffects() {
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach(stat => {
+                stat.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.1)';
+                    this.style.transition = 'all 0.3s ease';
+                });
+                
+                stat.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        }
+
+        // Initialize effects
+        setTimeout(addStatEffects, 1000);
+    </script>
+</body>
+</html> Storage keys for syncing with main voting page
         const STORAGE_KEYS = {
             votes: 'mefc_voting_data',
             fighterStats: 'mefc_fighter_stats',
@@ -1379,7 +1418,8 @@
                 const symbolElement = card.querySelector('.fighter-symbol');
                 if (!symbolElement) return;
                 
-                const symbol = symbolElement.textContent.replace(', '');
+                const symbol = symbolElement.textContent.replace('
+                , '');
                 const stats = currentStats[symbol];
                 if (!stats) return;
                 
@@ -1427,34 +1467,4 @@
             }, 10000);
         }
 
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeDynamicStats();
-            updateStatsDisplay();
-            startDynamicUpdates();
-            
-            console.log('Dynamic fighter stats system loaded!');
-            console.log('Stats sync with voting data every 10 seconds');
-            console.log('Random fluctuations every 30 seconds');
-        });
-
-        // Add visual effects
-        function addStatEffects() {
-            const statValues = document.querySelectorAll('.stat-value');
-            statValues.forEach(stat => {
-                stat.addEventListener('mouseenter', function() {
-                    this.style.transform = 'scale(1.1)';
-                    this.style.transition = 'all 0.3s ease';
-                });
-                
-                stat.addEventListener('mouseleave', function() {
-                    this.style.transform = 'scale(1)';
-                });
-            });
-        }
-
-        // Initialize effects
-        setTimeout(addStatEffects, 1000);
-    </script>
-</body>
-</html>
+        //
