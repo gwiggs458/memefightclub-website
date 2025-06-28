@@ -112,9 +112,18 @@
         .page-subtitle {
             font-size: 1.3rem;
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
             opacity: 0.9;
             color: #ffff00;
+        }
+
+        .blockchain-badge {
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #00ff66;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
         }
 
         /* Legal Disclaimer */
@@ -322,6 +331,13 @@
             font-style: italic;
         }
 
+        .sui-powered {
+            color: #00ff66;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            font-weight: bold;
+        }
+
         /* Mobile Responsive */
         @media (max-width: 1200px) {
             .nav-links {
@@ -418,6 +434,7 @@
             Fighters Gallery
         </h1>
         <p class="page-subtitle fade-in">Meet the Epic Meme Coin Champions of the Arena</p>
+        <p class="blockchain-badge fade-in">⚡ Powered by SUI Blockchain ⚡</p>
 
         <!-- Gallery Stats -->
         <div class="gallery-stats fade-in">
@@ -1249,6 +1266,10 @@
         <div class="community-message">
             Built with ❤️ for the meme community
         </div>
+        
+        <div class="sui-powered">
+            ⚡ Powered by SUI Blockchain ⚡
+        </div>
     </footer>
     <script>
         // Initialize when page loads
@@ -1279,9 +1300,8 @@
 
         // Initialize effects
         setTimeout(addStatEffects, 1000);
-    </script>
-</body>
-</html> Storage keys for syncing with main voting page
+
+        // Storage keys for syncing with main voting page
         const STORAGE_KEYS = {
             votes: 'mefc_voting_data',
             fighterStats: 'mefc_fighter_stats',
@@ -1418,8 +1438,7 @@
                 const symbolElement = card.querySelector('.fighter-symbol');
                 if (!symbolElement) return;
                 
-                const symbol = symbolElement.textContent.replace('
-                , '');
+                const symbol = symbolElement.textContent.replace(', '');
                 const stats = currentStats[symbol];
                 if (!stats) return;
                 
@@ -1466,5 +1485,6 @@
                 updateStatsDisplay();
             }, 10000);
         }
-
-        //
+    </script>
+</body>
+</html>
