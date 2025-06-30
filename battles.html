@@ -518,18 +518,34 @@
                     </div>
                 </section>
 
-                <!-- Suggest New Coin - WORKING! -->
+                <!-- Suggest New Coin - EMAIL INTEGRATION! -->
                 <section class="panel-section">
                     <h3 class="section-title">🎯 Suggest New Coin</h3>
                     
-                    <div style="text-align: center; background: rgba(0, 255, 102, 0.1); border: 2px solid #00ff66; border-radius: 15px; padding: 2rem;">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
-                        <h4 style="color: #00ff66; margin-bottom: 1rem; font-size: 1.3rem;">Got a Meme Coin Champion?</h4>
-                        <p style="margin-bottom: 1.5rem; opacity: 0.9;">Help us discover the next legendary fighter for the arena!</p>
+                    <div style="background: rgba(0, 255, 102, 0.1); border: 2px solid #00ff66; border-radius: 15px; padding: 1.5rem;">
+                        <div style="text-align: center; margin-bottom: 1.5rem;">
+                            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🚀</div>
+                            <h4 style="color: #00ff66; margin-bottom: 0.5rem; font-size: 1.2rem;">Got a Meme Coin Champion?</h4>
+                            <p style="margin-bottom: 0; opacity: 0.9; font-size: 0.9rem;">Help us discover the next legendary fighter for the arena!</p>
+                        </div>
                         
-                        <button onclick="openCoinForm()" class="submit-btn" style="font-size: 1.1rem; padding: 1rem 2rem;">
-                            🎯 Suggest New Coin
-                        </button>
+                        <form class="submission-form" onsubmit="submitCoinEmail(event)">
+                            <div class="form-group">
+                                <label style="color: #00ff66; font-weight: bold; margin-bottom: 0.3rem;">Coin Name:</label>
+                                <input type="text" class="form-input" placeholder="e.g., GekkoCash" required style="background: rgba(255, 255, 255, 0.1); border: 1px solid #00ff66; border-radius: 5px; padding: 0.8rem; color: white; font-family: inherit;">
+                            </div>
+                            <div class="form-group">
+                                <label style="color: #00ff66; font-weight: bold; margin-bottom: 0.3rem;">Symbol:</label>
+                                <input type="text" class="form-input" placeholder="e.g., GEK" required style="background: rgba(255, 255, 255, 0.1); border: 1px solid #00ff66; border-radius: 5px; padding: 0.8rem; color: white; font-family: inherit;">
+                            </div>
+                            <div class="form-group">
+                                <label style="color: #00ff66; font-weight: bold; margin-bottom: 0.3rem;">Why should we add it?</label>
+                                <textarea class="form-textarea" rows="3" placeholder="Tell us why this coin deserves a spot in the arena..." required style="background: rgba(255, 255, 255, 0.1); border: 1px solid #00ff66; border-radius: 5px; padding: 0.8rem; color: white; font-family: inherit; resize: vertical;"></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn" style="width: 100%; font-size: 1rem; padding: 1rem;">
+                                📮 Submit Suggestion
+                            </button>
+                        </form>
                     </div>
                 </section>
             </aside>
@@ -934,7 +950,30 @@
             await loadLiveNews();
         }
 
-        // Coin suggestion function
+        // Email integration for coin suggestions
+        function submitCoinEmail(event) {
+            event.preventDefault();
+            const form = event.target;
+            const coinName = form.querySelector('input[placeholder*="GekkoCash"]').value;
+            const symbol = form.querySelector('input[placeholder*="GEK"]').value;
+            const reason = form.querySelector('textarea').value;
+            
+            const subject = encodeURIComponent(`MEFC Coin Suggestion: ${coinName} (${symbol})`);
+            const body = encodeURIComponent(`
+Coin Name: ${coinName}
+Symbol: ${symbol}
+Reason: ${reason}
+
+Submitted from: memefightclub.com
+Time: ${new Date().toLocaleString()}
+            `);
+            
+            window.open(`mailto:memefightclubx@gmail.com?subject=${subject}&body=${body}`);
+            showSuccessMessage('📧 Email client opened! Send the suggestion email.');
+            form.reset();
+        }
+
+        // Coin suggestion function (now legacy - kept for compatibility)
         function openCoinForm() {
             const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSeKmeikroUHXb7rt1tcq_ynP7JTsdxRv_Ff12qGQqI8-djjPQ/viewform';
             window.open(formUrl, '_blank', 'width=800,height=900,scrollbars=yes,resizable=yes');
@@ -987,6 +1026,7 @@
         window.refreshNews = refreshNews;
         window.openCoinForm = openCoinForm;
         window.openLiveArticle = openLiveArticle;
+        window.submitCoinEmail = submitCoinEmail;
     </script>
 </body>
 </html>
