@@ -1297,6 +1297,7 @@
             ⚡ Powered by SUI Blockchain ⚡
         </div>
     </footer>
+
     <script>
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
@@ -1465,7 +1466,8 @@
                 const symbolElement = card.querySelector('.fighter-symbol');
                 if (!symbolElement) return;
                 
-                const symbol = symbolElement.textContent.replace(', '');
+                const symbol = symbolElement.textContent.replace('
+                    <div class="stat">, '');
                 const stats = currentStats[symbol];
                 if (!stats) return;
                 
@@ -1513,5 +1515,216 @@
             }, 10000);
         }
     </script>
+
+    <!-- ============================================ -->
+    <!-- MEME FIGHT CLUB - AUTO FIGHTER IMAGE REPLACER -->
+    <!-- ============================================ -->
+    <script>
+        // Configuration - Updated for gwiggs458/memefightclub-website
+        const GITHUB_CONFIG = {
+            username: 'gwiggs458',              // Your GitHub username
+            repo: 'memefightclub-website',      // Your repository name  
+            branch: 'main',                     // Your default branch
+            imagePath: 'images/fighters/'      // Path where fighter images will be stored
+        };
+
+        // Complete fighter image mapping (31 fighters)
+        const FIGHTER_IMAGES = {
+            // Priority Fighters (Start with these)
+            'DOGE': 'doge-legend.jpg',
+            'SHIB': 'shiba-warrior.jpg', 
+            'PEPE': 'business-pepe.jpg',
+            'WIF': 'dog-with-hat.jpg',
+            'BONK': 'bonk-fighter.jpg',
+            'FLOKI': 'viking-floki.jpg',
+            
+            // Medium Priority
+            'TRUMP': 'eagle-patriot.jpg',
+            'BRETT': 'brett-based.jpg',
+            'POPCAT': 'popcat-sonic.jpg',
+            'MOG': 'business-mogul.jpg',
+            'NEIRO': 'ai-dog-future.jpg',
+            'TURBO': 'speed-racer.jpg',
+            'MEME': 'meta-meme.jpg',
+            'CAT': 'simons-cat.jpg',
+            
+            // All Others (Add gradually)
+            'GOAT': 'ai-goat.jpg',
+            'PNUT': 'peanut-squirrel.jpg',
+            'ACT': 'ai-prophecy.jpg',
+            'PONKE': 'monkey-chaos.jpg',
+            'MOODENG': 'thai-hippo.jpg',
+            'CHILLGUY': 'chill-guy.jpg',
+            'BOME': 'book-wisdom.jpg',
+            'MYRO': 'rhythm-warrior.jpg',
+            'DOGS': 'pack-leader.jpg',
+            'WEN': 'time-warrior.jpg',
+            'DEGEN': 'gambler-fighter.jpg',
+            'PEPU': 'pepe-unchained.jpg',
+            'SLERF': 'sleepy-sloth.jpg',
+            'MEW': 'cat-rebel.jpg',
+            'HONK': 'chaos-goose.jpg',
+            'GEK': 'gekko-cash-fighter.jpg',      // ← Your Gekko Cash image!
+            'MEFC': 'ultimate-champion.jpg'
+        };
+
+        // Generate GitHub image URL
+        function getGitHubImageURL(filename) {
+            return `https://raw.githubusercontent.com/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/${GITHUB_CONFIG.imagePath}${filename}`;
+        }
+
+        // Get fallback emoji for each fighter
+        function getFallbackEmoji(symbol) {
+            const emojiMap = {
+                'DOGE': '🐕', 'SHIB': '🐶', 'PEPE': '🐸', 'WIF': '🐕🎩',
+                'BONK': '🏏', 'FLOKI': '⚔️', 'TRUMP': '🦅', 'BRETT': '🟢',
+                'POPCAT': '🐱', 'MOG': '💼', 'NEIRO': '🤖', 'TURBO': '🏎️',
+                'MEME': '🎭', 'CAT': '🐱', 'GOAT': '🐐', 'PNUT': '🐿️',
+                'ACT': '🎬', 'PONKE': '🐒', 'MOODENG': '🦛', 'CHILLGUY': '😎',
+                'BOME': '📖', 'MYRO': '🎵', 'DOGS': '🐕‍🦺', 'WEN': '⏰',
+                'DEGEN': '🎰', 'PEPU': '🐸⛓️', 'SLERF': '🦥', 'MEW': '🐱',
+                'HONK': '🦢', 'GEK': '🦎', 'MEFC': '🥊'
+            };
+            return emojiMap[symbol] || '🥊';
+        }
+
+        // Replace all fighter images
+        function replaceAllFighterImages() {
+            console.log('🥊 Starting MEFC fighter image replacement...');
+            
+            const fighterCards = document.querySelectorAll('.fighter-card');
+            let replacedCount = 0;
+            let totalFighters = 0;
+            
+            fighterCards.forEach((card, index) => {
+                const symbolElement = card.querySelector('.fighter-symbol');
+                const imageContainer = card.querySelector('.fighter-image');
+                
+                if (symbolElement && imageContainer) {
+                    totalFighters++;
+                    const symbol = symbolElement.textContent.replace('
+                    <div class="stat">, '').trim();
+                    const originalEmoji = getFallbackEmoji(symbol);
+                    
+                    if (FIGHTER_IMAGES[symbol]) {
+                        const imageURL = getGitHubImageURL(FIGHTER_IMAGES[symbol]);
+                        
+                        // Create image with comprehensive fallback
+                        imageContainer.innerHTML = `
+                            <img src="${imageURL}" 
+                                 alt="${symbol} Fighter - ${card.querySelector('.fighter-name').textContent}" 
+                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px; transition: all 0.3s ease;"
+                                 onerror="this.style.display='none'; this.parentNode.innerHTML='${originalEmoji}'; console.warn('❌ Failed to load: ${symbol}');"
+                                 onload="console.log('✅ Loaded: ${symbol} fighter image');">
+                        `;
+                        
+                        replacedCount++;
+                        console.log(`🔄 Processing ${symbol} (${replacedCount}/${totalFighters})`);
+                    } else {
+                        console.log(`⚠️ No image mapping for: ${symbol} - keeping emoji: ${originalEmoji}`);
+                        // Ensure fallback emoji is set correctly
+                        if (!imageContainer.textContent.trim()) {
+                            imageContainer.textContent = originalEmoji;
+                        }
+                    }
+                }
+            });
+            
+            console.log(`🎉 MEFC Auto-Replace Complete!`);
+            console.log(`📊 Stats: ${replacedCount} images attempted, ${totalFighters - replacedCount} using emoji fallbacks`);
+            
+            // Show completion notification
+            setTimeout(() => {
+                console.log(`🚀 Fighter gallery ready! Upload images to: ${GITHUB_CONFIG.imagePath}`);
+            }, 2000);
+        }
+
+        // Update GitHub configuration (call this if you need to change settings)
+        function updateGitHubConfig(username, repo, branch = 'main', imagePath = 'images/fighters/') {
+            GITHUB_CONFIG.username = username;
+            GITHUB_CONFIG.repo = repo;
+            GITHUB_CONFIG.branch = branch;
+            GITHUB_CONFIG.imagePath = imagePath;
+            console.log('📝 GitHub config updated:', GITHUB_CONFIG);
+            replaceAllFighterImages(); // Re-run with new config
+        }
+
+        // Manual refresh function (for testing)
+        function refreshFighterImages() {
+            console.log('🔄 Manually refreshing fighter images...');
+            replaceAllFighterImages();
+        }
+
+        // Add image loading progress indicator
+        function addLoadingIndicators() {
+            const fighterCards = document.querySelectorAll('.fighter-card');
+            
+            fighterCards.forEach(card => {
+                const imageContainer = card.querySelector('.fighter-image');
+                const img = imageContainer.querySelector('img');
+                
+                if (img) {
+                    // Add loading state
+                    img.addEventListener('loadstart', function() {
+                        this.style.opacity = '0.5';
+                        this.style.transform = 'scale(0.95)';
+                    });
+                    
+                    // Add success state
+                    img.addEventListener('load', function() {
+                        this.style.opacity = '1';
+                        this.style.transform = 'scale(1)';
+                        this.parentNode.style.borderColor = '#00ff66';
+                        setTimeout(() => {
+                            this.parentNode.style.borderColor = '';
+                        }, 1000);
+                    });
+                    
+                    // Add error state
+                    img.addEventListener('error', function() {
+                        this.parentNode.style.borderColor = '#ff0066';
+                        setTimeout(() => {
+                            this.parentNode.style.borderColor = '';
+                        }, 2000);
+                    });
+                }
+            });
+        }
+
+        // Initialize Auto-Replace System when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🥊 MEFC Fighter Gallery - Auto Image System Loading...');
+            
+            // Wait for page to fully load, then run after existing scripts
+            setTimeout(() => {
+                replaceAllFighterImages();
+                addLoadingIndicators();
+            }, 2000);
+            
+            // Add manual refresh capability (for development)
+            window.refreshFighterImages = refreshFighterImages;
+            window.updateGitHubConfig = updateGitHubConfig;
+            
+            console.log('🎮 MEFC Auto-Replace System Ready!');
+            console.log('💡 Tips:');
+            console.log('   - Upload images to: ' + GITHUB_CONFIG.imagePath);
+            console.log('   - Call refreshFighterImages() to manually refresh');
+            console.log('   - Call updateGitHubConfig("user", "repo") to change settings');
+        });
+
+        // Auto-refresh when window regains focus (useful during development)
+        window.addEventListener('focus', function() {
+            setTimeout(refreshFighterImages, 500);
+        });
+
+        // Development helper: Log current configuration
+        console.log('⚙️ MEFC Fighter Auto-Replace Configuration:');
+        console.log('GitHub User:', GITHUB_CONFIG.username);
+        console.log('Repository:', GITHUB_CONFIG.repo);
+        console.log('Branch:', GITHUB_CONFIG.branch);
+        console.log('Image Path:', GITHUB_CONFIG.imagePath);
+        console.log('Total Fighters Mapped:', Object.keys(FIGHTER_IMAGES).length);
+    </script>
 </body>
 </html>
+                    <div class="stat">
