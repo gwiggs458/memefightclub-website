@@ -227,6 +227,18 @@
         .place-emoji {
             font-size: 3rem;
             margin-bottom: 0.5rem;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .place-emoji img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 10px;
         }
 
         .place-name {
@@ -308,7 +320,19 @@
         }
 
         .coin-emoji {
-            font-size: 1.8rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .coin-emoji img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 8px;
         }
 
         .coin-info {
@@ -377,6 +401,29 @@
             padding: 1.5rem;
             margin-bottom: 1rem;
             border-left: 4px solid #00ff66;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .history-item-image {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .history-item-image img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 5px;
+        }
+
+        .history-item-content {
+            flex: 1;
         }
 
         .refresh-btn {
@@ -605,6 +652,49 @@
     </footer>
 
     <script>
+        // Fighter image mapping
+        const fighterImages = {
+            'DOGE': 'images/fighters/dogecoin.png',
+            'SHIB': 'images/fighters/shiba-inu.png', 
+            'PEPE': 'images/fighters/pepe.png',
+            'WIF': 'images/fighters/dog-wif-hat.png',
+            'BONK': 'images/fighters/bonk.png',
+            'FLOKI': 'images/fighters/floki-inu.png',
+            'TRUMP': 'images/fighters/maga-coin.png',
+            'BRETT': 'images/fighters/brett.png',
+            'POPCAT': 'images/fighters/popcat.png',
+            'MOG': 'images/fighters/mog-coin.png',
+            'NEIRO': 'images/fighters/neiro.png',
+            'TURBO': 'images/fighters/turbo.png',
+            'MEME': 'images/fighters/meme.png',
+            'CAT': 'images/fighters/simons-cat.png',
+            'GOAT': 'images/fighters/goatseus-maximus.png',
+            'PNUT': 'images/fighters/peanut-squirrel.png',
+            'ACT': 'images/fighters/act-ai-prophecy.png',
+            'PONKE': 'images/fighters/ponke.png',
+            'MOODENG': 'images/fighters/moo-deng.png',
+            'CHILLGUY': 'images/fighters/chill-guy.png',
+            'BOME': 'images/fighters/book-of-meme.png',
+            'MYRO': 'images/fighters/myro.png',
+            'DOGS': 'images/fighters/dogs.png',
+            'WEN': 'images/fighters/wen.png',
+            'DEGEN': 'images/fighters/degen.png',
+            'PEPU': 'images/fighters/pepe-unchained.png',
+            'SLERF': 'images/fighters/slerf.png',
+            'MEW': 'images/fighters/cat-dogs-world.png',
+            'HONK': 'images/fighters/honk.png',
+            'MEFC': 'images/fighters/meme-fight-club.png'
+        };
+
+        // Function to get fighter image HTML
+        function getFighterImage(symbol, emoji, size = 40) {
+            const imagePath = fighterImages[symbol];
+            if (imagePath) {
+                return `<img src="${imagePath}" alt="${symbol}" onerror="this.src='${imagePath.replace('.png', '.jpg')}'; this.onerror=function(){this.parentNode.innerHTML='${emoji}';}" style="width: ${size}px; height: ${size}px; object-fit: contain; object-position: center; border-radius: ${size > 40 ? '10px' : size > 30 ? '8px' : '5px'};">`;
+            }
+            return emoji;
+        }
+
         // Default meme coins data
         const defaultMemeCoins = [
             { rank: 1, symbol: 'DOGE', name: 'Dogecoin', emoji: '🐕', votes: 0 },
@@ -718,7 +808,7 @@
                 return `
                     <div class="podium-place ${placeClass}">
                         <div class="place-number">${placeNumber}</div>
-                        <div class="place-emoji">${coin.emoji}</div>
+                        <div class="place-emoji">${getFighterImage(coin.symbol, coin.emoji, 60)}</div>
                         <div class="place-name">${coin.name}</div>
                         <div class="place-votes">${votes} votes</div>
                         <div class="place-percentage">${percentage}%</div>
@@ -751,7 +841,7 @@
                     <div class="table-row">
                         <div class="rank-cell ${rankClass}">#${rank}</div>
                         <div class="coin-cell">
-                            <div class="coin-emoji">${coin.emoji}</div>
+                            <div class="coin-emoji">${getFighterImage(coin.symbol, coin.emoji, 40)}</div>
                             <div class="coin-info">
                                 <div class="coin-name">${coin.name}</div>
                                 <div class="coin-symbol">${coin.symbol}</div>
@@ -799,9 +889,12 @@
             
             historyEl.innerHTML = top5.map((coin, index) => `
                 <div class="history-item">
-                    <strong>#${index + 1} ${coin.emoji} ${coin.name}</strong> - ${coin.votes} votes
-                    <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;">
-                        ${Math.round((coin.votes / totalVotes) * 100)}% of total votes
+                    <div class="history-item-image">${getFighterImage(coin.symbol, coin.emoji, 30)}</div>
+                    <div class="history-item-content">
+                        <strong>#${index + 1} ${coin.name}</strong> - ${coin.votes} votes
+                        <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;">
+                            ${Math.round((coin.votes / totalVotes) * 100)}% of total votes
+                        </div>
                     </div>
                 </div>
             `).join('');
