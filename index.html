@@ -227,6 +227,18 @@
             font-size: 2.5rem;
             margin: 1rem 0 0.5rem;
             font-weight: bold;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .coin-symbol img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 10px;
         }
 
         .coin-name {
@@ -334,6 +346,29 @@
         }
 
         .coin-details {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .coin-emoji {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .coin-emoji img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 5px;
+        }
+
+        .coin-text {
             flex: 1;
         }
 
@@ -679,6 +714,40 @@
             battleTimer: 'mefc_battle_timer'
         };
 
+        // Fighter image mapping
+        const fighterImages = {
+            'DOGE': 'images/fighters/dogecoin.png',
+            'SHIB': 'images/fighters/shiba-inu.png', 
+            'PEPE': 'images/fighters/pepe.png',
+            'WIF': 'images/fighters/dog-wif-hat.png',
+            'BONK': 'images/fighters/bonk.png',
+            'FLOKI': 'images/fighters/floki-inu.png',
+            'TRUMP': 'images/fighters/maga-coin.png',
+            'BRETT': 'images/fighters/brett.png',
+            'POPCAT': 'images/fighters/popcat.png',
+            'MOG': 'images/fighters/mog-coin.png',
+            'NEIRO': 'images/fighters/neiro.png',
+            'TURBO': 'images/fighters/turbo.png',
+            'MEME': 'images/fighters/meme.png',
+            'CAT': 'images/fighters/simons-cat.png',
+            'GOAT': 'images/fighters/goatseus-maximus.png',
+            'PNUT': 'images/fighters/peanut-squirrel.png',
+            'ACT': 'images/fighters/act-ai-prophecy.png',
+            'PONKE': 'images/fighters/ponke.png',
+            'MOODENG': 'images/fighters/moo-deng.png',
+            'CHILLGUY': 'images/fighters/chill-guy.png',
+            'BOME': 'images/fighters/book-of-meme.png',
+            'MYRO': 'images/fighters/myro.png',
+            'DOGS': 'images/fighters/dogs.png',
+            'WEN': 'images/fighters/wen.png',
+            'DEGEN': 'images/fighters/degen.png',
+            'PEPU': 'images/fighters/pepe-unchained.png',
+            'SLERF': 'images/fighters/slerf.png',
+            'MEW': 'images/fighters/cat-dogs-world.png',
+            'HONK': 'images/fighters/honk.png',
+            'MEFC': 'images/fighters/meme-fight-club.png'
+        };
+
         // Top 30 Meme Coins data based on market research
         const memeCoins = [
             { rank: 1, symbol: 'DOGE', name: 'Dogecoin', emoji: '🐕', votes: 0 },
@@ -716,6 +785,15 @@
         let userVotesUsed = 0;
         const maxVotesPerRound = 2;
         let totalVoteCount = 0;
+
+        // Function to get fighter image HTML
+        function getFighterImage(symbol, emoji, size = 60) {
+            const imagePath = fighterImages[symbol];
+            if (imagePath) {
+                return `<img src="${imagePath}" alt="${symbol}" onerror="this.src='${imagePath.replace('.png', '.jpg')}'; this.onerror=function(){this.parentNode.innerHTML='${emoji}';}" style="width: ${size}px; height: ${size}px; object-fit: contain; object-position: center; border-radius: ${size > 40 ? '10px' : '5px'};">`;
+            }
+            return emoji;
+        }
 
         // Load existing voting data from localStorage
         function loadExistingData() {
@@ -845,7 +923,7 @@
                 saveVotingData();
                 
                 updateDisplay();
-                showMessage(`Vote ${userVotesUsed} of ${maxVotesPerRound} recorded for ${coin.emoji} ${coin.name}! 🎉`);
+                showMessage(`Vote ${userVotesUsed} of ${maxVotesPerRound} recorded for ${getFighterImage(coin.symbol, coin.emoji, 20)} ${coin.name}! 🎉`);
                 
                 // Simulate other votes
                 simulateOtherVotes();
@@ -884,7 +962,7 @@
                 
                 coinEl.innerHTML = `
                     <div class="coin-rank">${index + 1}</div>
-                    <div class="coin-symbol">${coin.emoji}</div>
+                    <div class="coin-symbol">${getFighterImage(coin.symbol, coin.emoji, 60)}</div>
                     <div class="coin-name">${coin.name}</div>
                     <div class="vote-count">${coin.votes} votes</div>
                     <div class="vote-percentage">${percentage}%</div>
@@ -911,8 +989,11 @@
                     <div class="coin-info">
                         <div class="coin-rank-small">${coin.rank}</div>
                         <div class="coin-details">
-                            <div class="coin-name-small">${coin.emoji} ${coin.name}</div>
-                            <div class="coin-symbol-small">${coin.symbol}</div>
+                            <div class="coin-emoji">${getFighterImage(coin.symbol, coin.emoji, 30)}</div>
+                            <div class="coin-text">
+                                <div class="coin-name-small">${coin.name}</div>
+                                <div class="coin-symbol-small">${coin.symbol}</div>
+                            </div>
                         </div>
                     </div>
                     <div class="coin-votes">${coin.votes} votes</div>
@@ -941,7 +1022,7 @@
                 box-shadow: 0 20px 40px rgba(0,0,0,0.8);
                 max-width: 90vw;
             `;
-            popup.textContent = message;
+            popup.innerHTML = message;
             
             document.body.appendChild(popup);
             
