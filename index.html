@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meme Fight Club - The Ultimate Crypto Battle Arena</title>
+    <title>Fighters Gallery - Meme Fight Club</title>
     <style>
         * {
             margin: 0;
@@ -55,13 +55,6 @@
             color: #ff0066;
         }
 
-        .logo img {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-            border-radius: 50%;
-        }
-
         .nav-links {
             display: flex;
             gap: 0.8rem;
@@ -88,37 +81,15 @@
             background: rgba(255, 0, 102, 0.1);
         }
 
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+        /* Main Content */
+        .main-content {
             padding: 120px 2rem 2rem;
-            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="%23ff0066" opacity="0.3"><animate attributeName="r" values="0;3;0" dur="2s" repeatCount="indefinite"/></circle></svg>');
-            animation: float 6s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .hero-title {
-            font-size: 4rem;
+        .page-title {
+            font-size: 3.5rem;
             font-weight: bold;
             margin-bottom: 1rem;
             background: linear-gradient(45deg, #ff0066, #ffff00, #00ff66);
@@ -126,8 +97,11 @@
             -webkit-background-clip: text;
             color: transparent;
             animation: pulse 2s ease-in-out infinite;
-            position: relative;
-            z-index: 10;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
         }
 
         @keyframes pulse {
@@ -135,289 +109,57 @@
             50% { transform: scale(1.05); }
         }
 
-        .hero-subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 3rem;
+        .page-subtitle {
+            font-size: 1.3rem;
+            text-align: center;
+            margin-bottom: 1rem;
             opacity: 0.9;
-            position: relative;
-            z-index: 10;
+            color: #ffff00;
         }
 
-        /* Live Battle Arena */
-        .battle-arena {
-            background: rgba(0, 0, 0, 0.8);
-            border: 3px solid #ff0066;
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 2rem 0;
-            max-width: 1000px;
-            width: 100%;
-            box-shadow: 0 20px 40px rgba(255, 0, 102, 0.3);
-            position: relative;
-            z-index: 10;
-        }
-
-        .battle-header {
+        .blockchain-badge {
+            font-size: 1rem;
             text-align: center;
             margin-bottom: 2rem;
-        }
-
-        .battle-status {
-            font-size: 1.2rem;
             color: #00ff66;
-            margin-bottom: 0.5rem;
-        }
-
-        .battle-timer {
-            font-size: 2rem;
-            color: #ffff00;
             font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
         }
 
-        /* Top 6 Meme Coins Display */
-        .top-five {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .top-coin {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid transparent;
+        /* Legal Disclaimer */
+        .legal-disclaimer {
+            background: rgba(255, 165, 0, 0.15);
+            border: 2px solid #ffa500;
             border-radius: 15px;
             padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .top-coin:hover {
-            border-color: #ff0066;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(255, 0, 102, 0.4);
-        }
-
-        .top-coin.voted {
-            border-color: #00ff66;
-            background: rgba(0, 255, 102, 0.1);
-            box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);
-        }
-
-        .coin-rank {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: #ff0066;
-            color: white;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-
-        .coin-symbol {
-            font-size: 2.5rem;
-            margin: 1rem 0 0.5rem;
-            font-weight: bold;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .coin-symbol img {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            object-position: center;
-            border-radius: 10px;
-        }
-
-        .coin-name {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            opacity: 0.9;
-        }
-
-        .vote-count {
-            font-size: 1.1rem;
-            color: #00ff66;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .vote-percentage {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 1rem;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(45deg, #ff0066, #ff3399);
-            border-radius: 3px;
-            transition: width 0.5s ease;
-            width: 0%;
-        }
-
-        /* Remaining Coins List */
-        .remaining-coins {
-            background: rgba(0, 0, 0, 0.6);
-            border: 2px solid #00ff66;
-            border-radius: 15px;
-            padding: 2rem;
             margin: 2rem 0;
-            max-width: 1000px;
-            width: 100%;
-            position: relative;
-            z-index: 10;
-        }
-
-        .remaining-title {
             text-align: center;
-            font-size: 1.5rem;
-            color: #00ff66;
-            margin-bottom: 2rem;
-        }
-
-        .coin-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-        }
-
-        .coin-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-        }
-
-        .coin-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #ff0066;
-            transform: translateX(5px);
-        }
-
-        .coin-item.voted {
-            background: rgba(0, 255, 102, 0.1);
-            border-color: #00ff66;
-        }
-
-        .coin-info {
-            display: flex;
-            align-items: center;
-            flex: 1;
-        }
-
-        .coin-rank-small {
-            background: #333;
-            color: #ccc;
-            border-radius: 50%;
-            width: 25px;
-            height: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            margin-right: 1rem;
-            min-width: 25px;
-        }
-
-        .coin-details {
-            flex: 1;
-            display: flex;
-            align-items: center;
-        }
-
-        .coin-emoji {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .coin-emoji img {
-            width: 30px;
-            height: 30px;
-            object-fit: contain;
-            object-position: center;
-            border-radius: 5px;
-        }
-
-        .coin-text {
-            flex: 1;
-        }
-
-        .coin-name-small {
+            color: #ffa500;
             font-weight: bold;
-            margin-bottom: 0.2rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
-        .coin-symbol-small {
-            opacity: 0.7;
-            font-size: 0.9rem;
-        }
-
-        .coin-votes {
-            text-align: right;
-            color: #00ff66;
-            font-weight: bold;
-        }
-
-        /* Stats Dashboard */
-        .stats-dashboard {
+        /* Gallery Stats */
+        .gallery-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin: 4rem 0;
-            max-width: 1000px;
-            width: 100%;
-            position: relative;
-            z-index: 10;
+            gap: 1rem;
+            margin: 2rem 0;
         }
 
         .stat-card {
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid #00ff66;
-            border-radius: 15px;
-            padding: 1.5rem;
+            background: rgba(255, 0, 102, 0.1);
+            border: 2px solid #ff0066;
+            border-radius: 10px;
+            padding: 1rem;
             text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
         }
 
         .stat-number {
             font-size: 2rem;
             font-weight: bold;
-            color: #00ff66;
-            margin-bottom: 0.5rem;
+            color: #ffff00;
         }
 
         .stat-label {
@@ -425,84 +167,143 @@
             opacity: 0.8;
         }
 
-        /* CTA Section */
-        .cta-section {
-            text-align: center;
-            margin: 4rem 0;
-            padding: 3rem 2rem;
-            background: rgba(255, 0, 102, 0.1);
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .fighter-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 3px solid #ff0066;
             border-radius: 20px;
-            border: 2px solid #ff0066;
-            position: relative;
-            z-index: 10;
-        }
-
-        .cta-title {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #ff0066;
-        }
-
-        .cta-subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .cta-btn {
-            background: linear-gradient(45deg, #ffff00, #ffa500);
-            color: #000;
-            text-decoration: none;
-            padding: 1rem 2rem;
-            border-radius: 25px;
-            font-weight: bold;
+            padding: 1.5rem;
             transition: all 0.3s ease;
-            display: inline-block;
+            position: relative;
+            overflow: hidden;
         }
 
-        .cta-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(255, 255, 0, 0.4);
+        .fighter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,0,102,0.1), transparent);
+            animation: shimmer 3s infinite;
         }
 
-        .secondary-btn {
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .fighter-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 0, 102, 0.4);
+            border-color: #ffff00;
+        }
+
+        .fighter-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #ff0066, #330066);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fighter-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 15px;
             background: transparent;
-            color: #ff0066;
-            border: 2px solid #ff0066;
         }
 
-        .secondary-btn:hover {
-            background: #ff0066;
-            color: white;
+        .fighter-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ff0066;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .fighter-symbol {
+            font-size: 0.9rem;
+            color: #ffff00;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-family: monospace;
+        }
+
+        .fighter-description {
+            font-size: 0.85rem;
+            color: #ccc;
+            text-align: center;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .fighter-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .stat {
+            background: rgba(255, 0, 102, 0.1);
+            padding: 0.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 0, 102, 0.3);
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ffff00;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
         }
 
         /* Footer */
         .footer {
             background: rgba(0, 0, 0, 0.9);
-            padding: 2rem;
-            text-align: center;
             border-top: 2px solid #ff0066;
-            margin-top: 4rem;
-            position: relative;
-            z-index: 10;
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
         }
 
         .footer-links {
-            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
         }
 
         .footer-links a {
-            color: #ccc;
+            color: white;
             text-decoration: none;
-            margin: 0 1rem;
             transition: color 0.3s;
+            padding: 0.5rem;
         }
 
         .footer-links a:hover {
@@ -510,22 +311,33 @@
         }
 
         .disclaimer {
+            background: rgba(255, 255, 0, 0.1);
+            border: 1px solid #ffff00;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #ffff00;
+            font-weight: bold;
             font-size: 0.9rem;
-            opacity: 0.7;
-            max-width: 600px;
-            margin: 0 auto 1rem;
         }
 
         .copyright {
-            font-size: 0.9rem;
             color: #ccc;
-            margin-top: 1rem;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
         }
 
         .community-message {
-            font-size: 0.8rem;
-            color: #999;
+            color: #ff0066;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .sui-powered {
+            color: #00ff66;
+            font-size: 0.9rem;
             margin-top: 0.5rem;
+            font-weight: bold;
         }
 
         /* Mobile Responsive */
@@ -561,38 +373,40 @@
                 padding: 0.8rem 1rem;
             }
             
-            .hero {
+            .main-content {
                 padding-top: 180px;
             }
         }
 
         @media (max-width: 768px) {
-            .hero-title {
+            .page-title {
                 font-size: 2.5rem;
+                flex-direction: column;
+                gap: 0.5rem;
             }
 
-            .coin-grid {
+            .main-content {
+                padding: 180px 1rem 1rem;
+            }
+
+            .gallery-grid {
                 grid-template-columns: 1fr;
             }
 
-            .top-five {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .cta-buttons {
+            .footer-links {
                 flex-direction: column;
-                align-items: center;
-            }
-
-            .logo {
-                font-size: 1.2rem;
+                gap: 0.5rem;
             }
         }
 
-        /* Ensure content is always visible */
-        .hero, .hero-title, .battle-arena, .stats-dashboard, .remaining-coins, .cta-section {
-            visibility: visible !important;
-            opacity: 1 !important;
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -601,99 +415,966 @@
     <header class="header">
         <nav class="nav">
             <div class="logo">
-                <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #ff0066, #ffff00); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 11px; font-weight: 900; color: #000; font-family: Arial Black, Arial, sans-serif;">MEFC</div>
+                <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #ff0066, #ffff00); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px; font-weight: 900; color: #000; font-family: Arial Black, Arial, sans-serif;">MEFC</div>
                 MEME FIGHT CLUB
             </div>
             <div class="nav-links">
-                <a href="https://memefightclub.com/" class="active">HOME</a>
-                <a href="https://memefightclub.com/battles.html">COMMUNITY</a>
+                <a href="fighters-gallery.html" class="active">FIGHTERS GALLERY</a>
+                <a href="https://memefightclub.com/voting-arena.html">VOTING ARENA</a>
                 <a href="https://memefightclub.com/leaderboard.html">LEADERBOARD</a>
-                <a href="fighters-gallery.html">FIGHTERS GALLERY</a>
-                <a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" target="_blank">MEFC TOKEN (SUI)</a>
+                <a href="https://memefightclub.com/community.html">COMMUNITY</a>
+                <a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" target="_blank">MEFC (SUI)</a>
                 <a href="https://memefightclub.com/disclaimer.html">DISCLAIMER</a>
             </div>
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1 class="hero-title">
-            <div style="display: inline-flex; align-items: center; gap: 15px;">
-                <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #ff0066, #ffff00); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: #000; font-family: Arial Black, Arial, sans-serif;">MEFC</div>
-                <span>MEME FIGHT CLUB</span>
-            </div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="page-title fade-in">
+            <div style="width: 60px; height: 60px; background: linear-gradient(45deg, #ff0066, #ffff00); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; color: #000; font-family: Arial Black, Arial, sans-serif;">MEFC</div>
+            Fighters Gallery
         </h1>
-        <p class="hero-subtitle">Vote for Your Favorite Meme Coin Champion</p>
-        <div style="text-align: center; margin-top: -15px; margin-bottom: 30px; opacity: 0.8;">
-            <span style="color: #00ff66; font-size: 14px; font-weight: bold;">⚡ Powered by SUI Blockchain</span>
+        <p class="page-subtitle fade-in">Meet the Epic Meme Coin Champions of the Arena</p>
+        <p class="blockchain-badge fade-in">⚡ Powered by SUI Blockchain ⚡</p>
+
+        <!-- Gallery Stats -->
+        <div class="gallery-stats fade-in">
+            <div class="stat-card">
+                <div class="stat-number">Awesome Meme Power!</div>
+                <div class="stat-label"></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">Epic Voting Battles!</div>
+                <div class="stat-label"></div>
+            </div>
         </div>
 
-        <!-- Live Battle Arena -->
-        <div class="battle-arena">
-            <div class="battle-header">
-                <div class="battle-status">🔴 LIVE MEME COIN VOTING</div>
-                <div class="battle-timer" id="battleTimer">0:29:45</div>
-                <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;">
-                    👥 <span id="totalVotes">0</span> total votes
+        <!-- Complete 32 Meme Fighters Gallery -->
+        <div class="gallery-grid fade-in">
+            <!-- Fighter 1: DOGE -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/dogecoin.png" alt="DOGECOIN" onerror="this.src='images/fighters/dogecoin.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐕';}">
+                </div>
+                <div class="fighter-name">DOGECOIN</div>
+                <div class="fighter-symbol">$DOGE</div>
+                <div class="fighter-description">The original meme coin legend. Much wow, very power, such fighting skills. The godfather of all meme warriors.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">100</div>
+                        <div class="stat-label">Legacy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">95</div>
+                        <div class="stat-label">Meme Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">88</div>
+                        <div class="stat-label">Battle Rating</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">156</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Top 6 Meme Coins -->
-            <h3 style="text-align: center; color: #ffff00; margin-bottom: 1rem;">🏆 TOP 6 MEME COINS VOTES</h3>
-            <div class="top-five" id="topSix">
-                <!-- Top 6 coins will be populated by JavaScript -->
+            <!-- Fighter 2: SHIB -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/shiba-inu.png" alt="SHIBA INU" onerror="this.src='images/fighters/shiba-inu.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐶';}">
+                </div>
+                <div class="fighter-name">SHIBA INU</div>
+                <div class="fighter-symbol">$SHIB</div>
+                <div class="fighter-description">The fierce Doge killer with an army of loyal warriors. Decentralized meme power meets unstoppable community spirit.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">97</div>
+                        <div class="stat-label">Army Size</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">92</div>
+                        <div class="stat-label">Aggression</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Speed</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">134</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Remaining Coins -->
-            <div class="remaining-coins">
-                <div class="remaining-title">🎯 THE CONTENDERS</div>
-                <div class="coin-grid" id="remainingCoins">
-                    <!-- Remaining coins will be populated by JavaScript -->
+            <!-- Fighter 3: PEPE -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/pepe.png" alt="PEPE" onerror="this.src='images/fighters/pepe.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐸';}">
+                </div>
+                <div class="fighter-name">PEPE</div>
+                <div class="fighter-symbol">$PEPE</div>
+                <div class="fighter-description">The rare Pepe warrior with infinite meme variations. Feels good man energy powers devastating special attacks.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">99</div>
+                        <div class="stat-label">Rarity</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">94</div>
+                        <div class="stat-label">Meme IQ</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">87</div>
+                        <div class="stat-label">Adaptability</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">128</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 4: PUDGY PENGUINS -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/pudgy-penguins.png" alt="PUDGY PENGUINS" onerror="this.src='images/fighters/pudgy-penguins.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐧';}">
+                </div>
+                <div class="fighter-name">PUDGY PENGUINS</div>
+                <div class="fighter-symbol">$PENGU</div>
+                <div class="fighter-description">The adorable yet fierce Antarctic warrior. Waddles into battle with icy determination and wholesome community power.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">98</div>
+                        <div class="stat-label">Cuteness</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">92</div>
+                        <div class="stat-label">Ice Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">96</div>
+                        <div class="stat-label">Community</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 5: BONK -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/bonk.png" alt="BONK" onerror="this.src='images/fighters/bonk.jpg'; this.onerror=function(){this.parentNode.innerHTML='🏏';}">
+                </div>
+                <div class="fighter-name">BONK</div>
+                <div class="fighter-symbol">$BONK</div>
+                <div class="fighter-description">The Solana bonking champion. Delivers crushing bonk attacks with meme-powered baseball bat devastation.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">93</div>
+                        <div class="stat-label">Bonk Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Speed</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">82</div>
+                        <div class="stat-label">Defense</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">98</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 6: OFFICIAL TRUMP -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/official-trump.png" alt="OFFICIAL TRUMP" onerror="this.src='images/fighters/official-trump.jpg'; this.onerror=function(){this.parentNode.innerHTML='🦅';}">
+                </div>
+                <div class="fighter-name">OFFICIAL TRUMP</div>
+                <div class="fighter-symbol">$TRUMP</div>
+                <div class="fighter-description">The patriotic eagle warrior with tremendous fighting power. Delivers freedom-powered attacks with maximum American energy.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">95</div>
+                        <div class="stat-label">Patriot Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">90</div>
+                        <div class="stat-label">Rally Energy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">88</div>
+                        <div class="stat-label">Leadership</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">102</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 7: SPX6900 -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/spx6900.png" alt="SPX6900" onerror="this.src='images/fighters/spx6900.jpg'; this.onerror=function(){this.parentNode.innerHTML='📈';}">
+                </div>
+                <div class="fighter-name">SPX6900</div>
+                <div class="fighter-symbol">$SPX</div>
+                <div class="fighter-description">The market-crushing warrior targeting astronomical gains. Combines traditional finance energy with meme coin chaos.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">94</div>
+                        <div class="stat-label">Market Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">91</div>
+                        <div class="stat-label">Growth Rate</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">88</div>
+                        <div class="stat-label">Momentum</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">76</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 8: FLOKI -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/floki-inu.png" alt="FLOKI INU" onerror="this.src='images/fighters/floki-inu.jpg'; this.onerror=function(){this.parentNode.innerHTML='⚔️';}">
+                </div>
+                <div class="fighter-name">FLOKI</div>
+                <div class="fighter-symbol">$FLOKI</div>
+                <div class="fighter-description">The Viking Inu warrior with Norse god strength. Pillages meme battlefields with unstoppable Viking fury.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">96</div>
+                        <div class="stat-label">Viking Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">91</div>
+                        <div class="stat-label">Berserker Mode</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">85</div>
+                        <div class="stat-label">Strategy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">112</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 9: PUMP -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/pump.png" alt="PUMP" onerror="this.src='images/fighters/pump.jpg'; this.onerror=function(){this.parentNode.innerHTML='💪';}">
+                </div>
+                <div class="fighter-name">PUMP</div>
+                <div class="fighter-symbol">$PUMP</div>
+                <div class="fighter-description">The ultimate pump warrior spreading bullish energy. Delivers explosive price action attacks with unstoppable momentum.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">93</div>
+                        <div class="stat-label">Pump Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Hype Level</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">87</div>
+                        <div class="stat-label">Momentum</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">83</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 10: FARTCOIN -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/fartcoin.png" alt="FARTCOIN" onerror="this.src='images/fighters/fartcoin.jpg'; this.onerror=function(){this.parentNode.innerHTML='💨';}">
+                </div>
+                <div class="fighter-name">FARTCOIN</div>
+                <div class="fighter-symbol">$FARTCOIN</div>
+                <div class="fighter-description">The gaseous gigachad bringing crude humor to crypto. Delivers devastating wind attacks with explosive comedic timing.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">88</div>
+                        <div class="stat-label">Gas Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">95</div>
+                        <div class="stat-label">Humor Level</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">92</div>
+                        <div class="stat-label">Surprise Factor</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">71</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 11: DOG WIF HAT -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/dog-wif-hat.png" alt="DOG WIF HAT" onerror="this.src='images/fighters/dog-wif-hat.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐕🎩';}">
+                </div>
+                <div class="fighter-name">DOG WIF HAT</div>
+                <div class="fighter-symbol">$WIF</div>
+                <div class="fighter-description">The stylish hat-wearing fighter. Combines fashion with fury, delivering knockout punches with dapper dog style.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">90</div>
+                        <div class="stat-label">Style Points</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">86</div>
+                        <div class="stat-label">Swag Level</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">84</div>
+                        <div class="stat-label">Combat Skills</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 12: MEMECORE -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/memecore.png" alt="MEMECORE" onerror="this.src='images/fighters/memecore.jpg'; this.onerror=function(){this.parentNode.innerHTML='🌀';}">
+                </div>
+                <div class="fighter-name">MEMECORE</div>
+                <div class="fighter-symbol">$M</div>
+                <div class="fighter-description">The essence of pure meme energy concentrated into fighting form. Channels the core power of internet culture itself.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">96</div>
+                        <div class="stat-label">Meme Essence</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">90</div>
+                        <div class="stat-label">Core Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">88</div>
+                        <div class="stat-label">Viral Spread</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">79</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 13: MOG COIN -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/mog-coin.png" alt="MOG COIN" onerror="this.src='images/fighters/mog-coin.jpg'; this.onerror=function(){this.parentNode.innerHTML='💼';}">
+                </div>
+                <div class="fighter-name">MOG COIN</div>
+                <div class="fighter-symbol">$MOG</div>
+                <div class="fighter-description">The business mogul meme warrior. Combines corporate power with meme energy for devastating market attacks.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Business IQ</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">84</div>
+                        <div class="stat-label">Market Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">87</div>
+                        <div class="stat-label">Strategy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">76</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 14: DOG -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/dog.png" alt="DOG" onerror="this.src='images/fighters/dog.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐕‍🦺';}">
+                </div>
+                <div class="fighter-name">DOG</div>
+                <div class="fighter-symbol">$DOG</div>
+                <div class="fighter-description">The simple yet powerful canine warrior. Proves that sometimes the best strategy is just being a good dog.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">85</div>
+                        <div class="stat-label">Simplicity</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">93</div>
+                        <div class="stat-label">Loyalty</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">87</div>
+                        <div class="stat-label">Effectiveness</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">78</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 15: TURBO -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/turbo.png" alt="TURBO" onerror="this.src='images/fighters/turbo.jpg'; this.onerror=function(){this.parentNode.innerHTML='🏎️';}">
+                </div>
+                <div class="fighter-name">TURBO</div>
+                <div class="fighter-symbol">$TURBO</div>
+                <div class="fighter-description">The high-speed racing warrior with turbo-charged attacks. Delivers lightning-fast combos with nitrous-powered fury.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">98</div>
+                        <div class="stat-label">Speed</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">84</div>
+                        <div class="stat-label">Acceleration</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">87</div>
+                        <div class="stat-label">Turbo Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">76</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 16: POPCAT -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/popcat.png" alt="POPCAT" onerror="this.src='images/fighters/popcat.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐱';}">
+                </div>
+                <div class="fighter-name">POPCAT</div>
+                <div class="fighter-symbol">$POPCAT</div>
+                <div class="fighter-description">The legendary popping cat warrior. Devastating mouth-pop attacks create sonic booms that shatter opponents.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">94</div>
+                        <div class="stat-label">Pop Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">90</div>
+                        <div class="stat-label">Sonic Boom</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">88</div>
+                        <div class="stat-label">Viral Spread</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">97</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 17: CAT IN A DOGS WORLD -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/cat-dogs-world.png" alt="CAT IN A DOGS WORLD" onerror="this.src='images/fighters/cat-dogs-world.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐱';}">
+                </div>
+                <div class="fighter-name">CAT IN A DOGS WORLD</div>
+                <div class="fighter-symbol">$MEW</div>
+                <div class="fighter-description">The rebellious cat fighting in a dog-dominated world. Delivers independent feline attacks with anti-establishment energy.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">87</div>
+                        <div class="stat-label">Independence</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">85</div>
+                        <div class="stat-label">Rebellion</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">91</div>
+                        <div class="stat-label">Cat Pride</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">72</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 18: CHEEMS -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/cheems.png" alt="CHEEMS" onerror="this.src='images/fighters/cheems.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐕';}">
+                </div>
+                <div class="fighter-name">CHEEMS</div>
+                <div class="fighter-symbol">$CHEEMS</div>
+                <div class="fighter-description">The wholesome yet powerful Shiba warrior. Fights with pure heart and classic meme energy that never goes out of style.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">91</div>
+                        <div class="stat-label">Wholesome Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">88</div>
+                        <div class="stat-label">Classic Appeal</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">94</div>
+                        <div class="stat-label">Heart</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">82</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 19: SNEK -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/snek.png" alt="SNEK" onerror="this.src='images/fighters/snek.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐍';}">
+                </div>
+                <div class="fighter-name">SNEK</div>
+                <div class="fighter-symbol">$SNEK</div>
+                <div class="fighter-description">The slithering serpent warrior with hypnotic charm. Strikes with venomous precision and mesmerizing meme magic.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">92</div>
+                        <div class="stat-label">Stealth</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">87</div>
+                        <div class="stat-label">Venom Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Hypnosis</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">74</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 20: TOSHI -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/toshi.png" alt="TOSHI" onerror="this.src='images/fighters/toshi.jpg'; this.onerror=function(){this.parentNode.innerHTML='🦸';}">
+                </div>
+                <div class="fighter-name">TOSHI</div>
+                <div class="fighter-symbol">$TOSHI</div>
+                <div class="fighter-description">The mysterious masked warrior honoring crypto's origins. Fights with the spirit of Satoshi and decentralized power.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">90</div>
+                        <div class="stat-label">Mystery</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">93</div>
+                        <div class="stat-label">Decentralization</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">86</div>
+                        <div class="stat-label">Legacy Honor</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">77</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 21: PEANUT THE SQUIRREL -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/peanut-squirrel.png" alt="PEANUT THE SQUIRREL" onerror="this.src='images/fighters/peanut-squirrel.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐿️';}">
+                </div>
+                <div class="fighter-name">PEANUT THE SQUIRREL</div>
+                <div class="fighter-symbol">$PNUT</div>
+                <div class="fighter-description">The tragic hero squirrel warrior. Fights for animal justice with acorn-powered attacks and righteous fury.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">86</div>
+                        <div class="stat-label">Justice Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">94</div>
+                        <div class="stat-label">Agility</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">88</div>
+                        <div class="stat-label">Heart</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">79</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 22: NOTCOIN -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/notcoin.png" alt="NOTCOIN" onerror="this.src='images/fighters/notcoin.jpg'; this.onerror=function(){this.parentNode.innerHTML='🚫';}">
+                </div>
+                <div class="fighter-name">NOTCOIN</div>
+                <div class="fighter-symbol">$NOT</div>
+                <div class="fighter-description">The contrarian warrior that defies expectations. Proves sometimes the best coin is the one that's not a coin.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Paradox Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">91</div>
+                        <div class="stat-label">Contrarian Energy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">85</div>
+                        <div class="stat-label">Surprise Factor</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">73</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 23: KET -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/ket.png" alt="KET" onerror="this.src='images/fighters/ket.jpg'; this.onerror=function(){this.parentNode.innerHTML='💊';}">
+                </div>
+                <div class="fighter-name">KET</div>
+                <div class="fighter-symbol">$KET</div>
+                <div class="fighter-description">The pharmaceutical feline warrior with mind-bending abilities. Delivers reality-warping attacks with chaotic cat energy.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">93</div>
+                        <div class="stat-label">Chaos Level</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">87</div>
+                        <div class="stat-label">Mind Warp</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">90</div>
+                        <div class="stat-label">Cat Reflexes</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">69</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 24: NON-PLAYABLE COIN -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/npc.png" alt="NON-PLAYABLE COIN" onerror="this.src='images/fighters/npc.jpg'; this.onerror=function(){this.parentNode.innerHTML='🤖';}">
+                </div>
+                <div class="fighter-name">NON-PLAYABLE COIN</div>
+                <div class="fighter-symbol">$NPC</div>
+                <div class="fighter-description">The automated warrior following its programming. Fights with predictable yet surprisingly effective NPC energy.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">88</div>
+                        <div class="stat-label">Programming</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">75</div>
+                        <div class="stat-label">Predictability</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">84</div>
+                        <div class="stat-label">Effectiveness</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">71</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 25: NEIRO -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/neiro.png" alt="NEIRO" onerror="this.src='images/fighters/neiro.jpg'; this.onerror=function(){this.parentNode.innerHTML='🤖';}">
+                </div>
+                <div class="fighter-name">NEIRO</div>
+                <div class="fighter-symbol">$NEIRO</div>
+                <div class="fighter-description">The next-generation AI dog warrior. Combines artificial intelligence with canine loyalty for futuristic fighting.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">87</div>
+                        <div class="stat-label">AI Evolution</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">85</div>
+                        <div class="stat-label">Loyalty Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">82</div>
+                        <div class="stat-label">Tech Fusion</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">78</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 26: MOO DENG -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/moo-deng.png" alt="MOO DENG" onerror="this.src='images/fighters/moo-deng.jpg'; this.onerror=function(){this.parentNode.innerHTML='🦛';}">
+                </div>
+                <div class="fighter-name">MOO DENG</div>
+                <div class="fighter-symbol">$MOODENG</div>
+                <div class="fighter-description">The adorable but deadly hippo warrior from Thailand. Delivers crushing bite attacks with unexpected cuteness power.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">90</div>
+                        <div class="stat-label">Bite Force</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">93</div>
+                        <div class="stat-label">Cuteness</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">87</div>
+                        <div class="stat-label">Thai Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">86</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 27: GIGACHAD -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/gigachad.png" alt="GIGACHAD" onerror="this.src='images/fighters/gigachad.jpg'; this.onerror=function(){this.parentNode.innerHTML='💪';}">
+                </div>
+                <div class="fighter-name">GIGACHAD</div>
+                <div class="fighter-symbol">$GIGA</div>
+                <div class="fighter-description">The ultimate alpha male warrior with legendary chad energy. Delivers devastating sigma attacks with pure masculine power.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">99</div>
+                        <div class="stat-label">Chad Energy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">96</div>
+                        <div class="stat-label">Alpha Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">92</div>
+                        <div class="stat-label">Sigma Grind</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">88</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 28: MELANIA MEME -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/melania-meme.png" alt="MELANIA MEME" onerror="this.src='images/fighters/melania-meme.jpg'; this.onerror=function(){this.parentNode.innerHTML='👸';}">
+                </div>
+                <div class="fighter-name">MELANIA MEME</div>
+                <div class="fighter-symbol">$MELANIA</div>
+                <div class="fighter-description">The elegant first lady warrior with sophisticated fighting style. Combines grace with devastating political meme power.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">94</div>
+                        <div class="stat-label">Elegance</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">87</div>
+                        <div class="stat-label">Political Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">91</div>
+                        <div class="stat-label">Grace</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">65</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 29: AI16Z -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/ai16z.png" alt="AI16Z" onerror="this.src='images/fighters/ai16z.jpg'; this.onerror=function(){this.parentNode.innerHTML='🧠';}">
+                </div>
+                <div class="fighter-name">AI16Z</div>
+                <div class="fighter-symbol">$AI16Z</div>
+                <div class="fighter-description">The artificial intelligence investment warrior. Fights with algorithmic precision and futuristic trading strategies.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">95</div>
+                        <div class="stat-label">AI Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">92</div>
+                        <div class="stat-label">Algorithm</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Investment IQ</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">74</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 30: AIXBT BY VIRTUALS -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/aixbt.png" alt="AIXBT BY VIRTUALS" onerror="this.src='images/fighters/aixbt.jpg'; this.onerror=function(){this.parentNode.innerHTML='🤖';}">
+                </div>
+                <div class="fighter-name">AIXBT BY VIRTUALS</div>
+                <div class="fighter-symbol">$AIXBT</div>
+                <div class="fighter-description">The virtual AI trading bot warrior. Delivers calculated attacks with machine learning and automated trading fury.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">91</div>
+                        <div class="stat-label">Trading Bot</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">88</div>
+                        <div class="stat-label">ML Power</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">93</div>
+                        <div class="stat-label">Automation</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">72</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 31: GEKKO CASH -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/gekko-cash.png" alt="GEKKO CASH" onerror="this.src='images/fighters/gekko-cash.jpg'; this.onerror=function(){this.parentNode.innerHTML='🦎';}">
+                </div>
+                <div class="fighter-name">GEKKO CASH</div>
+                <div class="fighter-symbol">$GEK</div>
+                <div class="fighter-description">The stealthy gecko warrior with lightning-fast reflexes. Delivers wall-crawling attacks with reptilian precision and cash-powered special moves.</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">91</div>
+                        <div class="stat-label">Stealth</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">95</div>
+                        <div class="stat-label">Reflexes</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">88</div>
+                        <div class="stat-label">Wall Crawling</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">84</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fighter 32: MEFC - THE ULTIMATE CHAMPION -->
+            <div class="fighter-card">
+                <div class="fighter-image">
+                    <img src="images/fighters/meme-fight-club.png" alt="MEME FIGHT CLUB" onerror="this.src='images/fighters/meme-fight-club.jpg'; this.onerror=function(){this.parentNode.innerHTML='🥊';}">
+                </div>
+                <div class="fighter-name">MEME FIGHT CLUB</div>
+                <div class="fighter-symbol">$MEFC</div>
+                <div class="fighter-description">The ultimate meme fighting champion and arena owner. The one who started it all - the king of the meme fight arena itself!</div>
+                <div class="fighter-stats">
+                    <div class="stat">
+                        <div class="stat-value">100</div>
+                        <div class="stat-label">Arena Master</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">99</div>
+                        <div class="stat-label">Fight IQ</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">98</div>
+                        <div class="stat-label">Meme Authority</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">247</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Stats Dashboard -->
-        <div class="stats-dashboard">
-            <div class="stat-card">
-                <div class="stat-number" id="memeCoins">30</div>
-                <div class="stat-label">Meme Coins Listed</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="onlineNow">423</div>
-                <div class="stat-label">Online Now</div>
-            </div>
+        <!-- Gallery Features Section -->
+        <div class="external-gallery-info fade-in">
+            <h2 style="color: #ff0066; font-size: 2rem; margin-bottom: 1rem; text-align: center;">🎨 Complete Meme Fighter Collection</h2>
+            <p style="text-align: center; margin-bottom: 2rem; opacity: 0.9;">Legendary Meme Coin Warriors Assembled in One Epic Voting Fight Arena!</p>
         </div>
 
-        <!-- CTA Section -->
-        <div class="cta-section">
-            <div class="cta-title">🚀 READY TO VOTE?</div>
-            <div class="cta-subtitle">Join thousands of meme warriors in the ultimate crypto voting arena</div>
-            <div style="color: #00ff66; font-size: 14px; margin-bottom: 20px; font-weight: bold;">
-                ⚡ Lightning-fast voting on SUI blockchain
-            </div>
-            <div class="cta-buttons">
-                <a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" target="_blank" class="cta-btn">💰 GET MEFC TOKENS</a>
-                <a href="https://x.com/MemeFightClubX" target="_blank" class="cta-btn secondary-btn">🐦 JOIN X COMMUNITY</a>
-                <a href="https://discord.gg/uVavCgB6vq" target="_blank" class="cta-btn secondary-btn">📱 JOIN DISCORD</a>
-            </div>
+        <!-- Legal Disclaimer -->
+        <div class="legal-disclaimer fade-in">
+            ⚠️ <strong>DISCLAIMER:</strong> All fighter representations are AI-generated artistic interpretations for entertainment purposes only. These are NOT official representations of any real persons, political figures, or cryptocurrency projects. Any resemblance to actual individuals is purely coincidental. All characters are fictional parody creations for the MEFC entertainment platform.
         </div>
-    </section>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-links">
-            <a href="https://memefightclub.com/">Home</a>
-            <a href="https://memefightclub.com/battles.html">Community</a>
-            <a href="https://memefightclub.com/leaderboard.html">Leaderboard</a>
             <a href="fighters-gallery.html">Fighters Gallery</a>
+            <a href="https://memefightclub.com/voting-arena.html">Voting Arena</a>
+            <a href="https://memefightclub.com/leaderboard.html">Leaderboard</a>
+            <a href="https://memefightclub.com/community.html">Community</a>
             <a href="https://memefightclub.com/disclaimer.html">Disclaimer</a>
             <a href="https://memefightclub.com/terms.html">Terms</a>
             <a href="https://memefightclub.com/privacy.html">Privacy</a>
         </div>
         
         <div class="disclaimer">
-            ⚠️ MEFC is a SUI blockchain token for entertainment only. High risk of total loss. Not financial advice. 18+ only.
+            ⚠️ MEFC is for entertainment only. High risk of total loss. Not financial advice. 18+ only. All fighters are fictional AI-generated characters for parody purposes.
         </div>
         
         <div class="copyright">
@@ -703,411 +1384,207 @@
         <div class="community-message">
             Built with ❤️ for the meme community
         </div>
+        
+        <div class="sui-powered">
+            ⚡ Powered by SUI Blockchain ⚡
+        </div>
     </footer>
 
+    <!-- Dynamic Stats System -->
     <script>
-        // Storage keys for syncing with leaderboard
-        const STORAGE_KEYS = {
-            votes: 'mefc_voting_data',
-            history: 'mefc_battle_history',
-            lastUpdate: 'mefc_last_update',
-            battleTimer: 'mefc_battle_timer'
-        };
-
-        // Fighter image mapping
-        const fighterImages = {
-            'DOGE': 'images/fighters/dogecoin.png',
-            'SHIB': 'images/fighters/shiba-inu.png', 
-            'PEPE': 'images/fighters/pepe.png',
-            'WIF': 'images/fighters/dog-wif-hat.png',
-            'BONK': 'images/fighters/bonk.png',
-            'FLOKI': 'images/fighters/floki-inu.png',
-            'TRUMP': 'images/fighters/maga-coin.png',
-            'BRETT': 'images/fighters/brett.png',
-            'POPCAT': 'images/fighters/popcat.png',
-            'MOG': 'images/fighters/mog-coin.png',
-            'NEIRO': 'images/fighters/neiro.png',
-            'TURBO': 'images/fighters/turbo.png',
-            'MEME': 'images/fighters/meme.png',
-            'CAT': 'images/fighters/simons-cat.png',
-            'GOAT': 'images/fighters/goatseus-maximus.png',
-            'PNUT': 'images/fighters/peanut-squirrel.png',
-            'ACT': 'images/fighters/act-ai-prophecy.png',
-            'PONKE': 'images/fighters/ponke.png',
-            'MOODENG': 'images/fighters/moo-deng.png',
-            'CHILLGUY': 'images/fighters/chill-guy.png',
-            'BOME': 'images/fighters/book-of-meme.png',
-            'MYRO': 'images/fighters/myro.png',
-            'DOGS': 'images/fighters/dogs.png',
-            'WEN': 'images/fighters/wen.png',
-            'DEGEN': 'images/fighters/degen.png',
-            'PEPU': 'images/fighters/pepe-unchained.png',
-            'SLERF': 'images/fighters/slerf.png',
-            'MEW': 'images/fighters/cat-dogs-world.png',
-            'HONK': 'images/fighters/honk.png',
-            'MEFC': 'images/fighters/meme-fight-club.png'
-        };
-
-        // Top 30 Meme Coins data based on market research
-        const memeCoins = [
-            { rank: 1, symbol: 'DOGE', name: 'Dogecoin', emoji: '🐕', votes: 0 },
-            { rank: 2, symbol: 'SHIB', name: 'Shiba Inu', emoji: '🐶', votes: 0 },
-            { rank: 3, symbol: 'PEPE', name: 'Pepe', emoji: '🐸', votes: 0 },
-            { rank: 4, symbol: 'WIF', name: 'Dogwifhat', emoji: '🎩', votes: 0 },
-            { rank: 5, symbol: 'BONK', name: 'Bonk', emoji: '⚾', votes: 0 },
-            { rank: 6, symbol: 'FLOKI', name: 'Floki Inu', emoji: '🗡️', votes: 0 },
-            { rank: 7, symbol: 'TRUMP', name: 'Official Trump', emoji: '🇺🇸', votes: 0 },
-            { rank: 8, symbol: 'BRETT', name: 'Brett', emoji: '👱', votes: 0 },
-            { rank: 9, symbol: 'POPCAT', name: 'Popcat', emoji: '😺', votes: 0 },
-            { rank: 10, symbol: 'MOG', name: 'Mog Coin', emoji: '😼', votes: 0 },
-            { rank: 11, symbol: 'NEIRO', name: 'Neiro', emoji: '🐕‍🦺', votes: 0 },
-            { rank: 12, symbol: 'TURBO', name: 'Turbo', emoji: '🏎️', votes: 0 },
-            { rank: 13, symbol: 'MEME', name: 'Meme', emoji: '😂', votes: 0 },
-            { rank: 14, symbol: 'CAT', name: 'Simon\'s Cat', emoji: '🐱', votes: 0 },
-            { rank: 15, symbol: 'GOAT', name: 'Goatseus Maximus', emoji: '🐐', votes: 0 },
-            { rank: 16, symbol: 'PNUT', name: 'Peanut', emoji: '🥜', votes: 0 },
-            { rank: 17, symbol: 'ACT', name: 'Act I', emoji: '🎭', votes: 0 },
-            { rank: 18, symbol: 'PONKE', name: 'Ponke', emoji: '🐒', votes: 0 },
-            { rank: 19, symbol: 'MOODENG', name: 'Moo Deng', emoji: '🦛', votes: 0 },
-            { rank: 20, symbol: 'CHILLGUY', name: 'Chill Guy', emoji: '😎', votes: 0 },
-            { rank: 21, symbol: 'BOME', name: 'Book of Meme', emoji: '📚', votes: 0 },
-            { rank: 22, symbol: 'MYRO', name: 'Myro', emoji: '🐕', votes: 0 },
-            { rank: 23, symbol: 'DOGS', name: 'Dogs', emoji: '🐕‍🦺', votes: 0 },
-            { rank: 24, symbol: 'WEN', name: 'Wen', emoji: '⏰', votes: 0 },
-            { rank: 25, symbol: 'DEGEN', name: 'Degen', emoji: '🎰', votes: 0 },
-            { rank: 26, symbol: 'PEPU', name: 'Pepe Unchained', emoji: '🐸⛓️', votes: 0 },
-            { rank: 27, symbol: 'SLERF', name: 'Slerf', emoji: '🦥', votes: 0 },
-            { rank: 28, symbol: 'MEW', name: 'Cat in a Dogs World', emoji: '🐱', votes: 0 },
-            { rank: 29, symbol: 'HONK', name: 'Honk', emoji: '🚗', votes: 0 },
-            { rank: 30, symbol: 'MEFC', name: 'Meme Fight Club', emoji: '🥊', votes: 0 }
-        ];
-
-        let userVotesUsed = 0;
-        const maxVotesPerRound = 2;
-        let totalVoteCount = 0;
-
-        // Function to get fighter image HTML
-        function getFighterImage(symbol, emoji, size = 60) {
-            const imagePath = fighterImages[symbol];
-            if (imagePath) {
-                return `<img src="${imagePath}" alt="${symbol}" onerror="this.src='${imagePath.replace('.png', '.jpg')}'; this.onerror=function(){this.parentNode.innerHTML='${emoji}';}" style="width: ${size}px; height: ${size}px; object-fit: contain; object-position: center; border-radius: ${size > 40 ? '10px' : '5px'};">`;
-            }
-            return emoji;
-        }
-
-        // Load existing voting data from localStorage
-        function loadExistingData() {
-            try {
-                const stored = localStorage.getItem(STORAGE_KEYS.votes);
-                if (stored) {
-                    const data = JSON.parse(stored);
-                    if (data.coins && data.totalVotes !== undefined) {
-                        // Merge stored votes with current coin data
-                        data.coins.forEach(storedCoin => {
-                            const currentCoin = memeCoins.find(c => c.symbol === storedCoin.symbol);
-                            if (currentCoin) {
-                                currentCoin.votes = storedCoin.votes || 0;
-                            }
-                        });
-                        totalVoteCount = data.totalVotes || 0;
-                        
-                        // Check if user already voted in current session
-                        userVotesUsed = data.userVotesUsed || 0;
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading existing voting data:', error);
-            }
-        }
-
-        // Save voting data to localStorage for leaderboard sync
-        function saveVotingData() {
-            try {
-                const data = {
-                    coins: memeCoins,
-                    totalVotes: totalVoteCount,
-                    userVotesUsed: userVotesUsed,
-                    timestamp: new Date().toISOString()
-                };
-                
-                localStorage.setItem(STORAGE_KEYS.votes, JSON.stringify(data));
-                localStorage.setItem(STORAGE_KEYS.lastUpdate, new Date().toISOString());
-                
-                console.log('Voting data saved for leaderboard sync');
-            } catch (error) {
-                console.error('Error saving voting data:', error);
-            }
-        }
-
-        // Save battle timer for leaderboard sync
-        function saveBattleTimer(timeString) {
-            try {
-                localStorage.setItem(STORAGE_KEYS.battleTimer, timeString);
-            } catch (error) {
-                console.error('Error saving battle timer:', error);
-            }
-        }
-
-        // Save battle history when round resets
-        function saveBattleHistory() {
-            try {
-                if (totalVoteCount === 0) return;
-                
-                const history = JSON.parse(localStorage.getItem(STORAGE_KEYS.history) || '[]');
-                const winner = [...memeCoins].sort((a, b) => b.votes - a.votes)[0];
-                
-                const battleRecord = {
-                    timestamp: new Date().toISOString(),
-                    winner: winner,
-                    totalVotes: totalVoteCount,
-                    topThree: [...memeCoins].sort((a, b) => b.votes - a.votes).slice(0, 3)
-                };
-                
-                history.unshift(battleRecord);
-                if (history.length > 10) history.pop(); // Keep last 10 rounds
-                
-                localStorage.setItem(STORAGE_KEYS.history, JSON.stringify(history));
-                console.log('Battle history saved:', battleRecord);
-            } catch (error) {
-                console.error('Error saving battle history:', error);
-            }
-        }
-
-        // Battle Timer Countdown
-        function updateTimer() {
-            const timer = document.getElementById('battleTimer');
-            if (!timer) return;
-            
-            let time = timer.textContent.split(':');
-            let hours = parseInt(time[0]);
-            let minutes = parseInt(time[1]);
-            let seconds = parseInt(time[2]);
-            
-            seconds--;
-            if (seconds < 0) {
-                seconds = 59;
-                minutes--;
-                if (minutes < 0) {
-                    minutes = 59;
-                    hours--;
-                    if (hours < 0) {
-                        hours = 0;
-                        minutes = 29;
-                        seconds = 45;
-                        resetVotes();
-                    }
-                }
-            }
-            
-            const timeString = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            timer.textContent = timeString;
-            
-            // Save timer for leaderboard sync
-            saveBattleTimer(timeString);
-        }
-
-        // Vote Function - Now with 2 votes per round
-        function vote(symbol) {
-            if (userVotesUsed >= maxVotesPerRound) {
-                showMessage('You have used both votes for this round! 🗳️');
-                return;
-            }
-
-            const coin = memeCoins.find(c => c.symbol === symbol);
-            if (coin) {
-                coin.votes++;
-                totalVoteCount++;
-                userVotesUsed++;
-                
-                // Save data immediately for leaderboard sync
-                saveVotingData();
-                
-                updateDisplay();
-                showMessage(`Vote ${userVotesUsed} of ${maxVotesPerRound} recorded for ${getFighterImage(coin.symbol, coin.emoji, 20)} ${coin.name}! 🎉`);
-                
-                // Simulate other votes
-                simulateOtherVotes();
-            }
-        }
-
-        // Update display
-        function updateDisplay() {
-            // Sort coins by votes for ranking
-            const sortedCoins = [...memeCoins].sort((a, b) => b.votes - a.votes);
-            
-            // Update total votes
-            document.getElementById('totalVotes').textContent = totalVoteCount;
-            
-            // Update top 6
-            updateTopSix(sortedCoins.slice(0, 6));
-            
-            // Update remaining coins
-            updateRemainingCoins(sortedCoins.slice(6));
-            
-            // Save updated data for leaderboard
-            saveVotingData();
-        }
-
-        // Update top 6 display
-        function updateTopSix(topCoins) {
-            const container = document.getElementById('topSix');
-            container.innerHTML = '';
-            
-            topCoins.forEach((coin, index) => {
-                const percentage = totalVoteCount > 0 ? Math.round((coin.votes / totalVoteCount) * 100) : 0;
-                
-                const coinEl = document.createElement('div');
-                coinEl.className = `top-coin ${userVotesUsed > 0 && coin.votes > 0 ? 'voted' : ''}`;
-                coinEl.onclick = () => vote(coin.symbol);
-                
-                coinEl.innerHTML = `
-                    <div class="coin-rank">${index + 1}</div>
-                    <div class="coin-symbol">${getFighterImage(coin.symbol, coin.emoji, 60)}</div>
-                    <div class="coin-name">${coin.name}</div>
-                    <div class="vote-count">${coin.votes} votes</div>
-                    <div class="vote-percentage">${percentage}%</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${percentage}%"></div>
-                    </div>
-                `;
-                
-                container.appendChild(coinEl);
-            });
-        }
-
-        // Update remaining coins display
-        function updateRemainingCoins(remainingCoins) {
-            const container = document.getElementById('remainingCoins');
-            container.innerHTML = '';
-            
-            remainingCoins.forEach((coin, index) => {
-                const coinEl = document.createElement('div');
-                coinEl.className = `coin-item ${userVotesUsed > 0 && coin.votes > 0 ? 'voted' : ''}`;
-                coinEl.onclick = () => vote(coin.symbol);
-                
-                coinEl.innerHTML = `
-                    <div class="coin-info">
-                        <div class="coin-rank-small">${coin.rank}</div>
-                        <div class="coin-details">
-                            <div class="coin-emoji">${getFighterImage(coin.symbol, coin.emoji, 30)}</div>
-                            <div class="coin-text">
-                                <div class="coin-name-small">${coin.name}</div>
-                                <div class="coin-symbol-small">${coin.symbol}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="coin-votes">${coin.votes} votes</div>
-                `;
-                
-                container.appendChild(coinEl);
-            });
-        }
-
-        // Show message popup
-        function showMessage(message) {
-            const popup = document.createElement('div');
-            popup.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: linear-gradient(45deg, #ff0066, #ff3399);
-                color: white;
-                padding: 1.5rem 2rem;
-                border-radius: 15px;
-                text-align: center;
-                z-index: 10000;
-                font-weight: bold;
-                font-size: 1.1rem;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-                max-width: 90vw;
-            `;
-            popup.innerHTML = message;
-            
-            document.body.appendChild(popup);
-            
-            setTimeout(() => {
-                popup.remove();
-            }, 3000);
-        }
-
-        // Simulate other users voting
-        function simulateOtherVotes() {
-            // Add 3-7 votes over the next 15 seconds
-            const otherVotes = Math.floor(Math.random() * 5) + 3;
-            
-            for (let i = 0; i < otherVotes; i++) {
-                setTimeout(() => {
-                    const randomCoin = memeCoins[Math.floor(Math.random() * memeCoins.length)];
-                    randomCoin.votes++;
-                    totalVoteCount++;
-                    updateDisplay(); // This will also save data
-                }, (i + 1) * 2000 + Math.random() * 3000);
-            }
-        }
-
-        // Simulate periodic activity
-        function simulatePeriodicActivity() {
-            if (Math.random() > 0.6) { // 40% chance
-                const randomCoin = memeCoins[Math.floor(Math.random() * memeCoins.length)];
-                randomCoin.votes++;
-                totalVoteCount++;
-                updateDisplay(); // This will also save data
-            }
-        }
-
-        // Reset votes for new round
-        function resetVotes() {
-            // Save current round to history before reset
-            saveBattleHistory();
-            
-            // Reset all votes
-            memeCoins.forEach(coin => coin.votes = 0);
-            totalVoteCount = 0;
-            userVotesUsed = 0;
-            
-            updateDisplay();
-            showMessage('🔄 New voting round started! Vote again!');
-        }
-
-        // Random stats updates
-        function updateStats() {
-            const stats = ['memeCoins', 'onlineNow'];
-            stats.forEach(stat => {
-                const element = document.getElementById(stat);
-                if (element && stat !== 'memeCoins') {
-                    let current = parseInt(element.textContent.replace(/[^0-9]/g, ''));
-                    
-                    if (stat === 'onlineNow') {
-                        let change = Math.floor(Math.random() * 20) - 10; // Can go up or down
-                        current = Math.max(current + change, 100); // Keep minimum of 100
-                        element.textContent = current;
-                    }
-                }
-            });
-        }
-
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            // Load existing voting data first
-            loadExistingData();
+            initializeDynamicStats();
+            updateStatsDisplay();
+            startDynamicUpdates();
             
-            // Initialize display with loaded data
-            updateDisplay();
-            
-            // Start timers
-            setInterval(updateTimer, 1000);
-            setInterval(simulatePeriodicActivity, 30000); // Every 30 seconds
-            setInterval(updateStats, 20000); // Every 20 seconds
-            
-            console.log('Meme Fight Club with 2 VOTES PER ROUND loaded successfully!');
-            console.log('Loaded total votes:', totalVoteCount);
-            console.log('User votes used:', userVotesUsed);
+            console.log('Dynamic fighter stats system loaded!');
+            console.log('Stats sync with voting data every 10 seconds');
+            console.log('Random fluctuations every 30 seconds');
         });
 
-        // Smooth scrolling for mobile
-        if (window.innerWidth <= 768) {
-            document.body.style.overflowX = 'hidden';
+        // Add visual effects
+        function addStatEffects() {
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach(stat => {
+                stat.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.1)';
+                    this.style.transition = 'all 0.3s ease';
+                });
+                
+                stat.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        }
+
+        // Initialize effects
+        setTimeout(addStatEffects, 1000);
+
+        // Storage keys for syncing with main voting page
+        const STORAGE_KEYS = {
+            votes: 'mefc_voting_data',
+            fighterStats: 'mefc_fighter_stats',
+            lastStatsUpdate: 'mefc_last_stats_update'
+        };
+
+        // Fighter base stats (these will be modified dynamically)
+        const fighterBaseStats = {
+            'DOGE': { legacy: 100, memePower: 95, battleRating: 88, wins: 156 },
+            'SHIB': { armySize: 97, aggression: 92, speed: 89, wins: 134 },
+            'PEPE': { rarity: 99, memeIQ: 94, adaptability: 87, wins: 128 },
+            'PENGU': { cuteness: 98, icePower: 92, community: 96, wins: 89 },
+            'BONK': { bonkPower: 93, speed: 89, defense: 82, wins: 98 },
+            'TRUMP': { patriotPower: 95, rallyEnergy: 90, leadership: 88, wins: 102 },
+            'SPX': { marketPower: 94, growthRate: 91, momentum: 88, wins: 76 },
+            'FLOKI': { vikingPower: 96, berserkerMode: 91, strategy: 85, wins: 112 },
+            'PUMP': { pumpPower: 93, hypeLevel: 89, momentum: 87, wins: 83 },
+            'FARTCOIN': { gasPower: 88, humorLevel: 95, surpriseFactor: 92, wins: 71 },
+            'WIF': { stylePoints: 90, swagLevel: 86, combatSkills: 84, wins: 89 },
+            'M': { memeEssence: 96, corePower: 90, viralSpread: 88, wins: 79 },
+            'MOG': { businessIQ: 89, marketPower: 84, strategy: 87, wins: 76 },
+            'DOG': { simplicity: 85, loyalty: 93, effectiveness: 87, wins: 78 },
+            'TURBO': { speed: 98, acceleration: 84, turboPower: 87, wins: 76 },
+            'POPCAT': { popPower: 94, sonicBoom: 90, viralSpread: 88, wins: 97 },
+            'MEW': { independence: 87, rebellion: 85, catPride: 91, wins: 72 },
+            'CHEEMS': { wholesomePower: 91, classicAppeal: 88, heart: 94, wins: 82 },
+            'SNEK': { stealth: 92, venomPower: 87, hypnosis: 89, wins: 74 },
+            'TOSHI': { mystery: 90, decentralization: 93, legacyHonor: 86, wins: 77 },
+            'PNUT': { justicePower: 86, agility: 94, heart: 88, wins: 79 },
+            'NOT': { paradoxPower: 89, contrarianEnergy: 91, surpriseFactor: 85, wins: 73 },
+            'KET': { chaosLevel: 93, mindWarp: 87, catReflexes: 90, wins: 69 },
+            'NPC': { programming: 88, predictability: 75, effectiveness: 84, wins: 71 },
+            'NEIRO': { aiEvolution: 87, loyaltyPower: 85, techFusion: 82, wins: 78 },
+            'MOODENG': { biteForce: 90, cuteness: 93, thaiPower: 87, wins: 86 },
+            'GIGA': { chadEnergy: 99, alphaPower: 96, sigmaGrind: 92, wins: 88 },
+            'MELANIA': { elegance: 94, politicalPower: 87, grace: 91, wins: 65 },
+            'AI16Z': { aiPower: 95, algorithm: 92, investmentIQ: 89, wins: 74 },
+            'AIXBT': { tradingBot: 91, mlPower: 88, automation: 93, wins: 72 },
+            'GEK': { stealth: 91, reflexes: 95, wallCrawling: 88, wins: 84 },
+            'MEFC': { arenaMaster: 100, fightIQ: 99, memeAuthority: 98, wins: 247 }
+        };
+
+        // Current dynamic stats
+        let currentStats = {};
+
+        // Initialize dynamic stats
+        function initializeDynamicStats() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEYS.fighterStats);
+                const lastUpdate = localStorage.getItem(STORAGE_KEYS.lastStatsUpdate);
+                
+                if (stored && lastUpdate) {
+                    const timeDiff = Date.now() - parseInt(lastUpdate);
+                    // Reset stats if more than 1 hour old
+                    if (timeDiff < 3600000) {
+                        currentStats = JSON.parse(stored);
+                        console.log('Loaded existing fighter stats');
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading fighter stats:', error);
+            }
+            
+            // Initialize fresh stats
+            currentStats = JSON.parse(JSON.stringify(fighterBaseStats));
+            updateStatsFromVoting();
+            saveStats();
+        }
+
+        // Update stats based on voting performance
+        function updateStatsFromVoting() {
+            try {
+                const votingData = localStorage.getItem(STORAGE_KEYS.votes);
+                if (votingData) {
+                    const data = JSON.parse(votingData);
+                    if (data.coins) {
+                        data.coins.forEach(coin => {
+                            if (currentStats[coin.symbol]) {
+                                // Boost stats based on vote performance
+                                const voteBonus = Math.min(coin.votes * 0.1, 10); // Max +10 boost
+                                const stats = currentStats[coin.symbol];
+                                
+                                // Apply vote bonus to all stats except wins
+                                Object.keys(stats).forEach(key => {
+                                    if (key !== 'wins') {
+                                        stats[key] = Math.min(fighterBaseStats[coin.symbol][key] + voteBonus, 100);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating stats from voting:', error);
+            }
+        }
+
+        // Save stats to localStorage
+        function saveStats() {
+            try {
+                localStorage.setItem(STORAGE_KEYS.fighterStats, JSON.stringify(currentStats));
+                localStorage.setItem(STORAGE_KEYS.lastStatsUpdate, Date.now().toString());
+            } catch (error) {
+                console.error('Error saving fighter stats:', error);
+            }
+        }
+
+        // Update display with current stats
+        function updateStatsDisplay() {
+            const fighterCards = document.querySelectorAll('.fighter-card');
+            fighterCards.forEach(card => {
+                const symbolElement = card.querySelector('.fighter-symbol');
+                if (symbolElement) {
+                    const symbol = symbolElement.textContent.replace(', '');
+                    const stats = currentStats[symbol];
+                    
+                    if (stats) {
+                        const statElements = card.querySelectorAll('.stat-value');
+                        const statLabels = card.querySelectorAll('.stat-label');
+                        
+                        let statIndex = 0;
+                        Object.keys(stats).forEach(key => {
+                            if (statElements[statIndex]) {
+                                statElements[statIndex].textContent = stats[key];
+                                statIndex++;
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        // Start dynamic updates
+        function startDynamicUpdates() {
+            // Update from voting data every 10 seconds
+            setInterval(() => {
+                updateStatsFromVoting();
+                updateStatsDisplay();
+                saveStats();
+            }, 10000);
+
+            // Add random fluctuations every 30 seconds
+            setInterval(() => {
+                addRandomFluctuations();
+                updateStatsDisplay();
+                saveStats();
+            }, 30000);
+        }
+
+        // Add small random fluctuations to keep stats dynamic
+        function addRandomFluctuations() {
+            Object.keys(currentStats).forEach(symbol => {
+                const stats = currentStats[symbol];
+                Object.keys(stats).forEach(key => {
+                    if (key !== 'wins') {
+                        // Random fluctuation of ±2
+                        const fluctuation = (Math.random() - 0.5) * 4;
+                        const baseValue = fighterBaseStats[symbol][key];
+                        stats[key] = Math.max(1, Math.min(100, Math.round(baseValue + fluctuation)));
+                    }
+                });
+            });
         }
     </script>
 </body>
