@@ -1,1591 +1,625 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fighters Gallery - Meme Fight Club</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Meme Fight Club — Live Fighter Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --bg-0:#0a0014; --bg-1:#150029; --bg-2:#1f0640; --bg-card:#150225;
+    --ink:#f3eefc; --ink-dim:#b9aed6; --ink-faint:#7a6d9e;
+    --pink:#ff2f76; --pink-dim:rgba(255,47,118,0.14); --pink-border:rgba(255,47,118,0.32);
+    --gold:#ffb703; --gold-dim:rgba(255,183,3,0.14); --gold-border:rgba(255,183,3,0.35);
+    --green:#17e8a6; --green-dim:rgba(23,232,166,0.14); --green-border:rgba(23,232,166,0.32);
+    --red:#ff4d5e;
+    --line:rgba(255,255,255,0.09);
+  }
+  body{
+    font-family:'Inter',sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(255,47,118,0.16), transparent 60%),
+      radial-gradient(ellipse 800px 600px at 100% 10%, rgba(23,232,166,0.10), transparent 55%),
+      linear-gradient(160deg,var(--bg-0),var(--bg-1) 45%,var(--bg-2));
+    background-attachment:fixed;
+  }
+  .display{font-family:'Bebas Neue',sans-serif; letter-spacing:0.02em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(45deg, #0a0015, #1a0033, #330066);
-            background-size: 400% 400%;
-            animation: gradientShift 8s ease infinite;
-            color: white;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
+  /* ── NAV ── */
+  nav{position:sticky; top:0; z-index:100; background:rgba(10,0,20,0.85); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
+  .nav-inner{max-width:1180px; margin:0 auto; padding:0.85rem 1.5rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;}
+  .brand{display:flex; align-items:center; gap:10px; text-decoration:none;}
+  .brand-badge{width:34px; height:34px; border-radius:50%; background:conic-gradient(from 200deg,var(--pink),var(--gold),var(--green),var(--pink)); display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:800; color:#0a0014; font-family:'Inter',sans-serif; flex-shrink:0;}
+  .brand-name{font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:0.05em; color:var(--ink);}
+  .brand-name span{color:var(--pink);}
+  .nav-right{display:flex; align-items:center; gap:1.4rem; flex-wrap:wrap;}
+  .nav-links{display:flex; gap:1.4rem; list-style:none;}
+  .nav-links a{font-size:12.5px; font-weight:600; letter-spacing:0.06em; color:var(--ink-dim); text-decoration:none; transition:color .15s;}
+  .nav-links a:hover{color:var(--ink);}
+  .live-pill{display:inline-flex; align-items:center; gap:6px; font-size:10.5px; font-weight:700; letter-spacing:0.1em; padding:5px 11px; border-radius:20px; background:var(--pink-dim); border:1px solid var(--pink-border); color:var(--pink);}
+  .live-dot{width:6px; height:6px; border-radius:50%; background:var(--pink); animation:pulse-dot 1.6s ease-in-out infinite;}
+  @keyframes pulse-dot{0%,100%{opacity:1;} 50%{opacity:0.3;}}
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+  .wrap{max-width:1180px; margin:0 auto; padding:0 1.5rem 4rem;}
 
-        /* Header */
-        .header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid #ff0066;
-            z-index: 1000;
-            padding: 1rem 2rem;
-        }
+  /* ── HERO ── */
+  .hero{padding:2.75rem 0 1.75rem; text-align:center;}
+  .hero-title{font-size:clamp(48px,9vw,88px); line-height:0.95; background:linear-gradient(100deg,var(--pink),var(--gold) 55%,var(--green)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .hero-sub{font-size:15px; color:var(--ink-dim); margin-top:10px; font-weight:500;}
+  .hero-meta{font-size:11.5px; color:var(--ink-faint); margin-top:8px; letter-spacing:0.08em;}
 
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+  /* ── VOTE BUDGET ── */
+  .budget-bar{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; background:var(--bg-card); border:1px solid var(--line); border-radius:14px; padding:0.9rem 1.4rem; margin:1.6rem 0 1.1rem;}
+  .budget-label{font-size:13px; color:var(--ink-dim); font-weight:500;}
+  .budget-label strong{color:var(--ink); font-weight:700;}
+  .budget-pips{display:flex; gap:6px;}
+  .pip{width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; background:var(--pink); box-shadow:0 0 10px rgba(255,47,118,0.5); transition:all .2s;}
+  .pip.used{background:transparent; border:1.5px solid var(--line); box-shadow:none;}
+  .budget-reset{font-size:11px; color:var(--ink-faint);}
 
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #ff0066;
-        }
+  /* ── CHAMPION BELT ── */
+  .belt{position:relative; border-radius:16px; padding:1.4rem 1.7rem; margin-bottom:1.5rem; background:linear-gradient(120deg,var(--gold-dim),rgba(255,47,118,0.08)); border:1px solid var(--gold-border); display:flex; align-items:center; gap:1.3rem; flex-wrap:wrap;}
+  .belt-icon{font-size:34px; flex-shrink:0;}
+  .belt-eyebrow{font-size:10.5px; font-weight:700; letter-spacing:0.14em; color:var(--gold); margin-bottom:4px;}
+  .belt-name{font-family:'Bebas Neue',sans-serif; font-size:30px; letter-spacing:0.03em; line-height:1;}
+  .belt-meta{display:flex; align-items:center; gap:12px; margin-top:6px; flex-wrap:wrap; font-size:12.5px;}
+  .belt-record{font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--gold); background:var(--gold-dim); border:1px solid var(--gold-border); padding:3px 10px; border-radius:4px; font-size:12px;}
+  .belt-img{width:56px; height:56px; border-radius:50%; object-fit:cover; border:2px solid var(--gold-border); flex-shrink:0;}
+  .belt-empty{color:var(--ink-faint); font-size:13.5px;}
 
-        .nav-links {
-            display: flex;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-        }
+  /* ── STATS ── */
+  .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:1.6rem;}
+  .stat-card{background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:1rem 1.2rem;}
+  .stat-label{font-size:10px; letter-spacing:0.12em; color:var(--ink-faint); margin-bottom:6px; font-weight:600;}
+  .stat-val{font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:0.02em;}
+  .stat-delta{font-size:12px; font-weight:600; margin-top:4px;}
+  .up{color:var(--green);} .dn{color:var(--red);} .mute{color:var(--ink-faint);}
 
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s;
-            padding: 0.4rem 0.7rem;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            white-space: nowrap;
-        }
+  /* ── CONTROLS ── */
+  .controls{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:1.4rem;}
+  .search-box{flex:1; min-width:180px; font-family:'Inter',sans-serif; font-size:13px; padding:9px 14px; border-radius:8px; border:1px solid var(--line); background:var(--bg-card); color:var(--ink); outline:none;}
+  .search-box::placeholder{color:var(--ink-faint);}
+  .search-box:focus{border-color:var(--pink-border);}
+  .pill-row{display:flex; gap:6px; flex-wrap:wrap;}
+  .pill{font-size:12px; font-family:'Inter',sans-serif; font-weight:600; padding:7px 15px; border-radius:20px; border:1px solid var(--line); background:transparent; color:var(--ink-dim); cursor:pointer; transition:all .14s; white-space:nowrap;}
+  .pill.active{background:var(--pink); border-color:var(--pink); color:#fff;}
+  .pill:hover:not(.active){border-color:var(--pink-border); color:var(--ink);}
+  .sort-select{font-family:'Inter',sans-serif; font-size:12px; font-weight:600; padding:8px 12px; border-radius:8px; border:1px solid var(--line); background:var(--bg-card); color:var(--ink-dim);}
+  .fighter-count{font-size:12px; color:var(--ink-faint); white-space:nowrap; margin-left:auto;}
 
-        .nav-links a:hover {
-            color: #ff0066;
-            background: rgba(255, 0, 102, 0.1);
-        }
+  /* ── FIGHTER GRID ── */
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1.1rem; margin-bottom:2rem;}
+  .card{position:relative; background:var(--bg-card); border:1px solid var(--line); border-radius:16px; padding:1.3rem; transition:transform .18s, border-color .18s, box-shadow .18s;}
+  .card:hover{transform:translateY(-4px); border-color:var(--pink-border); box-shadow:0 14px 28px rgba(255,47,118,0.15);}
+  .card.champ{border-color:var(--gold-border); box-shadow:0 0 0 1px var(--gold-border);}
+  .card-rank{position:absolute; top:12px; left:14px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-faint); font-weight:700;}
+  .champ-flag{position:absolute; top:10px; right:14px; font-size:10px; font-weight:800; letter-spacing:0.08em; color:var(--gold); background:var(--gold-dim); border:1px solid var(--gold-border); padding:3px 8px; border-radius:6px;}
+  .card-portrait{width:100%; display:flex; justify-content:center; margin:1.1rem 0 0.8rem;}
+  .card-portrait img, .card-portrait .emoji-fallback{width:76px; height:76px; border-radius:50%; object-fit:cover; border:2px solid var(--line); background:var(--bg-1);}
+  .emoji-fallback{display:flex; align-items:center; justify-content:center; font-size:32px;}
+  .card-name{text-align:center; font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:0.02em; line-height:1.1;}
+  .card-sym{text-align:center; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-faint); margin-top:2px;}
+  .card-tagline{text-align:center; font-size:11.5px; color:var(--ink-dim); font-style:italic; margin:0.55rem 0 0.85rem; line-height:1.45; min-height:32px;}
+  .card-price-row{display:flex; align-items:baseline; justify-content:center; gap:8px; margin-bottom:0.9rem;}
+  .card-price{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:14px;}
+  .card-chg{font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600;}
+  .fight-stats{display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:1rem;}
+  .fstat{background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:8px; padding:6px 4px; text-align:center;}
+  .fstat-val{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:14px; color:var(--gold);}
+  .fstat-label{font-size:9px; letter-spacing:0.05em; color:var(--ink-faint); margin-top:2px;}
+  .vote-row{display:flex; align-items:center; gap:8px;}
+  .vote-btn{flex:1; font-size:12px; font-family:'Inter',sans-serif; font-weight:700; letter-spacing:0.03em; padding:9px 10px; border-radius:9px; border:1px solid var(--pink-border); background:var(--pink-dim); color:var(--pink); cursor:pointer; transition:all .15s;}
+  .vote-btn:hover:not(:disabled){background:var(--pink); color:#fff;}
+  .vote-btn.voted{background:var(--green-dim); border-color:var(--green-border); color:var(--green);}
+  .vote-btn:disabled{opacity:0.35; cursor:not-allowed;}
+  .vote-tally{font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; color:var(--ink-dim); min-width:26px; text-align:center;}
+  .info-link{display:block; text-align:center; margin-top:0.7rem; font-size:10.5px; color:var(--ink-faint); text-decoration:none;}
+  .info-link:hover{color:var(--ink-dim);}
+  .state-msg{grid-column:1/-1; text-align:center; padding:3rem 1rem; color:var(--ink-faint); font-size:14px;}
+  .spinner{display:inline-block; width:15px; height:15px; border:2px solid var(--line); border-top-color:var(--pink); border-radius:50%; animation:spin .75s linear infinite; margin-right:8px; vertical-align:middle;}
+  @keyframes spin{to{transform:rotate(360deg);}}
 
-        .nav-links a.active {
-            color: #ff0066;
-            background: rgba(255, 0, 102, 0.1);
-        }
+  .mode-note{font-size:11px; color:var(--ink-faint); text-align:center; margin:-0.6rem 0 1.6rem; padding:8px 14px; border:1px dashed var(--line); border-radius:8px; background:rgba(255,255,255,0.02);}
 
-        /* Main Content */
-        .main-content {
-            padding: 120px 2rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+  /* ── FOOTER ── */
+  footer{margin-top:1rem; padding-top:1.5rem; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:14px;}
+  .footer-summary{font-size:12.5px; color:var(--ink-dim); line-height:1.65; padding:12px 16px; border-radius:10px; border:1px solid var(--line); background:var(--bg-card);}
+  .footer-summary strong{color:var(--pink);}
+  .footer-legal{font-size:10.5px; color:var(--ink-faint); line-height:1.75; padding:16px 18px; border-radius:10px; border:1px solid var(--line); background:var(--bg-card); display:flex; flex-direction:column; gap:9px;}
+  .footer-legal-title{font-size:10px; font-weight:700; letter-spacing:0.12em; color:var(--ink-faint);}
+  .footer-row{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; padding-bottom:0.5rem;}
+  .footer-note{font-size:11px; color:var(--ink-faint);}
+  .footer-links{display:flex; gap:1.2rem; flex-wrap:wrap;}
+  .footer-links a{font-size:11px; color:var(--ink-faint); text-decoration:none;}
+  .footer-links a:hover{color:var(--ink-dim);}
 
-        .page-title {
-            font-size: 3.5rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #ff0066, #ffff00, #00ff66);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            animation: pulse 2s ease-in-out infinite;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .page-subtitle {
-            font-size: 1.3rem;
-            text-align: center;
-            margin-bottom: 1rem;
-            opacity: 0.9;
-            color: #ffff00;
-        }
-
-        .blockchain-badge {
-            font-size: 1rem;
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #00ff66;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
-        }
-
-        /* Legal Disclaimer */
-        .legal-disclaimer {
-            background: rgba(255, 165, 0, 0.15);
-            border: 2px solid #ffa500;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            text-align: center;
-            color: #ffa500;
-            font-weight: bold;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* Gallery Stats */
-        .gallery-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .stat-card {
-            background: rgba(255, 0, 102, 0.1);
-            border: 2px solid #ff0066;
-            border-radius: 10px;
-            padding: 1rem;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #ffff00;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        /* Gallery Grid */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .fighter-card {
-            background: rgba(0, 0, 0, 0.8);
-            border: 3px solid #ff0066;
-            border-radius: 20px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .fighter-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,0,102,0.1), transparent);
-            animation: shimmer 3s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        .fighter-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(255, 0, 102, 0.4);
-            border-color: #ffff00;
-        }
-
-        .fighter-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #ff0066, #330066);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .fighter-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            object-position: center;
-            border-radius: 15px;
-            background: transparent;
-        }
-
-        .fighter-name {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #ff0066;
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-
-        .fighter-symbol {
-            font-size: 0.9rem;
-            color: #ffff00;
-            text-align: center;
-            margin-bottom: 0.5rem;
-            font-family: monospace;
-        }
-
-        .fighter-description {
-            font-size: 0.85rem;
-            color: #ccc;
-            text-align: center;
-            margin-bottom: 1rem;
-            opacity: 0.9;
-            font-style: italic;
-            line-height: 1.4;
-        }
-
-        .fighter-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .stat {
-            background: rgba(255, 0, 102, 0.1);
-            padding: 0.5rem;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid rgba(255, 0, 102, 0.3);
-        }
-
-        .stat-value {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #ffff00;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            opacity: 0.8;
-        }
-
-        /* Footer */
-        .footer {
-            background: rgba(0, 0, 0, 0.9);
-            border-top: 2px solid #ff0066;
-            padding: 2rem;
-            margin-top: 3rem;
-            text-align: center;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s;
-            padding: 0.5rem;
-        }
-
-        .footer-links a:hover {
-            color: #ff0066;
-        }
-
-        .disclaimer {
-            background: rgba(255, 255, 0, 0.1);
-            border: 1px solid #ffff00;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            color: #ffff00;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-
-        .copyright {
-            color: #ccc;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .community-message {
-            color: #ff0066;
-            font-size: 0.9rem;
-            font-style: italic;
-        }
-
-        .sui-powered {
-            color: #00ff66;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            font-weight: bold;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 1200px) {
-            .nav-links {
-                gap: 0.6rem;
-            }
-            
-            .nav-links a {
-                font-size: 0.85rem;
-                padding: 0.3rem 0.6rem;
-            }
-        }
-
-        @media (max-width: 900px) {
-            .nav {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-            
-            .nav-links {
-                gap: 0.5rem;
-                justify-content: center;
-            }
-            
-            .nav-links a {
-                font-size: 0.8rem;
-                padding: 0.25rem 0.5rem;
-            }
-            
-            .header {
-                padding: 0.8rem 1rem;
-            }
-            
-            .main-content {
-                padding-top: 180px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .page-title {
-                font-size: 2.5rem;
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .main-content {
-                padding: 180px 1rem 1rem;
-            }
-
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-links {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-        }
-
-        /* Animations */
-        .fade-in {
-            animation: fadeIn 1s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+  @media(max-width:640px){
+    .stats{grid-template-columns:1fr 1fr;}
+    .stats .stat-card:last-child{grid-column:span 2;}
+    .nav-links{display:none;}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(46%,1fr));}
+    .fighter-count{margin-left:0; width:100%; text-align:left;}
+  }
+</style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <nav class="nav">
-            <div class="logo">
-                <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #ff0066, #ffff00); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px; font-weight: 900; color: #000; font-family: Arial Black, Arial, sans-serif;">MEFC</div>
-                MEME FIGHT CLUB
-            </div>
-            <div class="nav-links">
-                <a href="https://memefightclub.com/" class="active">FIGHTERS GALLERY</a>
-                <a href="https://memefightclub.com/voting-arena.html">VOTING ARENA</a>
-                <a href="https://memefightclub.com/leaderboard.html">LEADERBOARD</a>
-                <a href="https://memefightclub.com/community.html">COMMUNITY</a>
-                <a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" target="_blank">MEFC (SUI)</a>
-                <a href="https://memefightclub.com/disclaimer.html">DISCLAIMER</a>
-            </div>
-        </nav>
-    </header>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <h1 class="page-title fade-in">
-            <div style="width: 60px; height: 60px; background: linear-gradient(45deg, #ff0066, #ffff00); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; color: #000; font-family: Arial Black, Arial, sans-serif;">MEFC</div>
-            Fighters Gallery
-        </h1>
-        <p class="page-subtitle fade-in">Meet the Epic Meme Coin Champions of the Arena</p>
-        <p class="blockchain-badge fade-in">⚡ Powered by SUI Blockchain ⚡</p>
-
-        <!-- Gallery Stats -->
-        <div class="gallery-stats fade-in">
-            <div class="stat-card">
-                <div class="stat-number">Awesome Meme Power!</div>
-                <div class="stat-label"></div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">Epic Voting Battles!</div>
-                <div class="stat-label"></div>
-            </div>
-        </div>
-
-        <!-- Complete 32 Meme Fighters Gallery -->
-        <div class="gallery-grid fade-in">
-            <!-- Fighter 1: DOGE -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/dogecoin.png" alt="DOGECOIN" onerror="this.src='images/fighters/dogecoin.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐕';}">
-                </div>
-                <div class="fighter-name">DOGECOIN</div>
-                <div class="fighter-symbol">$DOGE</div>
-                <div class="fighter-description">The original meme coin legend. Much wow, very power, such fighting skills. The godfather of all meme warriors.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">100</div>
-                        <div class="stat-label">Legacy</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">95</div>
-                        <div class="stat-label">Meme Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">88</div>
-                        <div class="stat-label">Battle Rating</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">156</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 2: SHIB -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/shiba-inu.png" alt="SHIBA INU" onerror="this.src='images/fighters/shiba-inu.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐶';}">
-                </div>
-                <div class="fighter-name">SHIBA INU</div>
-                <div class="fighter-symbol">$SHIB</div>
-                <div class="fighter-description">The fierce Doge killer with an army of loyal warriors. Decentralized meme power meets unstoppable community spirit.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">97</div>
-                        <div class="stat-label">Army Size</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">92</div>
-                        <div class="stat-label">Aggression</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">89</div>
-                        <div class="stat-label">Speed</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">134</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 3: PEPE -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/pepe.png" alt="PEPE" onerror="this.src='images/fighters/pepe.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐸';}">
-                </div>
-                <div class="fighter-name">PEPE</div>
-                <div class="fighter-symbol">$PEPE</div>
-                <div class="fighter-description">The rare Pepe warrior with infinite meme variations. Feels good man energy powers devastating special attacks.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">99</div>
-                        <div class="stat-label">Rarity</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">94</div>
-                        <div class="stat-label">Meme IQ</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">87</div>
-                        <div class="stat-label">Adaptability</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">128</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 4: PUDGY PENGUINS -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/pudgy-penguins.png" alt="PUDGY PENGUINS" onerror="this.src='images/fighters/pudgy-penguins.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐧';}">
-                </div>
-                <div class="fighter-name">PUDGY PENGUINS</div>
-                <div class="fighter-symbol">$PENGU</div>
-                <div class="fighter-description">The adorable yet fierce Antarctic warrior. Waddles into battle with icy determination and wholesome community power.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">98</div>
-                        <div class="stat-label">Cuteness</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">92</div>
-                        <div class="stat-label">Ice Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">96</div>
-                        <div class="stat-label">Community</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">89</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 5: BONK -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/bonk.png" alt="BONK" onerror="this.src='images/fighters/bonk.jpg'; this.onerror=function(){this.parentNode.innerHTML='🏏';}">
-                </div>
-                <div class="fighter-name">BONK</div>
-                <div class="fighter-symbol">$BONK</div>
-                <div class="fighter-description">The Solana bonking champion. Delivers crushing bonk attacks with meme-powered baseball bat devastation.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">93</div>
-                        <div class="stat-label">Bonk Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">89</div>
-                        <div class="stat-label">Speed</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">82</div>
-                        <div class="stat-label">Defense</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">98</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 6: OFFICIAL TRUMP -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/official-trump.png" alt="OFFICIAL TRUMP" onerror="this.src='images/fighters/official-trump.jpg'; this.onerror=function(){this.parentNode.innerHTML='🦅';}">
-                </div>
-                <div class="fighter-name">OFFICIAL TRUMP</div>
-                <div class="fighter-symbol">$TRUMP</div>
-                <div class="fighter-description">The patriotic eagle warrior with tremendous fighting power. Delivers freedom-powered attacks with maximum American energy.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">95</div>
-                        <div class="stat-label">Patriot Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">90</div>
-                        <div class="stat-label">Rally Energy</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">88</div>
-                        <div class="stat-label">Leadership</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">102</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 7: SPX6900 -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/spx6900.png" alt="SPX6900" onerror="this.src='images/fighters/spx6900.jpg'; this.onerror=function(){this.parentNode.innerHTML='📈';}">
-                </div>
-                <div class="fighter-name">SPX6900</div>
-                <div class="fighter-symbol">$SPX</div>
-                <div class="fighter-description">The market-crushing warrior targeting astronomical gains. Combines traditional finance energy with meme coin chaos.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">94</div>
-                        <div class="stat-label">Market Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">91</div>
-                        <div class="stat-label">Growth Rate</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">88</div>
-                        <div class="stat-label">Momentum</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">76</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 8: FLOKI -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/floki-inu.png" alt="FLOKI INU" onerror="this.src='images/fighters/floki-inu.jpg'; this.onerror=function(){this.parentNode.innerHTML='⚔️';}">
-                </div>
-                <div class="fighter-name">FLOKI</div>
-                <div class="fighter-symbol">$FLOKI</div>
-                <div class="fighter-description">The Viking Inu warrior with Norse god strength. Pillages meme battlefields with unstoppable Viking fury.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">96</div>
-                        <div class="stat-label">Viking Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">91</div>
-                        <div class="stat-label">Berserker Mode</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">85</div>
-                        <div class="stat-label">Strategy</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">112</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 9: PUMP -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/pump.png" alt="PUMP" onerror="this.src='images/fighters/pump.jpg'; this.onerror=function(){this.parentNode.innerHTML='💪';}">
-                </div>
-                <div class="fighter-name">PUMP</div>
-                <div class="fighter-symbol">$PUMP</div>
-                <div class="fighter-description">The ultimate pump warrior spreading bullish energy. Delivers explosive price action attacks with unstoppable momentum.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">93</div>
-                        <div class="stat-label">Pump Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">89</div>
-                        <div class="stat-label">Hype Level</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">87</div>
-                        <div class="stat-label">Momentum</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">83</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 10: FARTCOIN -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/fartcoin.png" alt="FARTCOIN" onerror="this.src='images/fighters/fartcoin.jpg'; this.onerror=function(){this.parentNode.innerHTML='💨';}">
-                </div>
-                <div class="fighter-name">FARTCOIN</div>
-                <div class="fighter-symbol">$FARTCOIN</div>
-                <div class="fighter-description">The gaseous gigachad bringing crude humor to crypto. Delivers devastating wind attacks with explosive comedic timing.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">88</div>
-                        <div class="stat-label">Gas Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">95</div>
-                        <div class="stat-label">Humor Level</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">92</div>
-                        <div class="stat-label">Surprise Factor</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">71</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 11: DOG WIF HAT -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/dog-wif-hat.png" alt="DOG WIF HAT" onerror="this.src='images/fighters/dog-wif-hat.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐕🎩';}">
-                </div>
-                <div class="fighter-name">DOG WIF HAT</div>
-                <div class="fighter-symbol">$WIF</div>
-                <div class="fighter-description">The stylish hat-wearing fighter. Combines fashion with fury, delivering knockout punches with dapper dog style.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">90</div>
-                        <div class="stat-label">Style Points</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">86</div>
-                        <div class="stat-label">Swag Level</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">84</div>
-                        <div class="stat-label">Combat Skills</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">89</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 12: MEMECORE -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/memecore.png" alt="MEMECORE" onerror="this.src='images/fighters/memecore.jpg'; this.onerror=function(){this.parentNode.innerHTML='🌀';}">
-                </div>
-                <div class="fighter-name">MEMECORE</div>
-                <div class="fighter-symbol">$M</div>
-                <div class="fighter-description">The essence of pure meme energy concentrated into fighting form. Channels the core power of internet culture itself.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">96</div>
-                        <div class="stat-label">Meme Essence</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">90</div>
-                        <div class="stat-label">Core Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">88</div>
-                        <div class="stat-label">Viral Spread</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">79</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 13: MOG COIN -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/mog-coin.png" alt="MOG COIN" onerror="this.src='images/fighters/mog-coin.jpg'; this.onerror=function(){this.parentNode.innerHTML='💼';}">
-                </div>
-                <div class="fighter-name">MOG COIN</div>
-                <div class="fighter-symbol">$MOG</div>
-                <div class="fighter-description">The business mogul meme warrior. Combines corporate power with meme energy for devastating market attacks.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">89</div>
-                        <div class="stat-label">Business IQ</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">84</div>
-                        <div class="stat-label">Market Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">87</div>
-                        <div class="stat-label">Strategy</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">76</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 14: DOG -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/dog.png" alt="DOG" onerror="this.src='images/fighters/dog.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐕‍🦺';}">
-                </div>
-                <div class="fighter-name">DOG</div>
-                <div class="fighter-symbol">$DOG</div>
-                <div class="fighter-description">The simple yet powerful canine warrior. Proves that sometimes the best strategy is just being a good dog.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">85</div>
-                        <div class="stat-label">Simplicity</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">93</div>
-                        <div class="stat-label">Loyalty</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">87</div>
-                        <div class="stat-label">Effectiveness</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">78</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 15: TURBO -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/turbo.png" alt="TURBO" onerror="this.src='images/fighters/turbo.jpg'; this.onerror=function(){this.parentNode.innerHTML='🏎️';}">
-                </div>
-                <div class="fighter-name">TURBO</div>
-                <div class="fighter-symbol">$TURBO</div>
-                <div class="fighter-description">The high-speed racing warrior with turbo-charged attacks. Delivers lightning-fast combos with nitrous-powered fury.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">98</div>
-                        <div class="stat-label">Speed</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">84</div>
-                        <div class="stat-label">Acceleration</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">87</div>
-                        <div class="stat-label">Turbo Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">76</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 16: POPCAT -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/popcat.png" alt="POPCAT" onerror="this.src='images/fighters/popcat.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐱';}">
-                </div>
-                <div class="fighter-name">POPCAT</div>
-                <div class="fighter-symbol">$POPCAT</div>
-                <div class="fighter-description">The legendary popping cat warrior. Devastating mouth-pop attacks create sonic booms that shatter opponents.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">94</div>
-                        <div class="stat-label">Pop Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">90</div>
-                        <div class="stat-label">Sonic Boom</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">88</div>
-                        <div class="stat-label">Viral Spread</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">97</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 17: CAT IN A DOGS WORLD -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/cat-dogs-world.png" alt="CAT IN A DOGS WORLD" onerror="this.src='images/fighters/cat-dogs-world.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐱';}">
-                </div>
-                <div class="fighter-name">CAT IN A DOGS WORLD</div>
-                <div class="fighter-symbol">$MEW</div>
-                <div class="fighter-description">The rebellious cat fighting in a dog-dominated world. Delivers independent feline attacks with anti-establishment energy.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">87</div>
-                        <div class="stat-label">Independence</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">85</div>
-                        <div class="stat-label">Rebellion</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">91</div>
-                        <div class="stat-label">Cat Pride</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">72</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 18: CHEEMS -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/cheems.png" alt="CHEEMS" onerror="this.src='images/fighters/cheems.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐕';}">
-                </div>
-                <div class="fighter-name">CHEEMS</div>
-                <div class="fighter-symbol">$CHEEMS</div>
-                <div class="fighter-description">The wholesome yet powerful Shiba warrior. Fights with pure heart and classic meme energy that never goes out of style.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">91</div>
-                        <div class="stat-label">Wholesome Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">88</div>
-                        <div class="stat-label">Classic Appeal</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">94</div>
-                        <div class="stat-label">Heart</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">82</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 19: SNEK -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/snek.png" alt="SNEK" onerror="this.src='images/fighters/snek.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐍';}">
-                </div>
-                <div class="fighter-name">SNEK</div>
-                <div class="fighter-symbol">$SNEK</div>
-                <div class="fighter-description">The slithering serpent warrior with hypnotic charm. Strikes with venomous precision and mesmerizing meme magic.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">92</div>
-                        <div class="stat-label">Stealth</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">87</div>
-                        <div class="stat-label">Venom Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">89</div>
-                        <div class="stat-label">Hypnosis</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">74</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 20: TOSHI -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/toshi.png" alt="TOSHI" onerror="this.src='images/fighters/toshi.jpg'; this.onerror=function(){this.parentNode.innerHTML='🦸';}">
-                </div>
-                <div class="fighter-name">TOSHI</div>
-                <div class="fighter-symbol">$TOSHI</div>
-                <div class="fighter-description">The mysterious masked warrior honoring crypto's origins. Fights with the spirit of Satoshi and decentralized power.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">90</div>
-                        <div class="stat-label">Mystery</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">93</div>
-                        <div class="stat-label">Decentralization</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">86</div>
-                        <div class="stat-label">Legacy Honor</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">77</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 21: PEANUT THE SQUIRREL -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/peanut-squirrel.png" alt="PEANUT THE SQUIRREL" onerror="this.src='images/fighters/peanut-squirrel.jpg'; this.onerror=function(){this.parentNode.innerHTML='🐿️';}">
-                </div>
-                <div class="fighter-name">PEANUT THE SQUIRREL</div>
-                <div class="fighter-symbol">$PNUT</div>
-                <div class="fighter-description">The tragic hero squirrel warrior. Fights for animal justice with acorn-powered attacks and righteous fury.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">86</div>
-                        <div class="stat-label">Justice Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">94</div>
-                        <div class="stat-label">Agility</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">88</div>
-                        <div class="stat-label">Heart</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">79</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 22: NOTCOIN -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/notcoin.png" alt="NOTCOIN" onerror="this.src='images/fighters/notcoin.jpg'; this.onerror=function(){this.parentNode.innerHTML='🚫';}">
-                </div>
-                <div class="fighter-name">NOTCOIN</div>
-                <div class="fighter-symbol">$NOT</div>
-                <div class="fighter-description">The contrarian warrior that defies expectations. Proves sometimes the best coin is the one that's not a coin.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">89</div>
-                        <div class="stat-label">Paradox Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">91</div>
-                        <div class="stat-label">Contrarian Energy</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">85</div>
-                        <div class="stat-label">Surprise Factor</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">73</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 23: KET -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/ket.png" alt="KET" onerror="this.src='images/fighters/ket.jpg'; this.onerror=function(){this.parentNode.innerHTML='💊';}">
-                </div>
-                <div class="fighter-name">KET</div>
-                <div class="fighter-symbol">$KET</div>
-                <div class="fighter-description">The pharmaceutical feline warrior with mind-bending abilities. Delivers reality-warping attacks with chaotic cat energy.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">93</div>
-                        <div class="stat-label">Chaos Level</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">87</div>
-                        <div class="stat-label">Mind Warp</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">90</div>
-                        <div class="stat-label">Cat Reflexes</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">69</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 24: NON-PLAYABLE COIN -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/npc.png" alt="NON-PLAYABLE COIN" onerror="this.src='images/fighters/npc.jpg'; this.onerror=function(){this.parentNode.innerHTML='🤖';}">
-                </div>
-                <div class="fighter-name">NON-PLAYABLE COIN</div>
-                <div class="fighter-symbol">$NPC</div>
-                <div class="fighter-description">The automated warrior following its programming. Fights with predictable yet surprisingly effective NPC energy.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">88</div>
-                        <div class="stat-label">Programming</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">75</div>
-                        <div class="stat-label">Predictability</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">84</div>
-                        <div class="stat-label">Effectiveness</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">71</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 25: NEIRO -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/neiro.png" alt="NEIRO" onerror="this.src='images/fighters/neiro.jpg'; this.onerror=function(){this.parentNode.innerHTML='🤖';}">
-                </div>
-                <div class="fighter-name">NEIRO</div>
-                <div class="fighter-symbol">$NEIRO</div>
-                <div class="fighter-description">The next-generation AI dog warrior. Combines artificial intelligence with canine loyalty for futuristic fighting.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">87</div>
-                        <div class="stat-label">AI Evolution</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">85</div>
-                        <div class="stat-label">Loyalty Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">82</div>
-                        <div class="stat-label">Tech Fusion</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">78</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 26: MOO DENG -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/moo-deng.png" alt="MOO DENG" onerror="this.src='images/fighters/moo-deng.jpg'; this.onerror=function(){this.parentNode.innerHTML='🦛';}">
-                </div>
-                <div class="fighter-name">MOO DENG</div>
-                <div class="fighter-symbol">$MOODENG</div>
-                <div class="fighter-description">The adorable but deadly hippo warrior from Thailand. Delivers crushing bite attacks with unexpected cuteness power.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">90</div>
-                        <div class="stat-label">Bite Force</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">93</div>
-                        <div class="stat-label">Cuteness</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">87</div>
-                        <div class="stat-label">Thai Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">86</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 27: GIGACHAD -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/gigachad.png" alt="GIGACHAD" onerror="this.src='images/fighters/gigachad.jpg'; this.onerror=function(){this.parentNode.innerHTML='💪';}">
-                </div>
-                <div class="fighter-name">GIGACHAD</div>
-                <div class="fighter-symbol">$GIGA</div>
-                <div class="fighter-description">The ultimate alpha male warrior with legendary chad energy. Delivers devastating sigma attacks with pure masculine power.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">99</div>
-                        <div class="stat-label">Chad Energy</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">96</div>
-                        <div class="stat-label">Alpha Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">92</div>
-                        <div class="stat-label">Sigma Grind</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">88</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 28: MELANIA MEME -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/melania-meme.png" alt="MELANIA MEME" onerror="this.src='images/fighters/melania-meme.jpg'; this.onerror=function(){this.parentNode.innerHTML='👸';}">
-                </div>
-                <div class="fighter-name">MELANIA MEME</div>
-                <div class="fighter-symbol">$MELANIA</div>
-                <div class="fighter-description">The elegant first lady warrior with sophisticated fighting style. Combines grace with devastating political meme power.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">94</div>
-                        <div class="stat-label">Elegance</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">87</div>
-                        <div class="stat-label">Political Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">91</div>
-                        <div class="stat-label">Grace</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">65</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 29: AI16Z -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/ai16z.png" alt="AI16Z" onerror="this.src='images/fighters/ai16z.jpg'; this.onerror=function(){this.parentNode.innerHTML='🧠';}">
-                </div>
-                <div class="fighter-name">AI16Z</div>
-                <div class="fighter-symbol">$AI16Z</div>
-                <div class="fighter-description">The artificial intelligence investment warrior. Fights with algorithmic precision and futuristic trading strategies.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">95</div>
-                        <div class="stat-label">AI Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">92</div>
-                        <div class="stat-label">Algorithm</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">89</div>
-                        <div class="stat-label">Investment IQ</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">74</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 30: AIXBT BY VIRTUALS -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/aixbt.png" alt="AIXBT BY VIRTUALS" onerror="this.src='images/fighters/aixbt.jpg'; this.onerror=function(){this.parentNode.innerHTML='🤖';}">
-                </div>
-                <div class="fighter-name">AIXBT BY VIRTUALS</div>
-                <div class="fighter-symbol">$AIXBT</div>
-                <div class="fighter-description">The virtual AI trading bot warrior. Delivers calculated attacks with machine learning and automated trading fury.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">91</div>
-                        <div class="stat-label">Trading Bot</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">88</div>
-                        <div class="stat-label">ML Power</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">93</div>
-                        <div class="stat-label">Automation</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">72</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 31: GEKKO CASH -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/gekko-cash.png" alt="GEKKO CASH" onerror="this.src='images/fighters/gekko-cash.jpg'; this.onerror=function(){this.parentNode.innerHTML='🦎';}">
-                </div>
-                <div class="fighter-name">GEKKO CASH</div>
-                <div class="fighter-symbol">$GEK</div>
-                <div class="fighter-description">The stealthy gecko warrior with lightning-fast reflexes. Delivers wall-crawling attacks with reptilian precision and cash-powered special moves.</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">91</div>
-                        <div class="stat-label">Stealth</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">95</div>
-                        <div class="stat-label">Reflexes</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">88</div>
-                        <div class="stat-label">Wall Crawling</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">84</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fighter 32: MEFC - THE ULTIMATE CHAMPION -->
-            <div class="fighter-card">
-                <div class="fighter-image">
-                    <img src="images/fighters/meme-fight-club.png" alt="MEME FIGHT CLUB" onerror="this.src='images/fighters/meme-fight-club.jpg'; this.onerror=function(){this.parentNode.innerHTML='🥊';}">
-                </div>
-                <div class="fighter-name">MEME FIGHT CLUB</div>
-                <div class="fighter-symbol">$MEFC</div>
-                <div class="fighter-description">The ultimate meme fighting champion and arena owner. The one who started it all - the king of the meme fight arena itself!</div>
-                <div class="fighter-stats">
-                    <div class="stat">
-                        <div class="stat-value">100</div>
-                        <div class="stat-label">Arena Master</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">99</div>
-                        <div class="stat-label">Fight IQ</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">98</div>
-                        <div class="stat-label">Meme Authority</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">247</div>
-                        <div class="stat-label">Wins</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Gallery Features Section -->
-        <div class="external-gallery-info fade-in">
-            <h2 style="color: #ff0066; font-size: 2rem; margin-bottom: 1rem; text-align: center;">🎨 Complete Meme Fighter Collection</h2>
-            <p style="text-align: center; margin-bottom: 2rem; opacity: 0.9;">Legendary Meme Coin Warriors Assembled in One Epic Voting Fight Arena!</p>
-        </div>
-
-        <!-- Legal Disclaimer -->
-        <div class="legal-disclaimer fade-in">
-            ⚠️ <strong>DISCLAIMER:</strong> All fighter representations are AI-generated artistic interpretations for entertainment purposes only. These are NOT official representations of any real persons, political figures, or cryptocurrency projects. Any resemblance to actual individuals is purely coincidental. All characters are fictional parody creations for the MEFC entertainment platform.
-        </div>
+<nav>
+  <div class="nav-inner">
+    <a href="#top" class="brand">
+      <span class="brand-badge">MEFC</span>
+      <span class="brand-name">MEME <span>FIGHT</span> CLUB</span>
+    </a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#arena">Arena</a></li>
+        <li><a href="#disclaimer">Disclaimer</a></li>
+        <li><a href="https://suivision.xyz/coin/0xc44a14f76b8defe396f91b34dbeb8904928bce4084f52eb49cd3b2ca489c4ae6::mefc::MEFC" target="_blank" rel="noopener">$MEFC (SUI)</a></li>
+      </ul>
+      <span class="live-pill"><span class="live-dot"></span> LIVE</span>
     </div>
+  </div>
+</nav>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-links">
-            <a href="/">Fighters Gallery</a>
-            <a href="voting-arena.html">Voting Arena</a>
-            <a href="leaderboard.html">Leaderboard</a>
-            <a href="community.html">Community</a>
-            <a href="disclaimer.html">Disclaimer</a>
-            <a href="terms.html">Terms</a>
-            <a href="privacy.html">Privacy</a>
-        </div>
-        
-        <div class="disclaimer">
-            ⚠️ MEFC is for entertainment only. High risk of total loss. Not financial advice. 18+ only. All fighters are fictional AI-generated characters for parody purposes.
-        </div>
-        
-        <div class="copyright">
-            © 2025 Meme Fight Club (MEFC). All rights reserved.
-        </div>
-        
-        <div class="community-message">
-            Built with ❤️ for the meme community
-        </div>
-        
-        <div class="sui-powered">
-            ⚡ Powered by SUI Blockchain ⚡
-        </div>
-    </footer>
+<main class="wrap" id="top">
 
-    <!-- Dynamic Stats System -->
-    <script>
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeDynamicStats();
-            updateStatsDisplay();
-            startDynamicUpdates();
-            
-            console.log('Dynamic fighter stats system loaded!');
-            console.log('Stats sync with voting data every 10 seconds');
-            console.log('Random fluctuations every 30 seconds');
+  <section class="hero" id="arena">
+    <div class="hero-title display">MEME FIGHT CLUB</div>
+    <div class="hero-sub">Real market data meets community voting — pick today's champion</div>
+    <div class="hero-meta" id="last-updated">Loading live fighter data...</div>
+  </section>
+
+  <div class="budget-bar">
+    <div class="budget-label">🥊 Daily votes — <strong><span id="votes-left">5</span> remaining</strong>. Stack them on one fighter or spread the love.</div>
+    <div class="budget-pips" id="pips">
+      <div class="pip">🥊</div><div class="pip">🥊</div><div class="pip">🥊</div><div class="pip">🥊</div><div class="pip">🥊</div>
+    </div>
+    <div class="budget-reset">Resets at midnight</div>
+  </div>
+
+  <div class="belt" id="belt">
+    <div class="belt-icon">🏆</div>
+    <div>
+      <div class="belt-eyebrow" id="belt-eyebrow">TODAY'S CHAMPION</div>
+      <div id="belt-empty" class="belt-empty">No votes yet — cast the first one below to crown a champion.</div>
+      <div id="belt-detail" style="display:none;">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <img class="belt-img" id="belt-img" src="" alt="" />
+          <div>
+            <div class="belt-name" id="belt-name"></div>
+            <div class="belt-meta">
+              <span class="mono" id="belt-price"></span>
+              <span class="belt-record" id="belt-record"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">TOTAL MEME MARKET CAP</div>
+      <div class="stat-val display" id="stat-mcap">—</div>
+      <div class="stat-delta" id="stat-mcap-delta">&nbsp;</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">24H TRADING VOLUME</div>
+      <div class="stat-val display" id="stat-vol">—</div>
+      <div class="stat-delta mute">Across today's fighter roster</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">TOP COIN BY MARKET CAP</div>
+      <div class="stat-val display" id="stat-top">—</div>
+      <div class="stat-delta" id="stat-top-chg">&nbsp;</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <input class="search-box" id="search" type="text" placeholder="🔍 Search fighters by name or ticker..." oninput="MFC.handleSearch(this.value)" />
+    <div class="pill-row" id="filters">
+      <button class="pill active" data-filter="all">All fighters</button>
+      <button class="pill" data-filter="trending">🔥 Trending</button>
+      <button class="pill" data-filter="gainers">📈 Gainers</button>
+      <button class="pill" data-filter="losers">📉 Dips</button>
+      <button class="pill" data-filter="mostvoted">🥊 Most voted</button>
+    </div>
+    <select class="sort-select" id="sort-select" onchange="MFC.handleSort(this.value)">
+      <option value="rank">Sort: Market rank</option>
+      <option value="price">Sort: Price</option>
+      <option value="chg">Sort: 24h change</option>
+      <option value="votes">Sort: Votes</option>
+    </select>
+    <span class="fighter-count" id="fighter-count"></span>
+  </div>
+
+  <div class="mode-note" id="mode-note">
+    🌐 Connecting to live shared voting...
+  </div>
+
+  <div class="grid" id="grid">
+    <div class="state-msg"><span class="spinner"></span>Loading fighters...</div>
+  </div>
+
+  <footer id="disclaimer">
+    <div class="footer-summary">
+      <strong>Entertainment only.</strong> Meme Fight Club is a meme coin data & voting site for fun. Votes are a popularity contest, not financial signals, and fight stats are stylized flavor text — not investment ratings. Nothing here is financial, legal, or investment advice. Crypto is highly volatile. Always do your own research.
+    </div>
+    <div class="footer-legal">
+      <div class="footer-legal-title">Full Disclaimer</div>
+      <p>Meme Fight Club and the $MEFC token are meme projects created for entertainment purposes only and have no association with any stocks, equities, securities, indices, companies, or other financial or business entities.</p>
+      <p>Fighter names, portraits, and "fight stats" shown here are stylized, parody presentations of publicly traded meme tokens, generated for entertainment. They are not official representations of any project, team, or individual, and any resemblance to real persons is coincidental.</p>
+      <p>Market data (price, market cap, 24h volume) is pulled from public sources and may be delayed, incomplete, or inaccurate. This site makes no guarantee of accuracy, completeness, or timeliness of any data shown.</p>
+      <p>$MEFC is a meme token with no intrinsic value or expectation of financial return. By using this site, you accept full responsibility for any losses, damages, or liabilities arising from your use of it, including financial losses.</p>
+      <p>Links to third-party sites and tokens are provided for convenience only and do not imply endorsement. You access external sites at your own risk.</p>
+    </div>
+    <div class="footer-row">
+      <div class="footer-note">Live data via CoinGecko &middot; © 2026 Meme Fight Club.</div>
+      <div class="footer-links">
+        <a href="https://www.coingecko.com" target="_blank" rel="noopener">Data: CoinGecko</a>
+        <a href="#disclaimer">Disclaimer</a>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ────────────────────────────────────────────────────────────────
+     Shares the MemeBoxer Firebase project (same owner, both sites).
+     Votes are namespaced under FIREBASE_VOTES_PATH so MEFC's tallies
+     stay separate from MemeBoxer's — same project, independent data.
+     Set FIREBASE_CONFIG back to null to fall back to local-only voting.
+  ──────────────────────────────────────────────────────────────── */
+  const FIREBASE_CONFIG = {
+    apiKey:            "AIzaSyAoZGW6I_7nMB23n7hznpJYzdHKbUTcx_8",
+    authDomain:        "memeboxer-39091.firebaseapp.com",
+    databaseURL:       "https://memeboxer-39091-default-rtdb.firebaseio.com",
+    projectId:         "memeboxer-39091",
+    storageBucket:     "memeboxer-39091.firebasestorage.app",
+    messagingSenderId: "114938930771",
+    appId:             "1:114938930771:web:c4eb1427555cadb75bc8a6",
+    measurementId:     "G-07TF1S5TT6"
+  };
+  // Votes are namespaced under 'mefc-votes' (rather than MemeBoxer's 'votes') so the
+  // two sites' vote tallies stay independent even though they share a Firebase project.
+  const FIREBASE_VOTES_PATH = 'mefc-votes';
+
+  const VOTE_LIMIT = 5;
+  const TODAY = new Date().toISOString().slice(0,10);
+  const LOCAL_KEY = 'mfc_arena_v1';
+
+  const FALLBACK = [
+    {id:'dogecoin',name:'Dogecoin',symbol:'doge',tagline:'The original meme coin legend. Much wow, still fighting.',current_price:0.0994,price_change_percentage_24h:0.13,market_cap:15190000000,total_volume:892000000,image:'https://assets.coingecko.com/coins/images/5/large/dogecoin.png'},
+    {id:'shiba-inu',name:'Shiba Inu',symbol:'shib',tagline:'The Doge-killer with an army of loyal warriors.',current_price:0.0000126,price_change_percentage_24h:-1.44,market_cap:7430000000,total_volume:310000000,image:'https://assets.coingecko.com/coins/images/11939/large/shiba.png'},
+    {id:'pepe',name:'Pepe',symbol:'pepe',tagline:'Rare Pepe energy. Feels good man, hits harder.',current_price:0.00001047,price_change_percentage_24h:5.82,market_cap:4400000000,total_volume:510000000,image:'https://assets.coingecko.com/coins/images/29850/large/pepe-token.jpeg'},
+    {id:'bonk',name:'Bonk',symbol:'bonk',tagline:'Solana bonking champion. Crushing bat-powered attacks.',current_price:0.00002314,price_change_percentage_24h:11.3,market_cap:1710000000,total_volume:240000000,image:'https://assets.coingecko.com/coins/images/28600/large/bonk.jpg'},
+    {id:'dogwifcoin',name:'dogwifhat',symbol:'wif',tagline:'Stylish hat-wearing fighter, dapper and deadly.',current_price:0.5842,price_change_percentage_24h:-4.12,market_cap:580000000,total_volume:98000000,image:'https://assets.coingecko.com/coins/images/33566/large/dogwifhat.png'},
+    {id:'floki',name:'FLOKI',symbol:'floki',tagline:'Viking Inu warrior. Pillages the arena with Norse fury.',current_price:0.0001192,price_change_percentage_24h:-2.91,market_cap:1150000000,total_volume:88000000,image:'https://assets.coingecko.com/coins/images/16746/large/PNG_image.png'},
+    {id:'pudgy-penguins',name:'Pudgy Penguins',symbol:'pengu',tagline:'Adorable but fierce. Waddles in with icy determination.',current_price:0.0182,price_change_percentage_24h:3.2,market_cap:970000000,total_volume:71000000,image:'https://assets.coingecko.com/coins/images/52622/standard/PUDGY_PENGUINS_PENGU_PFP.png?1733809110'},
+    {id:'fartcoin',name:'Fartcoin',symbol:'fartcoin',tagline:'Gaseous gigachad. Devastating comedic timing.',current_price:0.412,price_change_percentage_24h:-7.4,market_cap:410000000,total_volume:53000000,image:'https://assets.coingecko.com/coins/images/50891/standard/fart.jpg?1729503972'},
+    {id:'baby-doge-coin',name:'Baby Doge Coin',symbol:'babydoge',tagline:'Small but scrappy. Never underestimate this pup.',current_price:0.000000002,price_change_percentage_24h:8.47,market_cap:890000000,total_volume:62000000,image:'https://assets.coingecko.com/coins/images/16125/large/Baby-Doge.png'},
+    {id:'cat-in-a-dogs-world',name:'Cat in a Dogs World',symbol:'mew',tagline:'The rebellious cat fighting in a dog-dominated arena.',current_price:0.000005241,price_change_percentage_24h:3.67,market_cap:520000000,total_volume:44000000,image:'https://assets.coingecko.com/coins/images/36440/large/MEW.jpg'},
+    {id:'mog-coin',name:'Mog Coin',symbol:'mog',tagline:'Business mogul energy. Corporate power meets meme chaos.',current_price:0.000001823,price_change_percentage_24h:-6.21,market_cap:390000000,total_volume:37000000,image:'https://assets.coingecko.com/coins/images/31059/large/MOG_LOGO_%281%29.png'},
+    {id:'turbo',name:'Turbo',symbol:'turbo',tagline:'Nitrous-powered racer. Lightning-fast combos.',current_price:0.004821,price_change_percentage_24h:14.2,market_cap:340000000,total_volume:91000000,image:'https://assets.coingecko.com/coins/images/30176/large/logo200.png'},
+    {id:'popcat',name:'Popcat',symbol:'popcat',tagline:'Legendary popping cat. Sonic-boom mouth attacks.',current_price:0.2841,price_change_percentage_24h:2.33,market_cap:280000000,total_volume:29000000,image:'https://assets.coingecko.com/coins/images/33760/large/image.png'},
+    {id:'book-of-meme',name:'Book of Meme',symbol:'bome',tagline:'Ancient meme scripture, unlocked mid-battle.',current_price:0.002841,price_change_percentage_24h:-3.88,market_cap:190000000,total_volume:18000000,image:'https://assets.coingecko.com/coins/images/36808/large/bome.png'},
+    {id:'notcoin',name:'Notcoin',symbol:'not',tagline:'The contrarian warrior that defies expectations.',current_price:0.0021,price_change_percentage_24h:1.6,market_cap:210000000,total_volume:15000000,image:'https://assets.coingecko.com/coins/images/33453/standard/rFmThDiD_400x400.jpg?1701876350'},
+    {id:'moo-deng',name:'Moo Deng',symbol:'moodeng',tagline:'Adorable but deadly hippo. Crushing bite, unexpected cuteness.',current_price:0.152,price_change_percentage_24h:6.9,market_cap:150000000,total_volume:22000000,image:'https://coin-images.coingecko.com/coins/images/50264/large/MOODENG.jpg?1726726975'},
+    {id:'spx6900',name:'SPX6900',symbol:'spx',tagline:'Market-crushing warrior targeting astronomical gains.',current_price:1.24,price_change_percentage_24h:-2.1,market_cap:1300000000,total_volume:120000000,image:'https://assets.coingecko.com/coins/images/31401/standard/centeredcoin_%281%29.png?1737048493'},
+    {id:'ai16z',name:'ai16z',symbol:'ai16z',tagline:'AI investment warrior, algorithmic precision.',current_price:0.19,price_change_percentage_24h:4.4,market_cap:180000000,total_volume:19000000,image:''},
+    {id:'pnut-the-squirrel',name:'Peanut the Squirrel',symbol:'pnut',tagline:'Tragic hero squirrel, fighting for justice.',current_price:0.31,price_change_percentage_24h:-5.6,market_cap:95000000,total_volume:11000000,image:''},
+    {id:'official-trump',name:'Official Trump',symbol:'trump',tagline:'Patriotic eagle warrior with maximum rally energy.',current_price:9.8,price_change_percentage_24h:2.9,market_cap:2000000000,total_volume:210000000,image:'https://assets.coingecko.com/coins/images/53746/standard/trump.png?1737171561'}
+  ];
+
+  const state = {
+    coins: [],
+    votes: {},      // { coinId: count }
+    filter: 'all',
+    sort: 'rank',
+    search: '',
+    firebaseCastVote: null
+  };
+
+  /* ── local storage: per-day vote budget + local vote tallies ── */
+  function getLocal(){
+    try{
+      const d = JSON.parse(localStorage.getItem(LOCAL_KEY)||'{}');
+      if(d.date !== TODAY) return {date:TODAY, used:0, coinVotes:{}};
+      return d;
+    }catch{ return {date:TODAY, used:0, coinVotes:{}}; }
+  }
+  function saveLocal(d){ try{ localStorage.setItem(LOCAL_KEY, JSON.stringify(d)); }catch{} }
+
+  function updateBudgetUI(){
+    const s = getLocal();
+    const left = Math.max(0, VOTE_LIMIT - s.used);
+    document.getElementById('votes-left').textContent = left;
+    document.querySelectorAll('.pip').forEach((p,i)=>{
+      if(i < left){ p.classList.remove('used'); p.textContent='🥊'; }
+      else { p.classList.add('used'); p.textContent=''; }
+    });
+  }
+
+  /* ── formatters ── */
+  function fmtPrice(p){
+    if(p==null) return '—';
+    if(p>=1000) return '$'+p.toLocaleString('en-US',{maximumFractionDigits:2});
+    if(p>=1) return '$'+p.toFixed(4);
+    if(p>=0.01) return '$'+p.toFixed(5);
+    if(p>=0.0001) return '$'+p.toFixed(6);
+    if(p>=0.000001) return '$'+p.toFixed(8);
+    return '$'+p.toExponential(2);
+  }
+  function fmtLarge(n){
+    if(n==null) return '—';
+    if(n>=1e12) return '$'+(n/1e12).toFixed(2)+'T';
+    if(n>=1e9) return '$'+(n/1e9).toFixed(2)+'B';
+    if(n>=1e6) return '$'+(n/1e6).toFixed(1)+'M';
+    return '$'+n.toLocaleString();
+  }
+  function fmtChg(c){
+    if(c==null) return {text:'—',cls:'mute'};
+    return {text:(c>=0?'▲ ':'▼ ')+Math.abs(c).toFixed(2)+'%', cls:c>=0?'up':'dn'};
+  }
+
+  /* ── derive flavor "fight stats" from real market data ── */
+  function fightStats(coin, rank, totalCount, votes){
+    const rankPower = Math.round(60 + ((totalCount - rank) / totalCount) * 39);
+    const momentum = Math.round(Math.min(99, 55 + Math.abs(coin.price_change_percentage_24h||0) * 2.6));
+    const ratio = coin.market_cap ? (coin.total_volume||0) / coin.market_cap : 0;
+    const hype = Math.round(Math.min(99, 50 + ratio * 220));
+    const wins = Math.round((totalCount - rank + 1) * 1.4 + votes * 3);
+    return {power: rankPower, momentum, hype, wins};
+  }
+
+  function emojiFor(symbol){
+    const map = {doge:'🐕',shib:'🐶',pepe:'🐸',bonk:'🏏',wif:'🎩',floki:'⚔️',pengu:'🐧',fartcoin:'💨',babydoge:'🐕',mew:'🐱',mog:'💼',turbo:'🏎️',popcat:'😺',bome:'📚',not:'🚫',moodeng:'🦛',spx:'📈',ai16z:'🧠',pnut:'🐿️',trump:'🦅'};
+    return map[symbol] || '🥊';
+  }
+
+  /* ── render fighter grid ── */
+  function render(){
+    const grid = document.getElementById('grid');
+    let list = [...state.coins];
+    const votes = state.votes;
+
+    if(state.filter === 'trending') list = list.filter(c => Math.abs(c.price_change_percentage_24h||0) > 5);
+    else if(state.filter === 'gainers') list = [...list].sort((a,b)=>(b.price_change_percentage_24h||0)-(a.price_change_percentage_24h||0));
+    else if(state.filter === 'losers') list = [...list].sort((a,b)=>(a.price_change_percentage_24h||0)-(b.price_change_percentage_24h||0));
+    else if(state.filter === 'mostvoted') list = [...list].sort((a,b)=>(votes[b.id]||0)-(votes[a.id]||0));
+
+    if(state.search){
+      list = list.filter(c => c.name.toLowerCase().includes(state.search) || c.symbol.toLowerCase().includes(state.search));
+    }
+
+    const sortFns = {
+      rank: (a,b)=> (a._rank||0)-(b._rank||0),
+      price: (a,b)=> (b.current_price||0)-(a.current_price||0),
+      chg: (a,b)=> (b.price_change_percentage_24h||0)-(a.price_change_percentage_24h||0),
+      votes: (a,b)=> (votes[b.id]||0)-(votes[a.id]||0)
+    };
+    if(state.filter === 'all') list.sort(sortFns[state.sort] || sortFns.rank);
+
+    document.getElementById('fighter-count').textContent = list.length + ' fighter' + (list.length!==1?'s':'');
+
+    if(!list.length){
+      grid.innerHTML = '<div class="state-msg">No fighters match this search or filter.</div>';
+      return;
+    }
+
+    const local = getLocal();
+    const outOfVotes = local.used >= VOTE_LIMIT;
+    const entries = Object.entries(votes).sort((a,b)=>b[1]-a[1]);
+    const champId = entries.length && entries[0][1] > 0 ? entries[0][0] : null;
+    const totalCount = state.coins.length;
+
+    grid.innerHTML = list.map(c=>{
+      const rank = c._rank || 1;
+      const v = votes[c.id] || 0;
+      const stats = fightStats(c, rank, totalCount, v);
+      const chg = fmtChg(c.price_change_percentage_24h);
+      const isChamp = champId === c.id;
+      const voted = (local.coinVotes && local.coinVotes[c.id]);
+      const btnLabel = outOfVotes ? 'No votes left' : (voted ? 'Vote again 🥊' : '🥊 Vote fighter');
+      const btnClass = voted ? 'voted' : '';
+      const disabled = outOfVotes ? 'disabled' : '';
+      const img = c.image
+        ? '<img src="'+c.image+'" alt="'+c.name+'" loading="lazy" data-fallback-emoji="'+emojiFor(c.symbol)+'" onerror="MFC.imgFallback(this)" />'
+        : '<div class="emoji-fallback">'+emojiFor(c.symbol)+'</div>';
+      return (
+        '<div class="card'+(isChamp?' champ':'')+'">'+
+          '<div class="card-rank mono">#'+rank+'</div>'+
+          (isChamp ? '<div class="champ-flag">👑 CHAMP</div>' : '')+
+          '<div class="card-portrait">'+img+'</div>'+
+          '<div class="card-name">'+c.name+'</div>'+
+          '<div class="card-sym">$'+c.symbol.toUpperCase()+'</div>'+
+          '<div class="card-tagline">'+c.tagline+'</div>'+
+          '<div class="card-price-row"><span class="card-price">'+fmtPrice(c.current_price)+'</span><span class="card-chg '+chg.cls+'">'+chg.text+'</span></div>'+
+          '<div class="fight-stats">'+
+            '<div class="fstat"><div class="fstat-val">'+stats.power+'</div><div class="fstat-label">MARKET POWER</div></div>'+
+            '<div class="fstat"><div class="fstat-val">'+stats.momentum+'</div><div class="fstat-label">MOMENTUM</div></div>'+
+            '<div class="fstat"><div class="fstat-val">'+stats.hype+'</div><div class="fstat-label">HYPE</div></div>'+
+            '<div class="fstat"><div class="fstat-val">'+stats.wins+'</div><div class="fstat-label">RECORD</div></div>'+
+          '</div>'+
+          '<div class="vote-row">'+
+            '<button class="vote-btn '+btnClass+'" '+disabled+' onclick="MFC.vote(\''+c.id+'\')">'+btnLabel+'</button>'+
+            '<span class="vote-tally">'+(v||'')+'</span>'+
+          '</div>'+
+          '<a class="info-link" href="https://www.coingecko.com/en/coins/'+c.id+'" target="_blank" rel="noopener">View coin details ↗</a>'+
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function updateBelt(){
+    const votes = state.votes;
+    const entries = Object.entries(votes).sort((a,b)=>b[1]-a[1]);
+    const dateStr = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    document.getElementById('belt-eyebrow').textContent = "TODAY'S CHAMPION — " + dateStr;
+    const empty = document.getElementById('belt-empty');
+    const detail = document.getElementById('belt-detail');
+    if(!entries.length || entries[0][1] <= 0 || !state.coins.length){
+      empty.style.display=''; detail.style.display='none'; return;
+    }
+    const [champId, champVotes] = entries[0];
+    const coin = state.coins.find(c=>c.id===champId);
+    if(!coin) return;
+    empty.style.display='none'; detail.style.display='';
+    let img = document.getElementById('belt-img');
+    if(img.tagName !== 'IMG'){
+      const fresh = document.createElement('img');
+      fresh.id = 'belt-img'; fresh.className = 'belt-img';
+      img.replaceWith(fresh); img = fresh;
+    }
+    img.src = coin.image || '';
+    img.alt = coin.name;
+    img.onerror = function(){
+      this.replaceWith(Object.assign(document.createElement('div'), {
+        className: 'emoji-fallback', id: 'belt-img',
+        style: 'width:56px;height:56px;font-size:26px;border:2px solid var(--gold-border);',
+        textContent: emojiFor(coin.symbol)
+      }));
+    };
+    document.getElementById('belt-name').textContent = coin.name;
+    document.getElementById('belt-price').textContent = fmtPrice(coin.current_price);
+    document.getElementById('belt-record').textContent = '🥊 ' + champVotes + ' vote' + (champVotes!==1?'s':'');
+  }
+
+  function updateStats(){
+    const coins = state.coins;
+    if(!coins.length) return;
+    const mc = coins.reduce((s,c)=>s+(c.market_cap||0),0);
+    const vol = coins.reduce((s,c)=>s+(c.total_volume||0),0);
+    const avg = coins.reduce((s,c)=>s+(c.price_change_percentage_24h||0),0)/coins.length;
+    document.getElementById('stat-mcap').textContent = fmtLarge(mc);
+    document.getElementById('stat-vol').textContent = fmtLarge(vol);
+    const mcDelta = document.getElementById('stat-mcap-delta');
+    const avgChg = fmtChg(avg);
+    mcDelta.textContent = avgChg.text + ' avg (24h)';
+    mcDelta.className = 'stat-delta ' + avgChg.cls;
+    const top = [...coins].sort((a,b)=>(b.market_cap||0)-(a.market_cap||0))[0];
+    if(top){
+      document.getElementById('stat-top').textContent = top.symbol.toUpperCase();
+      const tChg = fmtChg(top.price_change_percentage_24h);
+      const el = document.getElementById('stat-top-chg');
+      el.textContent = tChg.text; el.className = 'stat-delta ' + tChg.cls;
+    }
+  }
+
+  /* ── voting ── */
+  window.MFC = {
+    vote: async function(coinId){
+      const local = getLocal();
+      if(local.used >= VOTE_LIMIT) return;
+      if(state.firebaseCastVote){
+        try{ await state.firebaseCastVote(coinId); }
+        catch(e){ console.error('Firebase vote failed, falling back to local tally', e); state.votes[coinId] = (state.votes[coinId]||0)+1; }
+      } else {
+        state.votes[coinId] = (state.votes[coinId]||0)+1;
+      }
+      local.used++;
+      local.coinVotes = local.coinVotes || {};
+      local.coinVotes[coinId] = (local.coinVotes[coinId]||0)+1;
+      saveLocal(local);
+      updateBudgetUI();
+      updateBelt();
+      render();
+    },
+    handleSearch: function(val){
+      state.search = val.trim().toLowerCase();
+      render();
+    },
+    handleSort: function(val){
+      state.sort = val;
+      render();
+    },
+    imgFallback: function(imgEl){
+      const div = document.createElement('div');
+      div.className = 'emoji-fallback';
+      div.textContent = imgEl.getAttribute('data-fallback-emoji') || '🥊';
+      imgEl.replaceWith(div);
+    }
+  };
+
+  document.getElementById('filters').addEventListener('click', function(e){
+    const btn = e.target.closest('.pill');
+    if(!btn) return;
+    document.querySelectorAll('#filters .pill').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    state.filter = btn.dataset.filter;
+    render();
+  });
+
+  /* ── CoinGecko live data ── */
+  async function fetchData(){
+    try{
+      const url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=meme-token&order=market_cap_desc&per_page=30&page=1&sparkline=false&price_change_percentage=24h';
+      const res = await fetch(url);
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const data = await res.json();
+      const flavor = {}; FALLBACK.forEach(f=>flavor[f.id]=f.tagline);
+      state.coins = data.map((c,i)=>({
+        id:c.id, name:c.name, symbol:c.symbol, image:c.image,
+        current_price:c.current_price, price_change_percentage_24h:c.price_change_percentage_24h,
+        market_cap:c.market_cap, total_volume:c.total_volume,
+        tagline: flavor[c.id] || 'A fierce contender ready to throw down in the arena.',
+        _rank:i+1
+      }));
+      document.getElementById('last-updated').textContent = 'Live — updated ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    }catch(e){
+      console.warn('CoinGecko fetch failed, using fallback roster:', e);
+      state.coins = FALLBACK.map((c,i)=>Object.assign({},c,{_rank:i+1}));
+      document.getElementById('last-updated').textContent = 'Sample roster — live data temporarily unavailable';
+    }
+    updateStats(); updateBelt(); render();
+  }
+
+  /* ── boot ── */
+  state.coins = FALLBACK.map((c,i)=>Object.assign({},c,{_rank:i+1}));
+  updateBudgetUI(); updateStats(); updateBelt(); render();
+  fetchData();
+  setInterval(fetchData, 60000);
+
+  /* ── optional Firebase wiring (only runs if FIREBASE_CONFIG is set above) ── */
+  if(FIREBASE_CONFIG){
+    const connectTimeout = setTimeout(function(){
+      document.getElementById('mode-note').textContent =
+        '🔒 Local demo mode — could not reach Firebase (often just a sandboxed-preview network limit), so votes are saved to this browser only for now.';
+    }, 4000);
+    (async function(){
+      try{
+        const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+        const { getDatabase, ref, runTransaction, onValue } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js');
+        const app = initializeApp(FIREBASE_CONFIG);
+        const db = getDatabase(app);
+        state.firebaseCastVote = async function(coinId){
+          await runTransaction(ref(db, FIREBASE_VOTES_PATH+'/'+TODAY+'/'+coinId), cur => (cur||0)+1);
+        };
+        onValue(ref(db, FIREBASE_VOTES_PATH+'/'+TODAY), snap=>{
+          clearTimeout(connectTimeout);
+          state.votes = snap.val() || {};
+          updateBelt(); render();
+          document.getElementById('mode-note').textContent = '🌐 Live shared voting connected — every vote here is visible to all visitors in real time.';
         });
-
-        // Add visual effects
-        function addStatEffects() {
-            const statValues = document.querySelectorAll('.stat-value');
-            statValues.forEach(stat => {
-                stat.addEventListener('mouseenter', function() {
-                    this.style.transform = 'scale(1.1)';
-                    this.style.transition = 'all 0.3s ease';
-                });
-                
-                stat.addEventListener('mouseleave', function() {
-                    this.style.transform = 'scale(1)';
-                });
-            });
-        }
-
-        // Initialize effects
-        setTimeout(addStatEffects, 1000);
-
-        // Storage keys for syncing with main voting page
-        const STORAGE_KEYS = {
-            votes: 'mefc_voting_data',
-            fighterStats: 'mefc_fighter_stats',
-            lastStatsUpdate: 'mefc_last_stats_update'
-        };
-
-        // Fighter base stats (these will be modified dynamically)
-        const fighterBaseStats = {
-            'DOGE': { legacy: 100, memePower: 95, battleRating: 88, wins: 156 },
-            'SHIB': { armySize: 97, aggression: 92, speed: 89, wins: 134 },
-            'PEPE': { rarity: 99, memeIQ: 94, adaptability: 87, wins: 128 },
-            'PENGU': { cuteness: 98, icePower: 92, community: 96, wins: 89 },
-            'BONK': { bonkPower: 93, speed: 89, defense: 82, wins: 98 },
-            'TRUMP': { patriotPower: 95, rallyEnergy: 90, leadership: 88, wins: 102 },
-            'SPX': { marketPower: 94, growthRate: 91, momentum: 88, wins: 76 },
-            'FLOKI': { vikingPower: 96, berserkerMode: 91, strategy: 85, wins: 112 },
-            'PUMP': { pumpPower: 93, hypeLevel: 89, momentum: 87, wins: 83 },
-            'FARTCOIN': { gasPower: 88, humorLevel: 95, surpriseFactor: 92, wins: 71 },
-            'WIF': { stylePoints: 90, swagLevel: 86, combatSkills: 84, wins: 89 },
-            'M': { memeEssence: 96, corePower: 90, viralSpread: 88, wins: 79 },
-            'MOG': { businessIQ: 89, marketPower: 84, strategy: 87, wins: 76 },
-            'DOG': { simplicity: 85, loyalty: 93, effectiveness: 87, wins: 78 },
-            'TURBO': { speed: 98, acceleration: 84, turboPower: 87, wins: 76 },
-            'POPCAT': { popPower: 94, sonicBoom: 90, viralSpread: 88, wins: 97 },
-            'MEW': { independence: 87, rebellion: 85, catPride: 91, wins: 72 },
-            'CHEEMS': { wholesomePower: 91, classicAppeal: 88, heart: 94, wins: 82 },
-            'SNEK': { stealth: 92, venomPower: 87, hypnosis: 89, wins: 74 },
-            'TOSHI': { mystery: 90, decentralization: 93, legacyHonor: 86, wins: 77 },
-            'PNUT': { justicePower: 86, agility: 94, heart: 88, wins: 79 },
-            'NOT': { paradoxPower: 89, contrarianEnergy: 91, surpriseFactor: 85, wins: 73 },
-            'KET': { chaosLevel: 93, mindWarp: 87, catReflexes: 90, wins: 69 },
-            'NPC': { programming: 88, predictability: 75, effectiveness: 84, wins: 71 },
-            'NEIRO': { aiEvolution: 87, loyaltyPower: 85, techFusion: 82, wins: 78 },
-            'MOODENG': { biteForce: 90, cuteness: 93, thaiPower: 87, wins: 86 },
-            'GIGA': { chadEnergy: 99, alphaPower: 96, sigmaGrind: 92, wins: 88 },
-            'MELANIA': { elegance: 94, politicalPower: 87, grace: 91, wins: 65 },
-            'AI16Z': { aiPower: 95, algorithm: 92, investmentIQ: 89, wins: 74 },
-            'AIXBT': { tradingBot: 91, mlPower: 88, automation: 93, wins: 72 },
-            'GEK': { stealth: 91, reflexes: 95, wallCrawling: 88, wins: 84 },
-            'MEFC': { arenaMaster: 100, fightIQ: 99, memeAuthority: 98, wins: 247 }
-        };
-
-        // Current dynamic stats
-        let currentStats = {};
-
-        // Initialize dynamic stats
-        function initializeDynamicStats() {
-            try {
-                const stored = localStorage.getItem(STORAGE_KEYS.fighterStats);
-                const lastUpdate = localStorage.getItem(STORAGE_KEYS.lastStatsUpdate);
-                
-                if (stored && lastUpdate) {
-                    const timeDiff = Date.now() - parseInt(lastUpdate);
-                    // Reset stats if more than 1 hour old
-                    if (timeDiff < 3600000) {
-                        currentStats = JSON.parse(stored);
-                        console.log('Loaded existing fighter stats');
-                        return;
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading fighter stats:', error);
-            }
-            
-            // Initialize fresh stats
-            currentStats = JSON.parse(JSON.stringify(fighterBaseStats));
-            updateStatsFromVoting();
-            saveStats();
-        }
-
-        // Update stats based on voting performance
-        function updateStatsFromVoting() {
-            try {
-                const votingData = localStorage.getItem(STORAGE_KEYS.votes);
-                if (votingData) {
-                    const data = JSON.parse(votingData);
-                    if (data.coins) {
-                        data.coins.forEach(coin => {
-                            if (currentStats[coin.symbol]) {
-                                // Boost stats based on vote performance
-                                const voteBonus = Math.min(coin.votes * 0.1, 10); // Max +10 boost
-                                const stats = currentStats[coin.symbol];
-                                
-                                // Apply vote bonus to all stats except wins
-                                Object.keys(stats).forEach(key => {
-                                    if (key !== 'wins') {
-                                        stats[key] = Math.min(fighterBaseStats[coin.symbol][key] + voteBonus, 100);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                }
-            } catch (error) {
-                console.error('Error updating stats from voting:', error);
-            }
-        }
-
-        // Save stats to localStorage
-        function saveStats() {
-            try {
-                localStorage.setItem(STORAGE_KEYS.fighterStats, JSON.stringify(currentStats));
-                localStorage.setItem(STORAGE_KEYS.lastStatsUpdate, Date.now().toString());
-            } catch (error) {
-                console.error('Error saving fighter stats:', error);
-            }
-        }
-
-        // Update display with current stats
-        function updateStatsDisplay() {
-            const fighterCards = document.querySelectorAll('.fighter-card');
-            fighterCards.forEach(card => {
-                const symbolElement = card.querySelector('.fighter-symbol');
-                if (symbolElement) {
-                    const symbol = symbolElement.textContent.replace(', '');
-                    const stats = currentStats[symbol];
-                    
-                    if (stats) {
-                        const statElements = card.querySelectorAll('.stat-value');
-                        const statLabels = card.querySelectorAll('.stat-label');
-                        
-                        let statIndex = 0;
-                        Object.keys(stats).forEach(key => {
-                            if (statElements[statIndex]) {
-                                statElements[statIndex].textContent = stats[key];
-                                statIndex++;
-                            }
-                        });
-                    }
-                }
-            });
-        }
-
-        // Start dynamic updates
-        function startDynamicUpdates() {
-            // Update from voting data every 10 seconds
-            setInterval(() => {
-                updateStatsFromVoting();
-                updateStatsDisplay();
-                saveStats();
-            }, 10000);
-
-            // Add random fluctuations every 30 seconds
-            setInterval(() => {
-                addRandomFluctuations();
-                updateStatsDisplay();
-                saveStats();
-            }, 30000);
-        }
-
-        // Add small random fluctuations to keep stats dynamic
-        function addRandomFluctuations() {
-            Object.keys(currentStats).forEach(symbol => {
-                const stats = currentStats[symbol];
-                Object.keys(stats).forEach(key => {
-                    if (key !== 'wins') {
-                        // Random fluctuation of ±2
-                        const fluctuation = (Math.random() - 0.5) * 4;
-                        const baseValue = fighterBaseStats[symbol][key];
-                        stats[key] = Math.max(1, Math.min(100, Math.round(baseValue + fluctuation)));
-                    }
-                });
-            });
-        }
-    </script>
+      }catch(e){
+        clearTimeout(connectTimeout);
+        console.error('Firebase init failed, staying in local demo mode:', e);
+        document.getElementById('mode-note').textContent = '🔒 Local demo mode — Firebase failed to load, so votes are saved to this browser only for now.';
+      }
+    })();
+  } else {
+    document.getElementById('mode-note').textContent = '🔒 Local demo mode — votes are saved to this browser only.';
+  }
+})();
+</script>
 </body>
 </html>
